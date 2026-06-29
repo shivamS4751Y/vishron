@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI Electrician Trade Theory Quiz</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        body { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #1f2937; }
+        .quiz-container { background-color: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); width: 100%; max-width: 720px; padding: 30px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f3f4f6; }
+        .title { font-size: 18px; color: #1e3a8a; font-weight: bold; }
+        .lang-switch-container { display: flex; background: #f3f4f6; padding: 4px; border-radius: 8px; }
+        .lang-btn { background: none; border: none; padding: 6px 14px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; }
+        .lang-btn.active { background: #1e3a8a; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .progress-bar-bg { width: 100%; background-color: #e5e7eb; border-radius: 10px; height: 10px; margin-bottom: 25px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); width: 0%; transition: width 0.3s ease; }
+        .question-stats { font-size: 14px; color: #6b7280; margin-bottom: 10px; font-weight: 600; }
+        .question-text { font-size: 19px; font-weight: 600; margin-bottom: 25px; line-height: 1.6; color: #111827; }
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
+        .option-card { background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; padding: 15px 20px; font-size: 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: #4b5563; width: 100%; }
+        .option-card:hover:not(:disabled) { background-color: #f3f4f6; border-color: #cbd5e0; transform: translateY(-1px); }
+        .option-card.correct { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; font-weight: bold; }
+        .option-card.wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .footer-nav { margin-top: 25px; display: flex; justify-content: flex-end; }
+        .next-btn { background: #1e3a8a; color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; display: none; }
+        .result-view { text-align: center; display: none; }
+        .score-badge { font-size: 46px; font-weight: 800; color: #1e3a8a; margin: 25px 0; }
+        .restart-btn { background: #10b981; color: white; border: none; padding: 14px 40px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="quiz-ui">
+        <div class="top-bar">
+            <span class="title">Electrician Model Paper - 01 (1st Year) ⚡</span>
+            <div class="lang-switch-container">
+                <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
+            </div>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+        <div class="question-stats" id="q-counter">Question 1 of 25</div>
+        <div class="question-text" id="q-text">Loading...</div>
+        <div class="options-grid" id="options-grid"></div>
+        <div class="footer-nav"><button class="next-btn" id="next-btn" onclick="nextAction()">Next Question ➡️</button></div>
+    </div>
+
+    <div id="result-ui" class="result-view">
+        <h2 id="res-title">Quiz Completed!</h2>
+        <div class="score-badge" id="score-display">0 / 25</div>
+        <p id="res-feedback" style="font-size: 17px; color: #4b5563; margin-bottom: 25px; font-weight: 500;"></p>
+        <button class="restart-btn" onclick="resetQuiz()">🔄 Restart Practice</button>
+    </div>
+</div>
+
+<script>
+    let currentLang = 'en'; 
+    let currentIdx = 0;
+    let userScore = 0;
+
+    const masterBank = [
+        {
+            en_q: "What is the effect of inductance if the distance between the turns increases?",
+            hi_q: "यदि कुण्डली के टर्नो (Turns) की दूरी बढ़ती है तो प्रेरण का क्या प्रभाव होगा?",
+            options_en: ["Remains same", "Increases", "Becomes zero", "Decreases"],
+            options_hi: ["समान रहेगा", "बढ़ेगा", "शून्य हो जायेगा", "कम होगा"],
+            correct: 1
+        },
+        {
+            en_q: "Which type of joint is used in overhead lines for high tensile strength?",
+            hi_q: "उच्च तन्यता शक्ति के लिए ओवरहेड लाइनों में किस प्रकार के जोड़ का उपयोग किया जाता है?",
+            options_en: ["Scarfed joint", "Western Union joint", "Britannia straight joint", "Britannia T joint"],
+            options_hi: ["स्कार्फ्ड जोड़", "वेस्टर्न यूनियन जोड़", "ब्रिटानिया सीधा जोड़", "ब्रिटानिया टी जोड़"],
+            correct: 1
+        },
+        {
+            en_q: "What is the name of the structural wiring diagram that shows the connection layout plan of elements?",
+            hi_q: "तत्वों की लेआउट योजना दिखाने वाले संरचनात्मक वायरिंग आरेख का नाम क्या है?",
+            options_en: ["Layout diagram", "Wiring diagram", "Schematic diagram", "Installation plan"],
+            options_hi: ["लेआउट आरेख", "वायरिंग आरेख", "योजनाबद्ध आरेख", "स्थापना योजना"],
+            correct: 1
+        },
+        {
+            en_q: "Where the iron clad double pole (ICDP) main switch is used?",
+            hi_q: "आयरन क्लैड डबल पोल (ICDP) मुख्य स्विच का उपयोग कहां किया जाता है?",
+            options_en: ["Large industrial installations", "Single phase domestic installations", "Three phase power circuit installations", "Large commercial installations"],
+            options_hi: ["बड़े औद्योगिक प्रतिष्ठान", "सिंगल फेज घरेलू प्रतिष्ठान", "तीन फेज power सर्किट प्रतिष्ठान", "बड़े व्यावसायिक प्रतिष्ठान"],
+            correct: 1
+        },
+        {
+            en_q: "What is the formula for the equivalent resistance (Rt) of the three resistors R1, R2, R3 connected in parallel?",
+            hi_q: "समांतर में जुड़े तीन प्रतिरोधकों R1, R2, R3 के समतुल्य प्रतिरोध (Rt) का सूत्र क्या है?",
+            options_en: ["Rt = 1 / (1/R1 + 1/R2 + 1/R3)", "Rt = R1 + R2 + R3", "1/Rt = R1 + R2 + R3", "Rt = (R1 * R2 * R3) / (R1 + R2 + R3)"],
+            options_hi: ["Rt = 1 / (1/R1 + 1/R2 + 1/R3)", "Rt = R1 + R2 + R3", "1/Rt = R1 + R2 + R3", "Rt = (R1 * R2 * R3) / (R1 + R2 + R3)"],
+            correct: 0 
+        },
+        {
+            en_q: "What is the unit for Quantity of electricity?",
+            hi_q: "विद्युत की मात्रा (Quantity of electricity) की इकाई क्या है?",
+            options_en: ["Ampere / second", "Volt / second", "Coulomb", "Ampere-hour"],
+            options_hi: ["एम्पीयर / सेकंड", "वोल्ट / सेकंड", "कूलम्ब", "एम्पीयर-घंटा"],
+            correct: 2
+        },
+        {
+            en_q: "Which part is leaking to causing malfunctioning the electronic earth leakage circuit breaker (ELCB)?",
+            hi_q: "इलेक्ट्रॉनिक अर्थ लीकेज सर्किट ब्रेकर (ELCB) के खराब होने का क्या कारण बनता है?",
+            options_en: ["Improper grounding", "Defective relay", "High resistance circuit", "Excessive load"],
+            options_hi: ["अनुचित ग्राउंडिंग", "दोषपूर्ण रिले", "उच्च प्रतिरोध सर्किट", "अत्यधिक लोड"],
+            correct: 1
+        },
+        {
+            en_q: "When the Wheatstone bridge is said to be in balanced condition?",
+            hi_q: "व्हीटस्टोन ब्रिज कब संतुलित स्थिति में कहा जाता है?",
+            options_en: ["No current flows through the galvanometer", "Equal current flows through all arms", "Voltage drop across all arms is equal", "Supply voltage becomes zero"],
+            options_hi: ["गैल्वेनोमीटर से कोई धारा नहीं बहती है", "सभी भुजाओं से समान धारा बहती है", "सभी भुजाओं में वोल्टेज ड्रॉप समान होता है", "आपूर्ति वोल्टेज शून्य हो जाता है"],
+            correct: 0
+        },
+        {
+            en_q: "Which conductors are used in the overhead distribution lines?",
+            hi_q: "ओवरहेड वितरण लाइनों में किन कंडक्टरों का उपयोग किया जाता है?",
+            options_en: ["Bare conductors", "Insulated conductors", "Two core cables", "Shielded cables"],
+            options_hi: ["नंगे कंडक्टर (Bare conductors)", "इंसुलेटेड कंडक्टर", "दो कोर केबल", "शील्डेड केबल"],
+            correct: 0
+        },
+        {
+            en_q: "Which is employed to the principle of thermal overload protection?",
+            hi_q: "थर्मल ओवरलोड प्रोटेक्शन किस सिद्धांत पर आधारित होता है?",
+            options_en: ["Bimetallic strip", "Magnetic repulsion", "Mechanical vibration", "Electrostatic charge"],
+            options_hi: ["द्वि-धातु पट्टी (Bimetallic strip)", "चुंबकीय प्रतिकर्षण", "यांत्रिक कंपन", "इलेक्ट्रोस्टैटिक चार्ज"],
+            correct: 0
+        },
+        {
+            en_q: "Which is the position to use the instrument provided with gravity control?",
+            hi_q: "ग्रेविटी कंट्रोल वाले उपकरण का उपयोग करने के लिए कौन सी स्थिति सही है?",
+            options_en: ["Horizontal position", "Vertical position", "Inclined position 45°", "Any position"],
+            options_hi: ["क्षैतिज स्थिति", "उर्ध्वाधर स्थिति (Vertical)", "झुकी हुई स्थिति 45°", "किसी भी स्थिति में"],
+            correct: 1
+        },
+        {
+            en_q: "Calculate the electrical energy in unit consumed by 500W lamp for 5 hours?",
+            hi_q: "500W के लैंप द्वारा 5 घंटे में उपभोग की गई विद्युत ऊर्जा की गणना यूनिट में करें?",
+            options_en: ["2.5 unit", "5.0 unit", "1.0 unit", "0.5 unit"],
+            options_hi: ["2.5 यूनिट", "5.0 यूनिट", "1.0 यूनिट", "0.5 यूनिट"],
+            correct: 0
+        },
+        {
+            en_q: "How to eliminate the open circuit fault in a local loop?",
+            hi_q: "स्थानीय लूप में ओपन सर्किट फॉल्ट को कैसे समाप्त किया जाता है?",
+            options_en: ["By replacing the broken conductor", "By insulating the conductor", "By reducing the load", "By grounding the system"],
+            options_hi: ["टूटे हुए कंडक्टर को बदलकर", "कंडक्टर को इंसुलेट करके", "लोड कम करके", "सिस्टम को ग्राउंड करके"],
+            correct: 0
+        },
+        {
+            en_q: "What is the name of the meter as shown in the standard multi-range diagram?",
+            hi_q: "मानक चित्रों के अनुसार मल्टी-रेंज पैमाने वाले मीटर का नाम क्या होता है?",
+            options_en: ["AC multi-range voltmeter", "DC multi-range ammeter", "AC/DC multi-range ammeter", "AC/DC multi-range voltmeter"],
+            options_hi: ["AC मल्टी-रेंज वोल्टमीटर", "DC मल्टी-रेंज एम्मीटर", "AC/DC मल्टी-रेंज एम्मीटर", "AC/DC मल्टी-रेंज वोल्टमीटर"],
+            correct: 2
+        },
+        {
+            en_q: "What is an application of L-series type MCB?",
+            hi_q: "L-सीरीज प्रकार के MCB का एक अनुप्रयोग कौन सा है?",
+            options_en: ["Halogen lamps", "Air conditioners", "Geysers", "General lighting circuits"],
+            options_hi: ["हैलोजन लैंप", "एयर कंडीशनर", "गीजर", "सामान्य प्रकाश सर्किट"],
+            correct: 3
+        },
+        {
+            en_q: "You withdraw Rs.500/- from an ATM. The ATM machine gives out Rs.5000/-. Which of the following would be ethically correct?",
+            hi_q: "आप एटीएम से 500/- रुपये निकालते हैं। एटीएम मशीन 5000/- रुपये देती है। निम्नलिखित में से कौन सा नैतिक रूप से सही होगा?",
+            options_en: ["Take the money", "Drop the money near ATM", "Give the money to the poor", "Make a complaint"],
+            options_hi: ["रुपये रख लेना", "एटीएम के पास पैसे गिरा देना", "गरीबों को पैसा दे देना", "शिकायत दर्ज करना"],
+            correct: 3
+        },
+        {
+            en_q: "Which type of fire extinguisher is used for electrical equipment fires?",
+            hi_q: "विद्युत उपकरणों की आग के लिए किस प्रकार के अग्निशामक का उपयोग किया जाता है?",
+            options_en: ["Gas cartridge water type", "Foam type", "Stored pressure water type", "Halon carbon dioxide type"],
+            options_hi: ["गैस कार्ट्रिज पानी प्रकार", "झाग प्रकार (Foam)", "संग्रहीत दबाव पानी प्रकार", "हैलोन या कार्बन डाइऑक्साइड प्रकार"],
+            correct: 3
+        },
+        {
+            en_q: "Which 3 phase system requires the artificial neutral to measure the phase voltage?",
+            hi_q: "फेज वोल्टेज को मापने के लिए किस 3 फेज प्रणाली में कृत्रिम न्यूट्रल की आवश्यकता होती है?",
+            options_en: ["3 wire delta connected system", "3 wire star connected system", "4 wire star connected system", "Open delta system"],
+            options_hi: ["3 तार डेल्टा संयोजित सिस्टम", "3 तार स्टार संयोजित सिस्टम", "4 तार स्टार संयोजित सिस्टम", "ओपन डेल्टा सिस्टम"],
+            correct: 0
+        },
+        {
+            en_q: "Which material is used to make the core of power transformer?",
+            hi_q: "पावर ट्रांसफार्मर की कोर बनाने के लिए किस सामग्री का उपयोग किया जाता है?",
+            options_en: ["Copper alloy", "Soft iron", "Cold rolled grain oriented steel (CRGO)", "Cast iron"],
+            options_hi: ["तांबा मिश्र धातु", "नरम लोहा", "कोल्ड रोल्ड ग्रेन ओरिएंटेड स्टील (CRGO)", "कास्त आयरन"],
+            correct: 2
+        },
+        {
+            en_q: "Which is an application of the series shunted circuit?",
+            hi_q: "सीरीज शंटेड सर्किट का एक अनुप्रयोग कौन सा है?",
+            options_en: ["Multiplier resistor of a voltmeter", "Shunt resistor in ammeter", "Lighting circuits", "Voltage regulation"],
+            options_hi: ["वोल्टमीटर का गुणक प्रतिरोध", "एम्मीटर में शंट प्रतिरोध", "लाइटिंग सर्किट", "वोल्टेज रेगुलेशन"],
+            correct: 1
+        },
+        {
+            en_q: "What is the advantage of the stranded conductor over the solid conductor?",
+            hi_q: "ठोस कंडक्टर की तुलना में फंसे हुए कंडक्टर (Stranded conductor) का क्या लाभ है?",
+            options_en: ["Less voltage drop", "More flexible", "More insulation resistance", "Less weight"],
+            options_hi: ["कम वोल्टेज ड्रॉप", "अधिक लचीला (More flexible)", "अधिक इन्सुलेशन प्रतिरोध", "कम वजन"],
+            correct: 1
+        },
+        {
+            en_q: "What is the standard frequency of AC power supply in India?",
+            hi_q: "भारत में AC बिजली आपूर्ति की मानक आवृत्ति (Frequency) क्या है?",
+            options_en: ["50 Hz", "60 Hz", "25 Hz", "100 Hz"],
+            options_hi: ["50 हर्ट्ज़ (50 Hz)", "60 हर्ट्ज़", "25 हर्ट्ज़", "100 हर्ट्ज़"],
+            correct: 0
+        },
+        {
+            en_q: "Why the system earthing is different from the equipment earthing?",
+            hi_q: "सिस्टम अर्थिंग, उपकरण अर्थिंग से किस प्रकार भिन्न होती है?",
+            options_en: ["It protects human life", "It is associated with current carrying conductors", "It reduces power consumption", "It avoids eddy current loss"],
+            options_hi: ["यह मानव जीवन की रक्षा करता है", "यह धारा ले जाने वाले कंडक्टरों से जुड़ा होता है", "यह बिजली की खपत को कम करता है", "यह भंवर धारा हानि से बचाता है"],
+            correct: 1
+        },
+        {
+            en_q: "What is the voltage drop in resistor R2 in the series circuit if R1=10, R2=20, R3=30 ohms and V=120V?",
+            hi_q: "यदि R1=10, R2=20, R3=30 ओम और V=120V है, तो सीरीज सर्किट में प्रतिरोधक R2 में वोल्टेज转换 ड्रॉप क्या होगा?",
+            options_en: ["20 Volt", "40 Volt", "60 Volt", "80 Volt"],
+            options_hi: ["20 वोल्ट", "40 वोल्ट", "60 वोल्ट", "80 वोल्ट"],
+            correct: 1
+        },
+        {
+            en_q: "Which device converts the sunlight into electrical energy?",
+            hi_q: "कौन सा उपकरण सूर्य के प्रकाश को विद्युत ऊर्जा में परिवर्तित करता है?",
+            options_en: ["Light emitting diode (LED)", "Liquid crystal diode (LCD)", "Photovoltaic cell", "Light dependent resistor (LDR)"],
+            options_hi: ["लाइट एमिटिंग डायोड (LED)", "लिक्विड क्रिस्टल डायोड (LCD)", "फोटोवोल्टिक सेल", "लाइट डिपेंडेंट रेसिस्टर (LDR)"],
+            correct: 2
+        }
+    ];
+
+    function startQuiz() {
+        currentIdx = 0;
+        userScore = 0;
+        document.getElementById("quiz-ui").style.display = "block";
+        document.getElementById("result-ui").style.display = "none";
+        loadQuestion();
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.getElementById("btn-en").classList.toggle("active", lang === 'en');
+        document.getElementById("btn-hi").classList.toggle("active", lang === 'hi');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        document.getElementById("next-btn").style.display = "none";
+        const qGrid = document.getElementById("options-grid");
+        qGrid.innerHTML = "";
+        const currentData = masterBank[currentIdx];
+        
+        const currentNum = currentIdx + 1;
+        document.getElementById("q-counter").innerText = currentLang === 'en' ? `Question ${currentNum} of ${masterBank.length}` : `प्रश्न ${currentNum} / ${masterBank.length}`;
+        document.getElementById("progress-fill").style.width = `${(currentIdx / masterBank.length) * 100}%`;
+        document.getElementById("q-text").innerText = currentLang === 'en' ? currentData.en_q : currentData.hi_q;
+
+        const optionsList = currentLang === 'en' ? currentData.options_en : currentData.options_hi;
+        optionsList.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-card";
+            btn.innerHTML = `<span>${opt}</span><span id="mark-${index}"></span>`;
+            btn.onclick = () => selectOption(index, btn);
+            qGrid.appendChild(btn);
+        });
+    }
+
+    function selectOption(selectedIndex, clickedBtn) {
+        const currentData = masterBank[currentIdx];
+        const correctIndex = currentData.correct;
+        const allButtons = document.getElementById("options-grid").getElementsByClassName("option-card");
+
+        for (let b of allButtons) { b.disabled = true; }
+
+        if (selectedIndex === correctIndex) {
+            clickedBtn.classList.add("correct");
+            document.getElementById(`mark-${selectedIndex}`).innerText = "✅";
+            userScore++;
+        } else {
+            clickedBtn.classList.add("wrong");
+            document.getElementById(`mark-${selectedIndex}`).innerText = "❌";
+            allButtons[correctIndex].classList.add("correct");
+            document.getElementById(`mark-${correctIndex}`).innerText = "✅";
+        }
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextAction() {
+        currentIdx++;
+        if (currentIdx < masterBank.length) { loadQuestion(); } 
+        else { document.getElementById("progress-fill").style.width = "100%"; showFinalResults(); }
+    }
+
+    function showFinalResults() {
+        document.getElementById("quiz-ui").style.display = "none";
+        document.getElementById("result-ui").style.display = "block";
+        document.getElementById("score-display").innerText = `${userScore} / ${masterBank.length}`;
+        const feedbackEl = document.getElementById("res-feedback");
+        const percentage = (userScore / masterBank.length) * 100;
+
+        if (currentLang === 'en') {
+            document.getElementById("res-title").innerText = "Exam Scoreboard!";
+            feedbackEl.innerText = percentage >= 80 ? "Brilliant Performance!" : percentage >= 50 ? "Good job! Keep practicing." : "Need more focus.";
+        } else {
+            document.getElementById("res-title").innerText = "परीक्षा स्कोरबोर्ड!";
+            feedbackEl.innerText = percentage >= 80 ? "शानदार प्रदर्शन!" : percentage >= 50 ? "अच्छा प्रयास! अभ्यास जारी रखें।" : "और ध्यान देने की आवश्यकता है।";
+        }
+    }
+
+    function resetQuiz() { startQuiz(); }
+    window.onload = () => { startQuiz(); };
+</script>
+
+</body>
+</html>
