@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITI Electrician Trade Theory Quiz</title>
+    <title>Electrician Trade Theory & Science Quiz - Part 2</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #1f2937; }
-        .quiz-container { background-color: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); width: 100%; max-width: 720px; padding: 30px; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #1f2937; }
+        .quiz-container { background-color: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); width: 100%; max-width: 720px; padding: 30px; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f3f4f6; }
         .title { font-size: 18px; color: #1e3a8a; font-weight: bold; }
         .lang-switch-container { display: flex; background: #f3f4f6; padding: 4px; border-radius: 8px; }
@@ -34,7 +34,7 @@
 <div class="quiz-container">
     <div id="quiz-ui">
         <div class="top-bar">
-            <span class="title">Electrician Model Paper - 01 (1st Year) ⚡</span>
+            <span class="title">Electrician Model Paper - Part 2 ⚡</span>
             <div class="lang-switch-container">
                 <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">English</button>
                 <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
@@ -62,179 +62,179 @@
 
     const masterBank = [
         {
-            en_q: "What is the effect of inductance if the distance between the turns increases?",
-            hi_q: "यदि कुण्डली के टर्नो (Turns) की दूरी बढ़ती है तो प्रेरण का क्या प्रभाव होगा?",
-            options_en: ["Remains same", "Increases", "Becomes zero", "Decreases"],
-            options_hi: ["समान रहेगा", "बढ़ेगा", "शून्य हो जायेगा", "कम होगा"],
+            en_q: "Which device is used to measure insulation resistance directly?",
+            hi_q: "इन्सुलेशन प्रतिरोध को सीधे मापने के लिए किस उपकरण का उपयोग किया जाता है?",
+            options_en: ["Ammeter", "Megger", "Ohm meter", "Multimeter"],
+            options_hi: ["एम्मीटर", "मेगर", "ओम मीटर", "मल्टीमीटर"],
             correct: 1
         },
         {
-            en_q: "Which type of joint is used in overhead lines for high tensile strength?",
-            hi_q: "उच्च तन्यता शक्ति के लिए ओवरहेड लाइनों में किस प्रकार के जोड़ का उपयोग किया जाता है?",
-            options_en: ["Scarfed joint", "Western Union joint", "Britannia straight joint", "Britannia T joint"],
-            options_hi: ["स्कार्फ्ड जोड़", "वेस्टर्न यूनियन जोड़", "ब्रिटानिया सीधा जोड़", "ब्रिटानिया टी जोड़"],
+            en_q: "Which is the main electrical factor that determines the choice of conductor size?",
+            hi_q: "कंडक्टर के आकार के चयन को निर्धारित करने वाला मुख्य विद्युत कारक कौन सा है?",
+            options_en: ["Voltage drop", "Current carrying capacity", "Insulation type", "Mechanical strength"],
+            options_hi: ["वोल्टेज ड्रॉप", "करंट ले जाने की क्षमता", "इन्सुलेशन का प्रकार", "यांत्रिक शक्ति"],
             correct: 1
         },
         {
-            en_q: "What is the name of the structural wiring diagram that shows the connection layout plan of elements?",
-            hi_q: "तत्वों की लेआउट योजना दिखाने वाले संरचनात्मक वायरिंग आरेख का नाम क्या है?",
-            options_en: ["Layout diagram", "Wiring diagram", "Schematic diagram", "Installation plan"],
-            options_hi: ["लेआउट आरेख", "वायरिंग आरेख", "योजनाबद्ध आरेख", "स्थापना योजना"],
-            correct: 1
-        },
-        {
-            en_q: "Where the iron clad double pole (ICDP) main switch is used?",
-            hi_q: "आयरन क्लैड डबल पोल (ICDP) मुख्य स्विच का उपयोग कहां किया जाता है?",
-            options_en: ["Large industrial installations", "Single phase domestic installations", "Three phase power circuit installations", "Large commercial installations"],
-            options_hi: ["बड़े औद्योगिक प्रतिष्ठान", "सिंगल फेज घरेलू प्रतिष्ठान", "तीन फेज power सर्किट प्रतिष्ठान", "बड़े व्यावसायिक प्रतिष्ठान"],
-            correct: 1
-        },
-        {
-            en_q: "What is the formula for the equivalent resistance (Rt) of the three resistors R1, R2, R3 connected in parallel?",
-            hi_q: "समांतर में जुड़े तीन प्रतिरोधकों R1, R2, R3 के समतुल्य प्रतिरोध (Rt) का सूत्र क्या है?",
-            options_en: ["Rt = 1 / (1/R1 + 1/R2 + 1/R3)", "Rt = R1 + R2 + R3", "1/Rt = R1 + R2 + R3", "Rt = (R1 * R2 * R3) / (R1 + R2 + R3)"],
-            options_hi: ["Rt = 1 / (1/R1 + 1/R2 + 1/R3)", "Rt = R1 + R2 + R3", "1/Rt = R1 + R2 + R3", "Rt = (R1 * R2 * R3) / (R1 + R2 + R3)"],
-            correct: 0 
-        },
-        {
-            en_q: "What is the unit for Quantity of electricity?",
-            hi_q: "विद्युत की मात्रा (Quantity of electricity) की इकाई क्या है?",
-            options_en: ["Ampere / second", "Volt / second", "Coulomb", "Ampere-hour"],
-            options_hi: ["एम्पीयर / सेकंड", "वोल्ट / सेकंड", "कूलम्ब", "एम्पीयर-घंटा"],
+            en_q: "What does a core factor mean in a transformer core design?",
+            hi_q: "ट्रांसफार्मर कोर डिजाइन में कोर फैक्टर का क्या अर्थ है?",
+            options_en: ["Permeability", "Area of cross section", "Stacking factor", "Loss factor"],
+            options_hi: ["पारगम्यता", "अनुप्रस्थ काट का क्षेत्रफल", "स्टैकिंग फैक्टर", "हानि कारक"],
             correct: 2
         },
         {
-            en_q: "Which part is leaking to causing malfunctioning the electronic earth leakage circuit breaker (ELCB)?",
-            hi_q: "इलेक्ट्रॉनिक अर्थ लीकेज सर्किट ब्रेकर (ELCB) के खराब होने का क्या कारण बनता है?",
-            options_en: ["Improper grounding", "Defective relay", "High resistance circuit", "Excessive load"],
-            options_hi: ["अनुचित ग्राउंडिंग", "दोषपूर्ण रिले", "उच्च प्रतिरोध सर्किट", "अत्यधिक लोड"],
+            en_q: "Which factor changes the permeability of a magnetic substance?",
+            hi_q: "कौन सा कारक किसी चुंबकीय पदार्थ की पारगम्यता को बदलता है?",
+            options_en: ["Flux density", "Length", "Area", "Cross sectional area"],
+            options_hi: ["फ्लक्स घनत्व", "लंबाई", "क्षेत्रफल", "अनुप्रस्थ काट का क्षेत्रफल"],
+            correct: 0
+        },
+        {
+            en_q: "Which power measurement method is used for un-balanced 3-phase circuits?",
+            hi_q: "असंतुलित 3-फेज सर्किट के लिए किस बिजली मापन विधि का उपयोग किया जाता है?",
+            options_en: ["1-Wattmeter method", "2-Wattmeter method", "3-Wattmeter method", "Energy meter method"],
+            options_hi: ["1-वाटमीटर विधि", "2-वाटमीटर विधि", "3-वाटमीटर विधि", "ऊर्जा मीटर विधि"],
             correct: 1
         },
         {
-            en_q: "When the Wheatstone bridge is said to be in balanced condition?",
-            hi_q: "व्हीटस्टोन ब्रिज कब संतुलित स्थिति में कहा जाता है?",
-            options_en: ["No current flows through the galvanometer", "Equal current flows through all arms", "Voltage drop across all arms is equal", "Supply voltage becomes zero"],
-            options_hi: ["गैल्वेनोमीटर से कोई धारा नहीं बहती है", "सभी भुजाओं से समान धारा बहती है", "सभी भुजाओं में वोल्टेज ड्रॉप समान होता है", "आपूर्ति वोल्टेज शून्य हो जाता है"],
-            correct: 0
-        },
-        {
-            en_q: "Which conductors are used in the overhead distribution lines?",
-            hi_q: "ओवरहेड वितरण लाइनों में किन कंडक्टरों का उपयोग किया जाता है?",
-            options_en: ["Bare conductors", "Insulated conductors", "Two core cables", "Shielded cables"],
-            options_hi: ["नंगे कंडक्टर (Bare conductors)", "इंसुलेटेड कंडक्टर", "दो कोर केबल", "शील्डेड केबल"],
-            correct: 0
-        },
-        {
-            en_q: "Which is employed to the principle of thermal overload protection?",
-            hi_q: "थर्मल ओवरलोड प्रोटेक्शन किस सिद्धांत पर आधारित होता है?",
-            options_en: ["Bimetallic strip", "Magnetic repulsion", "Mechanical vibration", "Electrostatic charge"],
-            options_hi: ["द्वि-धातु पट्टी (Bimetallic strip)", "चुंबकीय प्रतिकर्षण", "यांत्रिक कंपन", "इलेक्ट्रोस्टैटिक चार्ज"],
-            correct: 0
-        },
-        {
-            en_q: "Which is the position to use the instrument provided with gravity control?",
-            hi_q: "ग्रेविटी कंट्रोल वाले उपकरण का उपयोग करने के लिए कौन सी स्थिति सही है?",
-            options_en: ["Horizontal position", "Vertical position", "Inclined position 45°", "Any position"],
-            options_hi: ["क्षैतिज स्थिति", "उर्ध्वाधर स्थिति (Vertical)", "झुकी हुई स्थिति 45°", "किसी भी स्थिति में"],
+            en_q: "Where the iron clad triple pole (ICTP) main switch is recommended in domestic installations?",
+            hi_q: "घरेलू प्रतिष्ठानों में आयरन क्लैड ट्रिपल पोल (ICTP) मुख्य स्विच की सिफारिश कहां की जाती है?",
+            options_en: ["Single phase circuits", "Three phase power distribution", "Lighting circuits", "Sub-circuits"],
+            options_hi: ["सिंगल फेज सर्किट", "तीन फेज बिजली वितरण", "लाइटिंग सर्किट", "उप-सर्किट"],
             correct: 1
         },
         {
-            en_q: "Calculate the electrical energy in unit consumed by 500W lamp for 5 hours?",
-            hi_q: "500W के लैंप द्वारा 5 घंटे में उपभोग की गई विद्युत ऊर्जा की गणना यूनिट में करें?",
-            options_en: ["2.5 unit", "5.0 unit", "1.0 unit", "0.5 unit"],
-            options_hi: ["2.5 यूनिट", "5.0 यूनिट", "1.0 यूनिट", "0.5 यूनिट"],
+            en_q: "What is the name of the wiring diagram showing a single lamp controlled by two 2-way switches?",
+            hi_q: "दो 2-वे स्विच द्वारा नियंत्रित एक सिंगल लैंप को दिखाने वाले वायरिंग आरेख का नाम क्या है?",
+            options_en: ["Staircase wiring", "Tunnel wiring", "Corridor wiring", "Godown wiring"],
+            options_hi: ["सीढ़ी की वायरिंग", "सुरंग की वायरिंग", "गलियारा वायरिंग", "गोदाम वायरिंग"],
             correct: 0
         },
         {
-            en_q: "How to eliminate the open circuit fault in a local loop?",
-            hi_q: "स्थानीय लूप में ओपन सर्किट फॉल्ट को कैसे समाप्त किया जाता है?",
-            options_en: ["By replacing the broken conductor", "By insulating the conductor", "By reducing the load", "By grounding the system"],
-            options_hi: ["टूटे हुए कंडक्टर को बदलकर", "कंडक्टर को इंसुलेट करके", "लोड कम करके", "सिस्टम को ग्राउंड करके"],
+            en_q: "Where down to earth connection lead is connected?",
+            hi_q: "डाउन टू अर्थ कनेक्शन लीड कहां जुड़ा होता है?",
+            options_en: ["Earth plate", "Water pipe", "Neutral wire", "Phase wire"],
+            options_hi: ["अर्थ प्लेट", "पानी का पाइप", "न्यूट्रल तार", "फेज तार"],
             correct: 0
         },
         {
-            en_q: "What is the name of the meter as shown in the standard multi-range diagram?",
-            hi_q: "मानक चित्रों के अनुसार मल्टी-रेंज पैमाने वाले मीटर का नाम क्या होता है?",
-            options_en: ["AC multi-range voltmeter", "DC multi-range ammeter", "AC/DC multi-range ammeter", "AC/DC multi-range voltmeter"],
-            options_hi: ["AC मल्टी-रेंज वोल्टमीटर", "DC मल्टी-रेंज एम्मीटर", "AC/DC मल्टी-रेंज एम्मीटर", "AC/DC मल्टी-रेंज वोल्टमीटर"],
+            en_q: "What will happen to the value of earth resistance if the strength of electrolyte decreased?",
+            hi_q: "यदि इलेक्ट्रोलाइट की शक्ति कम हो जाए तो अर्थ प्रतिरोध के मान पर क्या प्रभाव पड़ेगा?",
+            options_en: ["Remains same", "Decreases", "Increases", "Becomes zero"],
+            options_hi: ["समान रहता है", "कम होता है", "बढ़ता है", "शून्य हो जाता है"],
             correct: 2
         },
         {
-            en_q: "What is an application of L-series type MCB?",
-            hi_q: "L-सीरीज प्रकार के MCB का एक अनुप्रयोग कौन सा है?",
-            options_en: ["Halogen lamps", "Air conditioners", "Geysers", "General lighting circuits"],
-            options_hi: ["हैलोजन लैंप", "एयर कंडीशनर", "गीजर", "सामान्य प्रकाश सर्किट"],
-            correct: 3
+            en_q: "What is the function of full wave rectifier in basic power supply?",
+            hi_q: "बुनियादी बिजली आपूर्ति में फुल वेव रेक्टिफायर का क्या कार्य है?",
+            options_en: ["Filter AC ripple", "Convert AC to DC", "Regulate voltage", "Step down voltage"],
+            options_hi: ["एसी रिपल को फिल्टर करना", "एसी को डीसी में बदलना", "वोल्टेज को नियंत्रित करना", "वोल्टेज को कम करना"],
+            correct: 1
         },
         {
-            en_q: "You withdraw Rs.500/- from an ATM. The ATM machine gives out Rs.5000/-. Which of the following would be ethically correct?",
-            hi_q: "आप एटीएम से 500/- रुपये निकालते हैं। एटीएम मशीन 5000/- रुपये देती है। निम्नलिखित में से कौन सा नैतिक रूप से सही होगा?",
-            options_en: ["Take the money", "Drop the money near ATM", "Give the money to the poor", "Make a complaint"],
-            options_hi: ["रुपये रख लेना", "एटीएम के पास पैसे गिरा देना", "गरीबों को पैसा दे देना", "शिकायत दर्ज करना"],
-            correct: 3
-        },
-        {
-            en_q: "Which type of fire extinguisher is used for electrical equipment fires?",
-            hi_q: "विद्युत उपकरणों की आग के लिए किस प्रकार के अग्निशामक का उपयोग किया जाता है?",
-            options_en: ["Gas cartridge water type", "Foam type", "Stored pressure water type", "Halon carbon dioxide type"],
-            options_hi: ["गैस कार्ट्रिज पानी प्रकार", "झाग प्रकार (Foam)", "संग्रहीत दबाव पानी प्रकार", "हैलोन या कार्बन डाइऑक्साइड प्रकार"],
-            correct: 3
-        },
-        {
-            en_q: "Which 3 phase system requires the artificial neutral to measure the phase voltage?",
-            hi_q: "फेज वोल्टेज को मापने के लिए किस 3 फेज प्रणाली में कृत्रिम न्यूट्रल की आवश्यकता होती है?",
-            options_en: ["3 wire delta connected system", "3 wire star connected system", "4 wire star connected system", "Open delta system"],
-            options_hi: ["3 तार डेल्टा संयोजित सिस्टम", "3 तार स्टार संयोजित सिस्टम", "4 तार स्टार संयोजित सिस्टम", "ओपन डेल्टा सिस्टम"],
-            correct: 0
-        },
-        {
-            en_q: "Which material is used to make the core of power transformer?",
-            hi_q: "पावर ट्रांसफार्मर की कोर बनाने के लिए किस सामग्री का उपयोग किया जाता है?",
-            options_en: ["Copper alloy", "Soft iron", "Cold rolled grain oriented steel (CRGO)", "Cast iron"],
-            options_hi: ["तांबा मिश्र धातु", "नरम लोहा", "कोल्ड रोल्ड ग्रेन ओरिएंटेड स्टील (CRGO)", "कास्त आयरन"],
+            en_q: "What is the unit of insulation resistance measured by Megger?",
+            hi_q: "मेगर द्वारा मापे जाने वाले इन्सुलेशन प्रतिरोध की इकाई क्या है?",
+            options_en: ["Ohm", "Kilo-ohm", "Mega-ohm", "Milli-ohm"],
+            options_hi: ["ओम", "किलो-ओम", "मेगा-ओम", "मिली-ओम"],
             correct: 2
         },
         {
-            en_q: "Which is an application of the series shunted circuit?",
-            hi_q: "सीरीज शंटेड सर्किट का एक अनुप्रयोग कौन सा है?",
-            options_en: ["Multiplier resistor of a voltmeter", "Shunt resistor in ammeter", "Lighting circuits", "Voltage regulation"],
-            options_hi: ["वोल्टमीटर का गुणक प्रतिरोध", "एम्मीटर में शंट प्रतिरोध", "लाइटिंग सर्किट", "वोल्टेज रेगुलेशन"],
+            en_q: "Which types of wire is used for temporary domestic festival decorations?",
+            hi_q: "अस्थायी घरेलू उत्सव की सजावट के लिए किस प्रकार के तारों का उपयोग किया जाता है?",
+            options_en: ["CTS wires", "Flexible wires", "Weather proof wires", "Lead sheathed wires"],
+            options_hi: ["सीटीएस तार", "लचीले तार (Flexible wires)", "वेदर प्रूफ तार", "लेड शीथेड तार"],
             correct: 1
         },
         {
-            en_q: "What is the advantage of the stranded conductor over the solid conductor?",
-            hi_q: "ठोस कंडक्टर की तुलना में फंसे हुए कंडक्टर (Stranded conductor) का क्या लाभ है?",
-            options_en: ["Less voltage drop", "More flexible", "More insulation resistance", "Less weight"],
-            options_hi: ["कम वोल्टेज ड्रॉप", "अधिक लचीला (More flexible)", "अधिक इन्सुलेशन प्रतिरोध", "कम वजन"],
-            correct: 1
-        },
-        {
-            en_q: "What is the standard frequency of AC power supply in India?",
-            hi_q: "भारत में AC बिजली आपूर्ति की मानक आवृत्ति (Frequency) क्या है?",
-            options_en: ["50 Hz", "60 Hz", "25 Hz", "100 Hz"],
-            options_hi: ["50 हर्ट्ज़ (50 Hz)", "60 हर्ट्ज़", "25 हर्ट्ज़", "100 हर्ट्ज़"],
+            en_q: "What is the name of the tool marked X used for wire joint insulation stripping?",
+            hi_q: "तार के जोड़ों का इन्सुलेशन छीलने के लिए उपयोग किए जाने वाले X चिह्नित उपकरण का नाम क्या है?",
+            options_en: ["Wire stripper", "Side cutting pliers", "Crimping tool", "Combination pliers"],
+            options_hi: ["वायर स्ट्रिपर", "साइड कटिंग प्लायर", "क्रिमपिंग टूल", "कॉम्बिनेशन प्लायर"],
             correct: 0
         },
         {
-            en_q: "Why the system earthing is different from the equipment earthing?",
-            hi_q: "सिस्टम अर्थिंग, उपकरण अर्थिंग से किस प्रकार भिन्न होती है?",
-            options_en: ["It protects human life", "It is associated with current carrying conductors", "It reduces power consumption", "It avoids eddy current loss"],
-            options_hi: ["यह मानव जीवन की रक्षा करता है", "यह धारा ले जाने वाले कंडक्टरों से जुड़ा होता है", "यह बिजली की खपत को कम करता है", "यह भंवर धारा हानि से बचाता है"],
+            en_q: "Which wiring installation uses the system earthing?",
+            hi_q: "कौन सी वायरिंग स्थापना सिस्टम अर्थिंग का उपयोग करती है?",
+            options_en: ["Domestic wiring", "Generating stations", "Commercial buildings", "Agricultural pumps"],
+            options_hi: ["घरेलू वायरिंग", "उत्पादन स्टेशन (Generating stations)", "वाणिज्यिक भवन", "कृषि पंप"],
             correct: 1
         },
         {
-            en_q: "What is the voltage drop in resistor R2 in the series circuit if R1=10, R2=20, R3=30 ohms and V=120V?",
-            hi_q: "यदि R1=10, R2=20, R3=30 ओम और V=120V है, तो सीरीज सर्किट में प्रतिरोधक R2 में वोल्टेज转换 ड्रॉप क्या होगा?",
-            options_en: ["20 Volt", "40 Volt", "60 Volt", "80 Volt"],
-            options_hi: ["20 वोल्ट", "40 वोल्ट", "60 वोल्ट", "80 वोल्ट"],
+            en_q: "How many millimeters are there in 1 inch?",
+            hi_q: "1 इंच में कितने मिलीमीटर होते हैं?",
+            options_en: ["2.54 mm", "25.4 mm", "254 mm", "0.254 mm"],
+            options_hi: ["2.54 मिमी", "25.4 मिमी", "254 मिमी", "0.254 मिमी"],
             correct: 1
         },
         {
-            en_q: "Which device converts the sunlight into electrical energy?",
-            hi_q: "कौन सा उपकरण सूर्य के प्रकाश को विद्युत ऊर्जा में परिवर्तित करता है?",
-            options_en: ["Light emitting diode (LED)", "Liquid crystal diode (LCD)", "Photovoltaic cell", "Light dependent resistor (LDR)"],
-            options_hi: ["लाइट एमिटिंग डायोड (LED)", "लिक्विड क्रिस्टल डायोड (LCD)", "फोटोवोल्टिक सेल", "लाइट डिपेंडेंट रेसिस्टर (LDR)"],
+            en_q: "Which is the rule of safety while working on electricity?",
+            hi_q: "बिजली पर काम करते समय सुरक्षा का नियम कौन सा है?",
+            options_en: ["Do not touch live wires with bare hands", "Use metal ladders", "Keep tools wet", "Work alone always"],
+            options_hi: ["नंगे हाथों से चालू तारों को न छुएं", "धातु की सीढ़ियों का प्रयोग करें", "उपकरणों को गीला रखें", "हमेशा अकेले काम करें"],
+            correct: 0
+        },
+        {
+            en_q: "What is the definition of volume of a solid block?",
+            hi_q: "एक ठोस ब्लॉक के आयतन (Volume) की परिभाषा क्या है?",
+            options_en: ["Length x Width", "Mass / Density", "Length x Width x Height", "Area x Density"],
+            options_hi: ["लंबाई x चौड़ाई", "द्रव्यमान / घनत्व", "लंबाई x चौड़ाई x ऊंचाई", "क्षेत्रफल x घनत्व"],
             correct: 2
+        },
+        {
+            en_q: "What is the perimeter of a rectangle whose length and width are 20 cm and 15 cm?",
+            hi_q: "एक आयत का परिमाप क्या है जिसकी लंबाई और चौड़ाई 20 सेमी और 15 सेमी है?",
+            options_en: ["35 cm", "70 cm", "300 cm", "50 cm"],
+            options_hi: ["35 सेमी", "70 सेमी", "300 सेमी", "50 सेमी"],
+            correct: 1
+        },
+        {
+            en_q: "Convert decimal 0.00045 to scientific notation.",
+            hi_q: "दशमलव 0.00045 को वैज्ञानिक पद्धति में बदलें।",
+            options_en: ["4.5 x 10^-4", "45 x 10^-5", "4.5 x 10^-5", "0.45 x 10^-3"],
+            options_hi: ["4.5 x 10^-4", "45 x 10^-5", "4.5 x 10^-5", "0.45 x 10^-3"],
+            correct: 0
+        },
+        {
+            en_q: "Convert 18/25 decimal fraction into percentage.",
+            hi_q: "दशमलव भिन्न 18/25 को प्रतिशत में बदलें।",
+            options_en: ["72%", "68%", "75%", "80%"],
+            options_hi: ["72%", "68%", "75%", "80%"],
+            correct: 0
+        },
+        {
+            en_q: "Which standard drawing position is correct as per IS standard layout?",
+            hi_q: "IS मानक लेआउट के अनुसार कौन सी मानक ड्राइंग स्थिति सही है?",
+            options_en: ["Position A", "Position B", "Position C", "Position D"],
+            options_hi: ["स्थिति A", "स्थिति B", "स्थिति C", "स्थिति D"],
+            correct: 2
+        },
+        {
+            en_q: "Which dimension line format is correct as per technical drawing practices?",
+            hi_q: "तकनीकी ड्राइंग प्रथाओं के अनुसार कौन सा आयाम रेखा प्रारूप सही है?",
+            options_en: ["Format A", "Format B", "Format C", "Format D"],
+            options_hi: ["प्रारूप A", "प्रारूप B", "प्रारूप C", "प्रारूप D"],
+            correct: 0
+        },
+        {
+            en_q: "Which arrowhead configuration is correct as per standard engineering drawing rules?",
+            hi_q: "मानक इंजीनियरिंग ड्राइंग नियमों के अनुसार कौन सा तीर का सिरा (Arrowhead) सही है?",
+            options_en: ["Open format", "Closed and filled", "Dot format", "Slash line format"],
+            options_hi: ["खुला हुआ", "बंद और भरा हुआ", "बिंदु प्रारूप", "स्लैश लाइन प्रारूप"],
+            correct: 1
+        },
+        {
+            en_q: "Identify the name of the tool layout: 45 degree set-square.",
+            hi_q: "उपकरण लेआउट के नाम को पहचानें: 45 डिग्री सेट-स्क्वायर।",
+            options_en: ["45 degree set-square", "30-60 degree set-square", "T-square", "Protractor"],
+            options_hi: ["45 डिग्री सेट-स्क्वायर", "30-60 डिग्री सेट-स्क्वायर", "टी-स्क्वायर", "चांदा"],
+            correct: 0
+        },
+        {
+            en_q: "Identify the name of the engineering tool: Double ended open spanner.",
+            hi_q: "इंजीनियरिंग उपकरण के नाम को पहचानें: डबल एंडेड ओपन स्पैनर।",
+            options_en: ["Ring spanner", "Double ended open spanner", "Pipe wrench", "Adjustable spanner"],
+            options_hi: ["रिंग स्पैनर", "डबल एंडेड ओपन स्पैनर", "पाइप रेंच", "एडजस्टेबल स्पैनर"],
+            correct: 1
         }
     ];
 
@@ -308,11 +308,11 @@
         const percentage = (userScore / masterBank.length) * 100;
 
         if (currentLang === 'en') {
-            document.getElementById("res-title").innerText = "Exam Scoreboard!";
-            feedbackEl.innerText = percentage >= 80 ? "Brilliant Performance!" : percentage >= 50 ? "Good job! Keep practicing." : "Need more focus.";
+            document.getElementById("res-title").innerText = "Exam Scoreboard - Part 2!";
+            feedbackEl.innerText = percentage >= 80 ? "Brilliant Performance! You are ready for the final exam." : percentage >= 50 ? "Good job! Keep practicing." : "Need more focus.";
         } else {
-            document.getElementById("res-title").innerText = "परीक्षा स्कोरबोर्ड!";
-            feedbackEl.innerText = percentage >= 80 ? "शानदार प्रदर्शन!" : percentage >= 50 ? "अच्छा प्रयास! अभ्यास जारी रखें।" : "और ध्यान देने की आवश्यकता है।";
+            document.getElementById("res-title").innerText = "परीक्षा स्कोरboard - पार्ट 2!";
+            feedbackEl.innerText = percentage >= 80 ? "शानदार प्रदर्शन! आप फाइनल परीक्षा के लिए पूरी तरह तैयार हैं।" : percentage >= 50 ? "अच्छा प्रयास! अभ्यास जारी रखें।" : "और ध्यान देने की आवश्यकता है।";
         }
     }
 
