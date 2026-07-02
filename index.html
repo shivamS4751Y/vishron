@@ -3,30 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electrician Trade Theory & Science Quiz - Part 2</title>
+    <title>Employability Skills - Premium Quiz Part 3</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #1f2937; }
-        .quiz-container { background-color: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); width: 100%; max-width: 720px; padding: 30px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f3f4f6; }
-        .title { font-size: 18px; color: #1e3a8a; font-weight: bold; }
-        .lang-switch-container { display: flex; background: #f3f4f6; padding: 4px; border-radius: 8px; }
-        .lang-btn { background: none; border: none; padding: 6px 14px; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; }
-        .lang-btn.active { background: #1e3a8a; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .progress-bar-bg { width: 100%; background-color: #e5e7eb; border-radius: 10px; height: 10px; margin-bottom: 25px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); width: 0%; transition: width 0.3s ease; }
-        .question-stats { font-size: 14px; color: #6b7280; margin-bottom: 10px; font-weight: 600; }
-        .question-text { font-size: 19px; font-weight: 600; margin-bottom: 25px; line-height: 1.6; color: #111827; }
-        .options-grid { display: flex; flex-direction: column; gap: 12px; }
-        .option-card { background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; padding: 15px 20px; font-size: 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: #4b5563; width: 100%; }
-        .option-card:hover:not(:disabled) { background-color: #f3f4f6; border-color: #cbd5e0; transform: translateY(-1px); }
-        .option-card.correct { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; font-weight: bold; }
-        .option-card.wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
-        .footer-nav { margin-top: 25px; display: flex; justify-content: flex-end; }
-        .next-btn { background: #1e3a8a; color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; display: none; }
-        .result-view { text-align: center; display: none; }
-        .score-badge { font-size: 46px; font-weight: 800; color: #1e3a8a; margin: 25px 0; }
-        .restart-btn { background: #10b981; color: white; border: none; padding: 14px 40px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        :root {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-accent: #38bdf8;
+            --correct-color: #10b981;
+            --wrong-color: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
+        body { background: var(--bg-gradient); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: var(--text-main); overflow-x: hidden; position: relative; }
+        
+        body::before, body::after {
+            content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(0,0,0,0) 70%); z-index: -1;
+            animation: floatBg 16s infinite alternate ease-in-out;
+        }
+        body::before { top: 5%; left: -5%; }
+        body::after { bottom: 5%; right: -5%; animation-delay: 8s; background: radial-gradient(circle, rgba(56,189,248,0.12) 0%, rgba(0,0,0,0) 70%); }
+        @keyframes floatBg { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, -40px) scale(1.15); } }
+
+        .quiz-container { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); width: 100%; max-width: 740px; padding: 35px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+        .title { font-size: 20px; font-weight: 800; background: linear-gradient(to right, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
+        .lang-switch-container { display: flex; background: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        .lang-btn { background: none; border: none; padding: 8px 18px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.3s; }
+        .lang-btn.active { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: white; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+        
+        .progress-bar-bg { width: 100%; background: rgba(255, 255, 255, 0.03); border-radius: 20px; height: 8px; margin-bottom: 30px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #a855f7, #38bdf8); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .question-stats { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .question-text { font-size: 21px; font-weight: 600; margin-bottom: 25px; line-height: 1.6; color: var(--text-main); }
+        
+        /* CSS Geometry Vectors for Drawing Visualizer */
+        .drawing-visualizer {
+            display: none; background: rgba(0,0,0,0.2); border: 1px dashed var(--neon-accent);
+            border-radius: 12px; padding: 20px; margin-bottom: 25px; justify-content: center; align-items: center; gap: 30px;
+        }
+        .box-shape { width: 120px; height: 80px; border: 2px solid #fff; position: relative; }
+        .arrow-line { width: 140px; height: 2px; background: #38bdf8; position: relative; display: flex; justify-content: space-between; align-items: center; }
+        .arrow-line::before { content: '◀'; color: #38bdf8; font-size: 12px; margin-left: -5px; }
+        .arrow-line::after { content: '▶'; color: #38bdf8; font-size: 12px; margin-right: -5px; }
+
+        .options-grid { display: flex; flex-direction: column; gap: 14px; }
+        .option-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 18px 24px; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.2s ease; color: #cbd5e1; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .option-card:hover:not(:disabled) { background: rgba(255, 255, 255, 0.06); border-color: var(--neon-accent); transform: translateY(-2px); color: white; }
+        .option-card.correct { background: rgba(16, 185, 129, 0.12) !important; border-color: var(--correct-color) !important; color: #a7f3d0 !important; font-weight: 700; }
+        .option-card.wrong { background: rgba(239, 68, 68, 0.12) !important; border-color: var(--wrong-color) !important; color: #fca5a5 !important; }
+        
+        .footer-nav { margin-top: 30px; display: flex; justify-content: flex-end; }
+        .next-btn { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: white; border: none; padding: 14px 35px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: 700; display: none; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+        .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5); }
+        
+        .result-view { text-align: center; display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        .score-badge { font-size: 56px; font-weight: 800; background: linear-gradient(to right, #a855f7, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .restart-btn { background: linear-gradient(135deg, #34d399 0%, #059669 100%); color: white; border: none; padding: 16px 45px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: 700; margin-top: 25px; box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3); }
     </style>
 </head>
 <body>
@@ -34,24 +71,31 @@
 <div class="quiz-container">
     <div id="quiz-ui">
         <div class="top-bar">
-            <span class="title">Electrician Model Paper - Part 2 ⚡</span>
+            <span class="title">Employability Skills - Pro Quiz 🚀</span>
             <div class="lang-switch-container">
                 <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">English</button>
                 <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
             </div>
         </div>
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
-        <div class="question-stats" id="q-counter">Question 1 of 25</div>
-        <div class="question-text" id="q-text">Loading...</div>
+        <div class="question-stats" id="q-counter">Question 1 of 26</div>
+        
+        <!-- Live Layout Renderer for Technical Drawings -->
+        <div class="drawing-visualizer" id="drawing-box">
+            <div class="box-shape" style="border-style: solid;"></div>
+            <div class="arrow-line"></div>
+        </div>
+
+        <div class="question-text" id="q-text">Loading question content...</div>
         <div class="options-grid" id="options-grid"></div>
         <div class="footer-nav"><button class="next-btn" id="next-btn" onclick="nextAction()">Next Question ➡️</button></div>
     </div>
 
     <div id="result-ui" class="result-view">
-        <h2 id="res-title">Quiz Completed!</h2>
-        <div class="score-badge" id="score-display">0 / 25</div>
-        <p id="res-feedback" style="font-size: 17px; color: #4b5563; margin-bottom: 25px; font-weight: 500;"></p>
-        <button class="restart-btn" onclick="resetQuiz()">🔄 Restart Practice</button>
+        <h2 id="res-title">Quiz Finished!</h2>
+        <div class="score-badge" id="score-display">0 / 26</div>
+        <p id="res-feedback" style="font-size: 18px; color: #94a3b8; margin-bottom: 25px; font-weight: 500; line-height: 1.6;"></p>
+        <button class="restart-btn" onclick="resetQuiz()">🔄 Restart Set</button>
     </div>
 </div>
 
@@ -62,186 +106,193 @@
 
     const masterBank = [
         {
-            en_q: "Which device is used to measure insulation resistance directly?",
-            hi_q: "इन्सुलेशन प्रतिरोध को सीधे मापने के लिए किस उपकरण का उपयोग किया जाता है?",
-            options_en: ["Ammeter", "Megger", "Ohm meter", "Multimeter"],
-            options_hi: ["एम्मीटर", "मेगर", "ओम मीटर", "मल्टीमीटर"],
-            correct: 1
-        },
-        {
-            en_q: "Which is the main electrical factor that determines the choice of conductor size?",
-            hi_q: "कंडक्टर के आकार के चयन को निर्धारित करने वाला मुख्य विद्युत कारक कौन सा है?",
-            options_en: ["Voltage drop", "Current carrying capacity", "Insulation type", "Mechanical strength"],
-            options_hi: ["वोल्टेज ड्रॉप", "करंट ले जाने की क्षमता", "इन्सुलेशन का प्रकार", "यांत्रिक शक्ति"],
-            correct: 1
-        },
-        {
-            en_q: "What does a core factor mean in a transformer core design?",
-            hi_q: "ट्रांसफार्मर कोर डिजाइन में कोर फैक्टर का क्या अर्थ है?",
-            options_en: ["Permeability", "Area of cross section", "Stacking factor", "Loss factor"],
-            options_hi: ["पारगम्यता", "अनुप्रस्थ काट का क्षेत्रफल", "स्टैकिंग फैक्टर", "हानि कारक"],
-            correct: 2
-        },
-        {
-            en_q: "Which factor changes the permeability of a magnetic substance?",
-            hi_q: "कौन सा कारक किसी चुंबकीय पदार्थ की पारगम्यता को बदलता है?",
-            options_en: ["Flux density", "Length", "Area", "Cross sectional area"],
-            options_hi: ["फ्लक्स घनत्व", "लंबाई", "क्षेत्रफल", "अनुप्रस्थ काट का क्षेत्रफल"],
-            correct: 0
-        },
-        {
-            en_q: "Which power measurement method is used for un-balanced 3-phase circuits?",
-            hi_q: "असंतुलित 3-फेज सर्किट के लिए किस बिजली मापन विधि का उपयोग किया जाता है?",
-            options_en: ["1-Wattmeter method", "2-Wattmeter method", "3-Wattmeter method", "Energy meter method"],
-            options_hi: ["1-वाटमीटर विधि", "2-वाटमीटर विधि", "3-वाटमीटर विधि", "ऊर्जा मीटर विधि"],
-            correct: 1
-        },
-        {
-            en_q: "Where the iron clad triple pole (ICTP) main switch is recommended in domestic installations?",
-            hi_q: "घरेलू प्रतिष्ठानों में आयरन क्लैड ट्रिपल पोल (ICTP) मुख्य स्विच की सिफारिश कहां की जाती है?",
-            options_en: ["Single phase circuits", "Three phase power distribution", "Lighting circuits", "Sub-circuits"],
-            options_hi: ["सिंगल फेज सर्किट", "तीन फेज बिजली वितरण", "लाइटिंग सर्किट", "उप-सर्किट"],
-            correct: 1
-        },
-        {
-            en_q: "What is the name of the wiring diagram showing a single lamp controlled by two 2-way switches?",
-            hi_q: "दो 2-वे स्विच द्वारा नियंत्रित एक सिंगल लैंप को दिखाने वाले वायरिंग आरेख का नाम क्या है?",
-            options_en: ["Staircase wiring", "Tunnel wiring", "Corridor wiring", "Godown wiring"],
-            options_hi: ["सीढ़ी की वायरिंग", "सुरंग की वायरिंग", "गलियारा वायरिंग", "गोदाम वायरिंग"],
-            correct: 0
-        },
-        {
-            en_q: "Where down to earth connection lead is connected?",
-            hi_q: "डाउन टू अर्थ कनेक्शन लीड कहां जुड़ा होता है?",
-            options_en: ["Earth plate", "Water pipe", "Neutral wire", "Phase wire"],
-            options_hi: ["अर्थ प्लेट", "पानी का पाइप", "न्यूट्रल तार", "फेज तार"],
-            correct: 0
-        },
-        {
-            en_q: "What will happen to the value of earth resistance if the strength of electrolyte decreased?",
-            hi_q: "यदि इलेक्ट्रोलाइट की शक्ति कम हो जाए तो अर्थ प्रतिरोध के मान पर क्या प्रभाव पड़ेगा?",
-            options_en: ["Remains same", "Decreases", "Increases", "Becomes zero"],
-            options_hi: ["समान रहता है", "कम होता है", "बढ़ता है", "शून्य हो जाता है"],
-            correct: 2
-        },
-        {
-            en_q: "What is the function of full wave rectifier in basic power supply?",
-            hi_q: "बुनियादी बिजली आपूर्ति में फुल वेव रेक्टिफायर का क्या कार्य है?",
-            options_en: ["Filter AC ripple", "Convert AC to DC", "Regulate voltage", "Step down voltage"],
-            options_hi: ["एसी रिपल को फिल्टर करना", "एसी को डीसी में बदलना", "वोल्टेज को नियंत्रित करना", "वोल्टेज को कम करना"],
-            correct: 1
-        },
-        {
-            en_q: "What is the unit of insulation resistance measured by Megger?",
-            hi_q: "मेगर द्वारा मापे जाने वाले इन्सुलेशन प्रतिरोध की इकाई क्या है?",
-            options_en: ["Ohm", "Kilo-ohm", "Mega-ohm", "Milli-ohm"],
-            options_hi: ["ओम", "किलो-ओम", "मेगा-ओम", "मिली-ओम"],
-            correct: 2
-        },
-        {
-            en_q: "Which types of wire is used for temporary domestic festival decorations?",
-            hi_q: "अस्थायी घरेलू उत्सव की सजावट के लिए किस प्रकार के तारों का उपयोग किया जाता है?",
-            options_en: ["CTS wires", "Flexible wires", "Weather proof wires", "Lead sheathed wires"],
-            options_hi: ["सीटीएस तार", "लचीले तार (Flexible wires)", "वेदर प्रूफ तार", "लेड शीथेड तार"],
-            correct: 1
-        },
-        {
-            en_q: "What is the name of the tool marked X used for wire joint insulation stripping?",
-            hi_q: "तार के जोड़ों का इन्सुलेशन छीलने के लिए उपयोग किए जाने वाले X चिह्नित उपकरण का नाम क्या है?",
-            options_en: ["Wire stripper", "Side cutting pliers", "Crimping tool", "Combination pliers"],
-            options_hi: ["वायर स्ट्रिपर", "साइड कटिंग प्लायर", "क्रिमपिंग टूल", "कॉम्बिनेशन प्लायर"],
-            correct: 0
-        },
-        {
-            en_q: "Which wiring installation uses the system earthing?",
-            hi_q: "कौन सी वायरिंग स्थापना सिस्टम अर्थिंग का उपयोग करती है?",
-            options_en: ["Domestic wiring", "Generating stations", "Commercial buildings", "Agricultural pumps"],
-            options_hi: ["घरेलू वायरिंग", "उत्पादन स्टेशन (Generating stations)", "वाणिज्यिक भवन", "कृषि पंप"],
-            correct: 1
-        },
-        {
-            en_q: "How many millimeters are there in 1 inch?",
-            hi_q: "1 इंच में कितने मिलीमीटर होते हैं?",
-            options_en: ["2.54 mm", "25.4 mm", "254 mm", "0.254 mm"],
-            options_hi: ["2.54 मिमी", "25.4 मिमी", "254 मिमी", "0.254 मिमी"],
-            correct: 1
-        },
-        {
-            en_q: "Which is the rule of safety while working on electricity?",
-            hi_q: "बिजली पर काम करते समय सुरक्षा का नियम कौन सा है?",
-            options_en: ["Do not touch live wires with bare hands", "Use metal ladders", "Keep tools wet", "Work alone always"],
-            options_hi: ["नंगे हाथों से चालू तारों को न छुएं", "धातु की सीढ़ियों का प्रयोग करें", "उपकरणों को गीला रखें", "हमेशा अकेले काम करें"],
-            correct: 0
-        },
-        {
-            en_q: "What is the definition of volume of a solid block?",
-            hi_q: "एक ठोस ब्लॉक के आयतन (Volume) की परिभाषा क्या है?",
-            options_en: ["Length x Width", "Mass / Density", "Length x Width x Height", "Area x Density"],
-            options_hi: ["लंबाई x चौड़ाई", "द्रव्यमान / घनत्व", "लंबाई x चौड़ाई x ऊंचाई", "क्षेत्रफल x घनत्व"],
-            correct: 2
-        },
-        {
-            en_q: "What is the perimeter of a rectangle whose length and width are 20 cm and 15 cm?",
-            hi_q: "एक आयत का परिमाप क्या है जिसकी लंबाई और चौड़ाई 20 सेमी और 15 सेमी है?",
-            options_en: ["35 cm", "70 cm", "300 cm", "50 cm"],
-            options_hi: ["35 सेमी", "70 सेमी", "300 सेमी", "50 सेमी"],
-            correct: 1
-        },
-        {
-            en_q: "Convert decimal 0.00045 to scientific notation.",
-            hi_q: "दशमलव 0.00045 को वैज्ञानिक पद्धति में बदलें।",
-            options_en: ["4.5 x 10^-4", "45 x 10^-5", "4.5 x 10^-5", "0.45 x 10^-3"],
-            options_hi: ["4.5 x 10^-4", "45 x 10^-5", "4.5 x 10^-5", "0.45 x 10^-3"],
-            correct: 0
-        },
-        {
-            en_q: "Convert 18/25 decimal fraction into percentage.",
-            hi_q: "दशमलव भिन्न 18/25 को प्रतिशत में बदलें।",
-            options_en: ["72%", "68%", "75%", "80%"],
-            options_hi: ["72%", "68%", "75%", "80%"],
-            correct: 0
-        },
-        {
-            en_q: "Which standard drawing position is correct as per IS standard layout?",
-            hi_q: "IS मानक लेआउट के अनुसार कौन सी मानक ड्राइंग स्थिति सही है?",
-            options_en: ["Position A", "Position B", "Position C", "Position D"],
-            options_hi: ["स्थिति A", "स्थिति B", "स्थिति C", "स्थिति D"],
-            correct: 2
-        },
-        {
-            en_q: "Which dimension line format is correct as per technical drawing practices?",
-            hi_q: "तकनीकी ड्राइंग प्रथाओं के अनुसार कौन सा आयाम रेखा प्रारूप सही है?",
-            options_en: ["Format A", "Format B", "Format C", "Format D"],
-            options_hi: ["प्रारूप A", "प्रारूप B", "प्रारूप C", "प्रारूप D"],
-            correct: 0
-        },
-        {
-            en_q: "Which arrowhead configuration is correct as per standard engineering drawing rules?",
-            hi_q: "मानक इंजीनियरिंग ड्राइंग नियमों के अनुसार कौन सा तीर का सिरा (Arrowhead) सही है?",
-            options_en: ["Open format", "Closed and filled", "Dot format", "Slash line format"],
-            options_hi: ["खुला हुआ", "बंद और भरा हुआ", "बिंदु प्रारूप", "स्लैश लाइन प्रारूप"],
-            correct: 1
-        },
-        {
-            en_q: "Identify the name of the tool layout: 45 degree set-square.",
-            hi_q: "उपकरण लेआउट के नाम को पहचानें: 45 डिग्री सेट-स्क्वायर।",
-            options_en: ["45 degree set-square", "30-60 degree set-square", "T-square", "Protractor"],
-            options_hi: ["45 डिग्री सेट-स्क्वायर", "30-60 डिग्री सेट-स्क्वायर", "टी-स्क्वायर", "चांदा"],
-            correct: 0
-        },
-        {
-            en_q: "Identify the name of the engineering tool: Double ended open spanner.",
-            hi_q: "इंजीनियरिंग उपकरण के नाम को पहचानें: डबल एंडेड ओपन स्पैनर।",
+            en_q: "Identify the name of tool layout: Double ended open spanner.",
+            hi_q: "इंजीनियरिंग उपकरण का नाम पहचानें: डबल एंडेड ओपन स्पैनer।",
             options_en: ["Ring spanner", "Double ended open spanner", "Pipe wrench", "Adjustable spanner"],
             options_hi: ["रिंग स्पैनर", "डबल एंडेड ओपन स्पैनर", "पाइप रेंच", "एडजस्टेबल स्पैनर"],
             correct: 1
+        },
+        {
+            en_q: "Expansion of SMS is __________.",
+            hi_q: "SMS का विस्तृत रूप (Full Form) क्या है?",
+            options_en: ["Short Message Service", "Simple Message Service", "Swift Message System", "Short Mail System"],
+            options_hi: ["शॉर्ट मैसेज सर्विस", "सिंपल मैसेज सर्विस", "स्विफ्ट मैसेज सिस्टम", "शॉर्ट मेल सिस्टम"],
+            correct: 0
+        },
+        {
+            en_q: "Values are __________.",
+            hi_q: "मूल्य (Values) क्या होते हैं?",
+            options_en: ["Very costly", "Not punctual", "It achieves some value", "Motivates our attitude and action"],
+            options_hi: ["बहुत महंगे", "समय के पाबंद नहीं", "यह कुछ मूल्य प्राप्त करता है", "हमारे दृष्टिकोण और क्रियाओं को प्रेरित करते हैं"],
+            correct: 3
+        },
+        {
+            en_q: "It is a wireless technology that connects devices to the internet called __________.",
+            hi_q: "यह एक वायरलेस तकनीक है जो डिवाइसेज को इंटरनेट से जोड़ती है, उसे क्या कहते हैं?",
+            options_en: ["Desktop", "Bluetooth", "Router Network", "Wi-Fi"],
+            options_hi: ["डेस्कटॉप", "ब्लूटूथ", "राउटर नेटवर्क", "वाई-फाई"],
+            correct: 3
+        },
+        {
+            en_q: "Dedication to a particular work is called __________.",
+            hi_q: "किसी विशेष कार्य के प्रति समर्पण को क्या कहा जाता है?",
+            options_en: ["Integrity", "Commitment", "Intelligence", "Confidence"],
+            options_hi: ["सत्यनिष्ठा", "प्रतिबद्धता (Commitment)", "बुद्धि", "आत्मविश्वास"],
+            correct: 1
+        },
+        {
+            en_q: "In MS Excel, expansion of work sheet is known as __________.",
+            hi_q: "MS Excel में वर्कशीट के विस्तार को किस रूप में जाना जाता है?",
+            options_en: ["Workbook", "Worksheet", "Spreadsheet", "Data log"],
+            options_hi: ["वर्कबुक", "वर्कशीट", "स्प्रेडशीट", "डेटा लॉग"],
+            correct: 2
+        },
+        {
+            en_q: "In option orientation, the text is printed width wise. Which layout is it?",
+            hi_q: "ओरिएंटेशन विकल्प में, जब टेक्स्ट चौड़ाई के अनुसार प्रिंट होता है तो वह कौन सा लेआउट है?",
+            options_en: ["Portrait", "Margin", "Landscape", "Width style"],
+            options_hi: ["पोर्ट्रेट", "मार्जिन", "लैंडस्केप", "विड्थ स्टाइल"],
+            correct: 2
+        },
+        {
+            en_q: "Fill in the blank with suitable place preposition: 'My house is __________ the third floor.'",
+            hi_q: "उचित स्थान प्रीपोजीशन के साथ रिक्त स्थान भरें: 'My house is __________ the third floor.'",
+            options_en: ["at", "in", "under", "on"],
+            options_hi: ["at", "in", "under", "on"],
+            correct: 3
+        },
+        {
+            en_q: "Which one is NOT a benefit of the role playing?",
+            hi_q: "भूमिका निभाने (Role playing) का कौन सा एक लाभ नहीं है?",
+            options_en: ["Develops creative problem-solving skills", "Develops listening skill", "Builds confidence", "Develops boredom"],
+            options_hi: ["रचनात्मक समस्या समाधान कौशल विकसित करना", "सुनने का कौशल विकसित करना", "आत्मविश्वास का निर्माण", "उबाऊपन विकसित करना"],
+            correct: 3
+        },
+        {
+            en_q: "Which one is a search engine?",
+            hi_q: "इनमें से कौन सा एक सर्च इंजन है?",
+            options_en: ["Facebook", "Hotmail", "Flickr", "Google"],
+            options_hi: ["फेसबुक", "हॉटमेल", "फ्लिकर", "गूगल"],
+            correct: 3
+        },
+        {
+            en_q: "Which one is a polite sentence?",
+            hi_q: "निम्नलिखित में से कौन सा एक विनम्र वाक्य है?",
+            options_en: ["You look bad today", "I have some bad tools", "Listen to what I say", "I have a small dynamic request"],
+            options_hi: ["तुम आज बुरे लग रहे हो", "मेरे पास कुछ खराब उपकरण हैं", "सुनो मैं क्या कहता हूं", "मेरा एक छोटा सा विनम्र अनुरोध है"],
+            correct: 3
+        },
+        {
+            en_q: "Which file extension is not supported for images?",
+            hi_q: "छवियों (Images) के लिए कौन सा फाइल एक्सटेंशन समर्थित नहीं है?",
+            options_en: [".mp3", ".gif", ".png", ".jpeg"],
+            options_hi: [".mp3", ".gif", ".png", ".jpeg"],
+            correct: 0
+        },
+        {
+            en_q: "What is capital letter used for?",
+            hi_q: "कैपिटल लेटर (बड़े अक्षरों) का उपयोग किसके लिए किया जाता है?",
+            options_en: ["Beginning of a sentence", "Names of persons", "Names of places", "All the above"],
+            options_hi: ["वाक्य की शुरुआत में", "व्यक्तियों के नाम में", "स्थानों के नाम में", "ऊपर के सभी"],
+            correct: 3
+        },
+        {
+            en_q: "An activity that stops or reduces stress is called a stress buster. Which of the following is NOT a stress buster?",
+            hi_q: "वह गतिविधि जो तनाव को रोकती या कम करती है, स्ट्रेस बस्टर कहलाती है। निम्नलिखित में से कौन सा स्ट्रेस बस्टर नहीं है?",
+            options_en: ["Spending long hours thinking about the problem", "Gardening", "Listening to music", "Going to beach or a dynamic view"],
+            options_hi: ["समस्या के बारे में लंबे समय तक सोचते रहना", "बागवानी करना", "संगीत सुनना", "समुद्र तट या खुली जगह घूमना"],
+            correct: 0
+        },
+        {
+            en_q: "Spread sheets are saved with extension __________.",
+            hi_q: "स्प्रेडशीट फाइलों को किस एक्सटेंशन के साथ सहेज कर (Save) रखा जाता है?",
+            options_en: [".doc", ".xls", ".pdf", ".mp4"],
+            options_hi: [".doc", ".xls", ".pdf", ".mp4"],
+            correct: 1
+        },
+        {
+            en_q: "Choose the odd word out:",
+            hi_q: "इनमें से विषम (अलग) शब्द चुनिए:",
+            options_en: ["marks", "please", "sorry", "paper"],
+            options_hi: ["अंक (marks)", "कृपया (please)", "माफ करें (sorry)", "कागज (paper)"],
+            correct: 3
+        },
+        {
+            en_q: "Name, full resume, permanent address form a part of one's __________ in the resume.",
+            hi_q: "नाम, पूरा पता, स्थायी संपर्क विवरण रिज्यूमे में किसके हिस्से होते हैं?",
+            options_en: ["Personal information", "Achievements", "Career objectives", "Qualifications"],
+            options_hi: ["व्यक्तिगत विवरण (Personal info)", "उपलब्धियां", "करियर के उद्देश्य", "योग्यताएं"],
+            correct: 0
+        },
+        {
+            en_q: "PIN stands for __________.",
+            hi_q: "PIN का पूर्ण रूप क्या होता है?",
+            options_en: ["Personal Identification Number", "Professional Identification Number", "Personal Income Number", "Personal Instance Number"],
+            options_hi: ["पर्सनल आइडेंटिफिकेशन नंबर", "प्रोफेशनल आइडेंटिफिकेशन नंबर", "पर्सनल इनकम नंबर", "पर्सनल इंस्टेंस नंबर"],
+            correct: 0
+        },
+        {
+            en_q: "A good way to respond to the question 'Shall we start the discussion?' is __________.",
+            hi_q: "चर्चा शुरू करने के प्रश्न 'Shall we start the discussion?' का उत्तर देने का एक अच्छा तरीका क्या है?",
+            options_en: ["To finish later", "Yes, let's start", "To turn up", "But, what do you think?"],
+            options_hi: ["बाद में समाप्त करना", "हां, चलिए शुरू करते हैं", "दिखाई देना", "लेकिन, आप क्या सोचते हैं?"],
+            correct: 1
+        },
+        {
+            en_q: "It is also important to pay attention to customer's __________ while pricing and tracking details.",
+            hi_q: "ग्राहकों के व्यवहार को समझते समय उनकी किन चीजों पर ध्यान देना महत्वपूर्ण है?",
+            options_en: ["Personal needs", "Friends", "Body language", "Home systems"],
+            options_hi: ["व्यक्तिगत जरूरतें", "मित्र", "बॉडी लैंग्वेज (Body language)", "घरेलू व्यवस्था"],
+            correct: 2
+        },
+        {
+            en_q: "Which letter 'A' in SMART criteria stand for?",
+            hi_q: "SMART लक्ष्य निर्धारण मानदंड में अक्षर 'A' का क्या अर्थ है?",
+            options_en: ["Actionable", "Action", "Ambitious", "Achievable"],
+            options_hi: ["एक्शनएबल", "एक्शन", "महत्वाकांक्षी", "प्राप्त करने योग्य (Achievable)"],
+            correct: 3
+        },
+        {
+            en_q: "Which of these is not a characteristic trait of a good leader?",
+            hi_q: "इनमें से कौन सा एक अच्छे लीडर (नेता) का गुण या विशेषता नहीं है?",
+            options_en: ["Integrity", "Impartial", "Creativity", "Arrogant"],
+            options_hi: ["सत्यनिष्ठा", "निष्पक्षता", "रचनात्मकता", "अहंकारी होना (Arrogant)"],
+            correct: 3
+        },
+        {
+            en_q: "To learn a cluster of skills is __________.",
+            hi_q: "कौशलों के समूह को सीखना क्या कहलाता है?",
+            options_en: ["Employability", "Knowledge", "Livelihood", "Job status"],
+            options_hi: ["रोजगार क्षमता (Employability)", "ज्ञान", "आजीविका", "नौकरी की स्थिति"],
+            correct: 0
+        },
+        {
+            en_q: "Time management is __________.",
+            hi_q: "समय प्रबंधन (Time Management) क्या होता है?",
+            options_en: ["Managing time efficiently", "More and more work", "Problem solving", "Complete your work on sleep time"],
+            options_hi: ["समय का कुशलतापूर्वक प्रबंधन", "अधिक से अधिक कार्य करना", "समस्या का समाधान", "सोने के समय अपना कार्य पूरा करना"],
+            correct: 0
+        },
+        {
+            en_q: "Money invested in purchasing of raw materials, payment of wages and salaries, rental, electricity etc comes under __________.",
+            hi_q: "कच्चे माल की खरीद, मजदूरी और वेतन का भुगतान, किराया, बिजली आदि में निवेश किया गया धन किसके अंतर्गत आता है?",
+            options_en: ["Capital income", "Working capital", "Long term capital", "Fixed capital"],
+            options_hi: ["पूंजीगत आय", "कार्यशील पूंजी (Working capital)", "दीर्घकालिक पूंजी", "नियत पूंजी"],
+            correct: 1
+        },
+        {
+            en_q: "Someone is treated differently on their skin color, gender, race or status is called __________.",
+            hi_q: "किसी व्यक्ति के साथ उसकी त्वचा के रंग, लिंग, जाति या स्थिति के आधार पर अलग व्यवहार करना क्या कहलाता है?",
+            options_en: ["Society", "Unity", "Contact", "Discrimination"],
+            options_hi: ["समाज", "एकता", "संपर्क", "भेदभाव (Discrimination)"],
+            correct: 3
         }
     ];
 
     function startQuiz() {
         currentIdx = 0;
         userScore = 0;
-        document.getElementById("quiz-ui").style.display = "block";
+        document.getElementById("quiz-ui").style.with = "block";
         document.getElementById("result-ui").style.display = "none";
         loadQuestion();
     }
@@ -259,6 +310,14 @@
         qGrid.innerHTML = "";
         const currentData = masterBank[currentIdx];
         
+        // Geometric Visualizer display logic for engineering context
+        const drawingBox = document.getElementById("drawing-box");
+        if (currentIdx === 0 || currentIdx >= 20) {
+            drawingBox.style.display = "flex";
+        } else {
+            drawingBox.style.display = "none";
+        }
+
         const currentNum = currentIdx + 1;
         document.getElementById("q-counter").innerText = currentLang === 'en' ? `Question ${currentNum} of ${masterBank.length}` : `प्रश्न ${currentNum} / ${masterBank.length}`;
         document.getElementById("progress-fill").style.width = `${(currentIdx / masterBank.length) * 100}%`;
@@ -308,11 +367,11 @@
         const percentage = (userScore / masterBank.length) * 100;
 
         if (currentLang === 'en') {
-            document.getElementById("res-title").innerText = "Exam Scoreboard - Part 2!";
-            feedbackEl.innerText = percentage >= 80 ? "Brilliant Performance! You are ready for the final exam." : percentage >= 50 ? "Good job! Keep practicing." : "Need more focus.";
+            document.getElementById("res-title").innerText = "Skill Matrix Scoreboard 🏆";
+            feedbackEl.innerText = percentage >= 80 ? "Phenomenal! Your Employability Skills are up to corporate industry standards." : percentage >= 50 ? "Good work! Keep learning to boost your placement skills." : "Needs comprehensive revision.";
         } else {
-            document.getElementById("res-title").innerText = "परीक्षा स्कोरboard - पार्ट 2!";
-            feedbackEl.innerText = percentage >= 80 ? "शानदार प्रदर्शन! आप फाइनल परीक्षा के लिए पूरी तरह तैयार हैं।" : percentage >= 50 ? "अच्छा प्रयास! अभ्यास जारी रखें।" : "और ध्यान देने की आवश्यकता है।";
+            document.getElementById("res-title").innerText = "योग्यता स्कोरबोर्ड 🏆";
+            feedbackEl.innerText = percentage >= 80 ? "असाधारण! आपकी एम्प्लॉयबिलिटी स्किल्स कॉर्पोरेट इंडस्ट्री के मानकों के अनुकूल हैं।" : percentage >= 50 ? "अच्छा काम! प्लेसमेंट स्किल्स को बढ़ाने के लिए नियमित अभ्यास करते रहें।" : "व्यापक पुनरीक्षण की आवश्यकता है।";
         }
     }
 
