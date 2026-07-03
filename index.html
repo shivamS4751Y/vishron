@@ -3,278 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2-Way Switch Wiring Lesson & Quiz</title>
+    <title>Two-Way Switch Wiring - Seekho Aur Khelo</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f8fafc;
+            --primary: #007BFF;
+            --success: #28a745;
+            --danger: #dc3545;
+            --dark: #2d3436;
         }
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            background-color: var(--bg);
-            color: #334155;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
             margin: 0;
             padding: 20px;
+            color: var(--dark);
         }
         .container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
+        }
+        .card {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
         }
-        h1, h2, h3 { color: #1e293b; }
-        .highlight {
-            background-color: #f0fdf4;
-            border-left: 4px solid var(--success);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+        h1, h2, h3 {
+            color: #004085;
+            margin-top: 0;
         }
-        
-        /* Interactive Diagram Styles */
-        .diagram-container {
-            background: #1e293b;
-            color: white;
-            padding: 20px;
+        /* Simulator Styling */
+        .simulator-box {
+            background: #f8f9fa;
+            border: 2px dashed #b2bec3;
             border-radius: 8px;
+            padding: 20px;
             text-align: center;
-            margin: 20px 0;
         }
         .circuit {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin: 30px 0;
+            margin: 20px 0;
+        }
+        .switch-container {
+            background: #dfe6e9;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100px;
         }
         .switch-btn {
-            background: #475569;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 16px;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             cursor: pointer;
-            border-radius: 5px;
-            transition: 0.2s;
+            font-weight: bold;
         }
-        .switch-btn.up { border-top: 4px solid #f59e0b; }
-        .switch-btn.down { border-bottom: 4px solid #f59e0b; }
+        .switch-btn.active {
+            background: #0984e3;
+            color: white;
+            border-color: #0984e3;
+        }
         .bulb {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #64748b;
-            display: inline-block;
-            line-height: 60px;
-            transition: 0.3s;
+            font-size: 70px;
+            transition: transform 0.2s;
         }
-        .bulb.on {
-            background: #f59e0b;
-            box-shadow: 0 0 20px #f59e0b;
-            color: black;
+        .bulb.glow {
+            text-shadow: 0 0 30px #ffeaa7;
+            transform: scale(1.1);
         }
-
-        /* Quiz Styles */
-        .quiz-section {
-            margin-top: 40px;
-            border-top: 2px solid #e2e8f0;
-            padding-top: 20px;
+        .status-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
         }
-        .question-card {
-            display: none;
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .question-card.active { display: block; }
-        .options-list {
-            list-style: none;
-            padding: 0;
-        }
-        .option-item {
-            background: white;
+        /* Quiz Styling */
+        .options-btn {
+            display: block;
+            width: 100%;
             padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #cbd5e1;
+            margin: 10px 0;
+            border: 2px solid var(--primary);
+            background: white;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            text-align: left;
             transition: 0.2s;
         }
-        .option-item:hover { background: #e2e8f0; }
-        .progress-bar {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
+        .options-btn:hover {
+            background: #e8f4fd;
         }
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 10%;
-            transition: 0.3s;
-        }
-        #result-card {
-            text-align: center;
+        .hidden {
             display: none;
+        }
+        .score {
+            font-size: 24px;
+            color: var(--success);
+            font-weight: bold;
+        }
+        .reset-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .trick-box {
+            background: #e3f2fd;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>💡 2-Way Switch Wiring Sikhein Aasan Bhasha Me</h1>
-    
-    <p>Kya aapne kabhi socha hai ki seedhiyo (Staircase) ki light niche se ON aur upar pahunch kar OFF kaise ho jati hai? Chaliye iska jadu samajhte hain!</p>
 
-    <div class="highlight">
-        <strong>🚂 Train ki Patri Vali Trick:</strong> 2-Way Switch ko ek railway track samjhein jahan do patriyan hain. Agar dono switch ek hi patri par connect honge, toh current pass hoga aur bulb jalega. Agar ek switch upar aur dusra niche hoga, toh raasta toot jayega!
-    </div>
-
-    <h3>Niche diye gaye switches ko click karke live check karein:</h3>
-    <div class="diagram-container">
-        <div class="circuit">
-            <div>
-                <p>Switch A (Niche)</p>
-                <button id="switchA" class="switch-btn up" onclick="toggleSwitch('A')">UP</button>
-            </div>
-            <div>
-                <div id="bulbInstance" class="bulb">OFF</div>
-            </div>
-            <div>
-                <p>Switch B (Upar)</p>
-                <button id="switchB" class="switch-btn up" onclick="toggleSwitch('B')">UP</button>
-            </div>
+    <!-- 1. Introduction Card -->
+    <div class="card">
+        <h1>💡 2-Way Switch Wiring (सीढ़ी की वायरिंग)</h1>
+        <p>जब हमें <strong>एक ही बल्ब को दो अलग-अलग जगहों</strong> (जैसे सीढ़ी के नीचे और ऊपर) से चालू या बंद करना होता है, तो हम 2-Way Switch का इस्तेमाल करते हैं।</p>
+        <div class="trick-box">
+            <strong>याद रखने की जादुई ट्रिक (Cheat Code):</strong><br>
+            • अगर दोनों स्विच की दिशा <strong>SAME (एक जैसी)</strong> होगी ➔ तो बल्ब <strong>जलेगा (ON)</strong>।<br>
+            • अगर दोनों स्विच की दिशा <strong>OPPOSITE (अलग)</strong> होगी ➔ तो बल्ब <strong>बंद (OFF)</strong> रहेगा।
         </div>
-        <p id="circuit-status">Dono switch UP hain = Rasta Poora Hai = Light ON!</p>
     </div>
 
-    <!-- QUIZ SECTION -->
-    <div class="quiz-section">
-        <h2>📝 Mega Quiz: Kya aapko concept samajh aaya?</h2>
-        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+    <!-- 2. Interactive Simulator Card -->
+    <div class="card">
+        <h2>🛠️ खुद क्लिक करके सीखें (Live Simulator)</h2>
+        <p>नीचे दिए गए दोनों स्विच को दबाकर देखें कि करंट कैसे फ्लो होता है:</p>
         
-        <div id="quiz-container">
-            <!-- Questions will be injected here dynamically -->
-        </div>
+        <div class="simulator-box">
+            <div class="circuit">
+                <!-- Switch A -->
+                <div class="switch-container">
+                    <strong>स्विच A (नीचे)</strong>
+                    <button id="swA-up" class="switch-btn active" onclick="toggleSwitch('A', 'UP')">UP ↑</button>
+                    <button id="swA-down" class="switch-btn" onclick="toggleSwitch('A', 'DOWN')">DOWN ↓</button>
+                </div>
 
-        <div id="result-card">
-            <h3>🎉 Quiz Poora Hua!</h3>
-            <p id="score-text"></p>
-            <button onclick="restartQuiz()" class="switch-btn" style="background: var(--primary);">Dubara Khele</button>
+                <!-- Live Bulb -->
+                <div>
+                    <div id="bulb-icon" class="bulb glow">💡</div>
+                </div>
+
+                <!-- Switch B -->
+                <div class="switch-container">
+                    <strong>स्विच B (ऊपर)</strong>
+                    <button id="swB-up" class="switch-btn active" onclick="toggleSwitch('B', 'UP')">UP ↑</button>
+                    <button id="swB-down" class="switch-btn" onclick="toggleSwitch('B', 'DOWN')">DOWN ↓</button>
+                </div>
+            </div>
+            <div id="circuit-status" class="status-text" style="color: var(--success);">करंट चालू है! बल्ब जल रहा है। 😊</div>
         </div>
     </div>
+
+    <!-- 3. Smart Quiz Card -->
+    <div class="card">
+        <h2>🧠 आपका टेस्ट (Quiz Game)</h2>
+        <p>देखते हैं आपको कितना याद हुआ! (यह गेम बंद होने पर भी यहीं से शुरू होगा)</p>
+        <hr>
+
+        <div id="quiz-box">
+            <h3 id="question-number">Question 1</h3>
+            <p id="question-text" style="font-size: 18px; font-weight: 500;">Loading question...</p>
+            <div id="options-container"></div>
+        </div>
+        
+        <div id="result-box" class="hidden" style="text-align: center;">
+            <h3>🎉 क्विज़ पूरी हुई!</h3>
+            <p class="score">आपका स्कोर: <span id="final-score">0</span> / <span id="total-questions">0</span></p>
+            <button class="reset-btn" onclick="resetQuiz()">क्विज़ दोबारा शुरू करें</button>
+        </div>
+    </div>
+
 </div>
 
 <script>
-    // --- 1. INTERACTIVE WIRING LOGIC ---
-    let stateA = "UP";
-    let stateB = "UP";
+// --- SIMULATOR LOGIC ---
+let stateA = 'UP';
+let stateB = 'UP';
 
-    function toggleSwitch(type) {
-        if(type === 'A') {
-            stateA = stateA === "UP" ? "DOWN" : "UP";
-            document.getElementById('switchA').innerText = stateA;
-            document.getElementById('switchA').className = `switch-btn ${stateA.toLowerCase()}`;
-        } else {
-            stateB = stateB === "UP" ? "DOWN" : "UP";
-            document.getElementById('switchB').innerText = stateB;
-            document.getElementById('switchB').className = `switch-btn ${stateB.toLowerCase()}`;
-        }
-
-        const bulb = document.getElementById('bulbInstance');
-        const status = document.getElementById('circuit-status');
-
-        if(stateA === stateB) {
-            bulb.classList.add('on');
-            bulb.innerText = "ON";
-            status.innerText = `Dono switch ${stateA} hain = Rasta Poora Hai = Light ON!`;
-        } else {
-            bulb.classList.remove('on');
-            bulb.innerText = "OFF";
-            status.innerText = `Ek UP hai aur ek DOWN = Rasta Toota Hai = Light OFF!`;
-        }
+function toggleSwitch(switchName, direction) {
+    if (switchName === 'A') {
+        stateA = direction;
+        document.getElementById('swA-up').classList.toggle('active', direction === 'UP');
+        document.getElementById('swA-down').classList.toggle('active', direction === 'DOWN');
+    } else {
+        stateB = direction;
+        document.getElementById('swB-up').classList.toggle('active', direction === 'UP');
+        document.getElementById('swB-down').classList.toggle('active', direction === 'DOWN');
     }
+    updateCircuit();
+}
 
-    // --- 2. 10 QUIZ QUESTIONS DATA ---
-    const quizData = [
-        { q: "2-Way Switch me total kitne terminals (points) hote hain?", a: ["2", "3", "4"], c: 1 },
-        { q: "Staircase wiring me aamtaur par kis switch ka use hota hai?", a: ["1-Way Switch", "2-Way Switch", "Indicator Switch"], c: 1 },
-        { q: "2-Way switch ke beech wale terminal ko kya kehte hain?", a: ["Traveler Terminal", "Earth Terminal", "Common Terminal"], c: 2 },
-        { q: "Agar Switch 1 'UP' hai aur Switch 2 bhi 'UP' hai, toh bulb ki kya sthiti hogi?", a: ["Bulb ON hoga", "Bulb OFF hoga", "Bulb blast ho jayega"], c: 0 },
-        { q: "Agar Switch A 'UP' hai aur Switch B 'DOWN' hai, toh kya circuit poora hoga?", a: ["Haan", "Nahi", "Keh nahi sakte"], c: 1 },
-        { q: "2-Way wiring me dono switches ko aapas me jodne wali wires ko kya kehte hain?", a: ["Phase wires", "Neutral wires", "Traveler wires"], c: 2 },
-        { q: "Main Phase (Live) wire ko sabse pehle kis terminal me joda jata hai?", a: ["Pehle switch ke Common (Middle) me", "Direct Bulb me", "Switch ke upar wale terminal me"], c: 0 },
-        { q: "Bulb se aane wala Neutral wire kahan joda jata hai?", a: ["Switch me", "Direct Main Neutral supply se", "Earth wire se"], c: 1 },
-        { q: "2-Way switch wiring ka use ghar me kahan sabse zyadatar hota hai?", a: ["Kitchen me", "Bed ke paas aur Seedhiyo (Staircase) me", "Bathroom ke andar"], c: 1 },
-        { q: "Kya hum ek hi bulb ko 3 alag-alag jagah se control karne ke liye sirf do 2-way switch ka use kar sakte hain?", a: ["Haan", "Nahi, uske liye Intermediate switch bhi chahiye", "Hume 1-way switch chahiye"], c: 1 }
-    ];
-
-    let currentQuestion = 0;
-    let score = 0;
-
-    function initQuiz() {
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = '';
-        
-        quizData.forEach((data, index) => {
-            let optionsHTML = data.a.map((opt, oIdx) => 
-                `<li class="option-item" onclick="handleAnswer(${index}, ${oIdx})">${opt}</li>`
-            ).join('');
-
-            container.innerHTML += `
-                <div class="question-card ${index === 0 ? 'active' : ''}" id="q-${index}">
-                    <h3>Sawal ${index + 1}: ${data.q}</h3>
-                    <ul class="options-list">${optionsHTML}</ul>
-                </div>
-            `;
-        });
-        toggleSwitch('A'); // Init light state
+function updateCircuit() {
+    const bulb = document.getElementById('bulb-icon');
+    const status = document.getElementById('circuit-status');
+    
+    // Magic Rule: Same direction = ON, Opposite = OFF
+    if (stateA === stateB) {
+        bulb.innerHTML = "💡";
+        bulb.classList.add('glow');
+        status.innerText = "करंट चालू है! दोनों स्विच एक ही दिशा में हैं (Circuit Complete) ।";
+        status.style.color = "var(--success)";
+    } else {
+        bulb.innerHTML = "🌑";
+        bulb.classList.remove('glow');
+        status.innerText = "बल्ब बंद है! दोनों स्विच अलग दिशा में हैं (Circuit Broken) ।";
+        status.style.color = "var(--danger)";
     }
+}
 
-    // Automatic transition without submit button
-    function handleAnswer(qIdx, selectedIdx) {
-        if(selectedIdx === quizData[qIdx].c) {
-            score++;
-        }
 
-        document.getElementById(`q-${qIdx}`).classList.remove('active');
-        currentQuestion++;
+// --- REFRESH-PROOF & SHUFFLE QUIZ LOGIC ---
+const originalQuestions = [
+    { q: "2-Way Switch का इस्तेमाल मुख्य रूप से कहाँ किया जाता है?", options: ["रसोई घर में", "सीढ़ियों की वायरिंग (Staircase) में", "कूलर के अंदर", "सड़क की लाइट में"], answer: "सीढ़ियों की वायरिंग (Staircase) में" },
+    { q: "अगर 2-way वायरिंग में दोनों स्विच UP स्थिति में हैं, तो बल्ब की क्या हालत होगी?", options: ["बल्ब बंद रहेगा", "बल्ब ब्लास्ट हो जाएगा", "बल्ब चालू (ON) हो जाएगा", "बल्ब धीमा जलेगा"], answer: "बल्ब चालू (ON) हो जाएगा" },
+    { q: "यदि स्विच A 'UP' है और स्विच B 'DOWN' है, तो क्या बल्ब जलेगा?", options: ["हाँ, जलेगा", "नहीं, बंद रहेगा (OFF)", "सिर्फ आधा जलेगा", "वायरिंग जल जाएगी"], answer: "नहीं, बंद रहेगा (OFF)" },
+    { q: "2-Way वायरिंग का आसान शॉर्टकट रूल क्या है?", options: ["दिशा अलग तो ON", "दिशा SAME तो ON", "हमेशा OFF रहेगा", "कोई रूल नहीं है"], answer: "दिशा SAME तो ON" }
+];
 
-        // Update progress bar
-        const progressPercent = ((currentQuestion) / quizData.length) * 100;
-        document.getElementById('progress').style.width = `${progressPercent}%`;
+let questions = [];
+let currentQuestionIndex = 0;
+let score = 0;
 
-        if(currentQuestion < quizData.length) {
-            document.getElementById(`q-${currentQuestion}`).classList.add('active');
-        } else {
-            showResults();
-        }
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
+}
 
-    function showResults() {
-        document.getElementById('quiz-container').style.display = 'none';
-        const resultCard = document.getElementById('result-card');
-        resultCard.style.display = 'block';
-        document.getElementById('score-text').innerText = `Aapne 10 me se ${score} sawalo ke sahi jawab diye hain!`;
-    }
+function initQuiz() {
+    const savedQuestions = localStorage.getItem('twoway_questions');
+    const savedIndex = localStorage.getItem('twoway_current_index');
+    const savedScore = localStorage.getItem('twoway_score');
 
-    function restartQuiz() {
-        currentQuestion = 0;
+    if (savedQuestions && savedIndex && savedScore) {
+        questions = JSON.parse(savedQuestions);
+        currentQuestionIndex = parseInt(savedIndex);
+        score = parseInt(savedScore);
+    } else {
+        questions = shuffleArray([...originalQuestions]);
+        currentQuestionIndex = 0;
         score = 0;
-        document.getElementById('progress').style.width = '10%';
-        document.getElementById('quiz-container').style.display = 'block';
-        document.getElementById('result-card').style.display = 'none';
-        initQuiz();
+        saveState();
     }
 
-    // Start script
-    window.onload = initQuiz;
+    if (currentQuestionIndex >= questions.length) {
+        showResults();
+    } else {
+        showQuestion();
+    }
+}
+
+function saveState() {
+    localStorage.setItem('twoway_questions', JSON.stringify(questions));
+    localStorage.setItem('twoway_current_index', currentQuestionIndex);
+    localStorage.setItem('twoway_score', score);
+}
+
+function showQuestion() {
+    document.getElementById('quiz-box').classList.remove('hidden');
+    document.getElementById('result-box').classList.add('hidden');
+
+    const currentQuestion = questions[currentQuestionIndex];
+    document.getElementById('question-number').innerText = `प्रश्न ${currentQuestionIndex + 1} / ${questions.length}`;
+    document.getElementById('question-text').innerText = currentQuestion.q;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    // Options को भी shuffle कर रहे हैं ताकि चीटिंग न हो
+    const shuffledOptions = shuffleArray([...currentQuestion.options]);
+
+    shuffledOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.innerText = option;
+        button.classList.add('options-btn');
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function checkAnswer(selectedOption) {
+    const correctAnswer = questions[currentQuestionIndex].answer;
+
+    if (selectedOption === correctAnswer) {
+        score++;
+    }
+
+    currentQuestionIndex++;
+    saveState();
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    document.getElementById('quiz-box').classList.add('hidden');
+    document.getElementById('result-box').classList.remove('hidden');
+    document.getElementById('final-score').innerText = score;
+    document.getElementById('total-questions').innerText = questions.length;
+}
+
+function resetQuiz() {
+    localStorage.removeItem('twoway_questions');
+    localStorage.removeItem('twoway_current_index');
+    localStorage.removeItem('twoway_score');
+    initQuiz();
+}
+
+// Page लोड होते ही सब सेट करें
+window.onload = () => {
+    updateCircuit();
+    initQuiz();
+};
 </script>
 
 </body>
