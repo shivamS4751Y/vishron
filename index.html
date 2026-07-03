@@ -1,382 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employability Skills - Premium Quiz Part 3</title>
+    <title>2-Way Switch Wiring Lesson & Quiz</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-accent: #38bdf8;
-            --correct-color: #10b981;
-            --wrong-color: #ef4444;
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: #334155;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: #1e293b; }
+        .highlight {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Interactive Diagram Styles */
+        .diagram-container {
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .circuit {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .switch-btn {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .switch-btn.up { border-top: 4px solid #f59e0b; }
+        .switch-btn.down { border-bottom: 4px solid #f59e0b; }
+        .bulb {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #64748b;
+            display: inline-block;
+            line-height: 60px;
+            transition: 0.3s;
+        }
+        .bulb.on {
+            background: #f59e0b;
+            box-shadow: 0 0 20px #f59e0b;
+            color: black;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
-        body { background: var(--bg-gradient); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: var(--text-main); overflow-x: hidden; position: relative; }
-        
-        body::before, body::after {
-            content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(0,0,0,0) 70%); z-index: -1;
-            animation: floatBg 16s infinite alternate ease-in-out;
+        /* Quiz Styles */
+        .quiz-section {
+            margin-top: 40px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
         }
-        body::before { top: 5%; left: -5%; }
-        body::after { bottom: 5%; right: -5%; animation-delay: 8s; background: radial-gradient(circle, rgba(56,189,248,0.12) 0%, rgba(0,0,0,0) 70%); }
-        @keyframes floatBg { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, -40px) scale(1.15); } }
-
-        .quiz-container { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); width: 100%; max-width: 740px; padding: 35px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
-        .title { font-size: 20px; font-weight: 800; background: linear-gradient(to right, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
-        .lang-switch-container { display: flex; background: rgba(0, 0, 0, 0.4); padding: 4px; border-radius: 12px; border: 1px solid var(--glass-border); }
-        .lang-btn { background: none; border: none; padding: 8px 18px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.3s; }
-        .lang-btn.active { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: white; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
-        
-        .progress-bar-bg { width: 100%; background: rgba(255, 255, 255, 0.03); border-radius: 20px; height: 8px; margin-bottom: 30px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #a855f7, #38bdf8); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .question-stats { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-        .question-text { font-size: 21px; font-weight: 600; margin-bottom: 25px; line-height: 1.6; color: var(--text-main); }
-        
-        /* CSS Geometry Vectors for Drawing Visualizer */
-        .drawing-visualizer {
-            display: none; background: rgba(0,0,0,0.2); border: 1px dashed var(--neon-accent);
-            border-radius: 12px; padding: 20px; margin-bottom: 25px; justify-content: center; align-items: center; gap: 30px;
+        .question-card {
+            display: none;
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        .box-shape { width: 120px; height: 80px; border: 2px solid #fff; position: relative; }
-        .arrow-line { width: 140px; height: 2px; background: #38bdf8; position: relative; display: flex; justify-content: space-between; align-items: center; }
-        .arrow-line::before { content: '◀'; color: #38bdf8; font-size: 12px; margin-left: -5px; }
-        .arrow-line::after { content: '▶'; color: #38bdf8; font-size: 12px; margin-right: -5px; }
-
-        .options-grid { display: flex; flex-direction: column; gap: 14px; }
-        .option-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 18px 24px; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.2s ease; color: #cbd5e1; width: 100%; display: flex; justify-content: space-between; align-items: center; }
-        .option-card:hover:not(:disabled) { background: rgba(255, 255, 255, 0.06); border-color: var(--neon-accent); transform: translateY(-2px); color: white; }
-        .option-card.correct { background: rgba(16, 185, 129, 0.12) !important; border-color: var(--correct-color) !important; color: #a7f3d0 !important; font-weight: 700; }
-        .option-card.wrong { background: rgba(239, 68, 68, 0.12) !important; border-color: var(--wrong-color) !important; color: #fca5a5 !important; }
-        
-        .footer-nav { margin-top: 30px; display: flex; justify-content: flex-end; }
-        .next-btn { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: white; border: none; padding: 14px 35px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: 700; display: none; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5); }
-        
-        .result-view { text-align: center; display: none; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
-        .score-badge { font-size: 56px; font-weight: 800; background: linear-gradient(to right, #a855f7, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
-        .restart-btn { background: linear-gradient(135deg, #34d399 0%, #059669 100%); color: white; border: none; padding: 16px 45px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: 700; margin-top: 25px; box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3); }
+        .question-card.active { display: block; }
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+        .option-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option-item:hover { background: #e2e8f0; }
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 10%;
+            transition: 0.3s;
+        }
+        #result-card {
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <div id="quiz-ui">
-        <div class="top-bar">
-            <span class="title">Employability Skills - Pro Quiz 🚀</span>
-            <div class="lang-switch-container">
-                <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">English</button>
-                <button class="lang-btn" id="btn-hi" onclick="changeLanguage('hi')">हिन्दी</button>
-            </div>
-        </div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
-        <div class="question-stats" id="q-counter">Question 1 of 26</div>
-        
-        <!-- Live Layout Renderer for Technical Drawings -->
-        <div class="drawing-visualizer" id="drawing-box">
-            <div class="box-shape" style="border-style: solid;"></div>
-            <div class="arrow-line"></div>
-        </div>
+<div class="container">
+    <h1>💡 2-Way Switch Wiring Sikhein Aasan Bhasha Me</h1>
+    
+    <p>Kya aapne kabhi socha hai ki seedhiyo (Staircase) ki light niche se ON aur upar pahunch kar OFF kaise ho jati hai? Chaliye iska jadu samajhte hain!</p>
 
-        <div class="question-text" id="q-text">Loading question content...</div>
-        <div class="options-grid" id="options-grid"></div>
-        <div class="footer-nav"><button class="next-btn" id="next-btn" onclick="nextAction()">Next Question ➡️</button></div>
+    <div class="highlight">
+        <strong>🚂 Train ki Patri Vali Trick:</strong> 2-Way Switch ko ek railway track samjhein jahan do patriyan hain. Agar dono switch ek hi patri par connect honge, toh current pass hoga aur bulb jalega. Agar ek switch upar aur dusra niche hoga, toh raasta toot jayega!
     </div>
 
-    <div id="result-ui" class="result-view">
-        <h2 id="res-title">Quiz Finished!</h2>
-        <div class="score-badge" id="score-display">0 / 26</div>
-        <p id="res-feedback" style="font-size: 18px; color: #94a3b8; margin-bottom: 25px; font-weight: 500; line-height: 1.6;"></p>
-        <button class="restart-btn" onclick="resetQuiz()">🔄 Restart Set</button>
+    <h3>Niche diye gaye switches ko click karke live check karein:</h3>
+    <div class="diagram-container">
+        <div class="circuit">
+            <div>
+                <p>Switch A (Niche)</p>
+                <button id="switchA" class="switch-btn up" onclick="toggleSwitch('A')">UP</button>
+            </div>
+            <div>
+                <div id="bulbInstance" class="bulb">OFF</div>
+            </div>
+            <div>
+                <p>Switch B (Upar)</p>
+                <button id="switchB" class="switch-btn up" onclick="toggleSwitch('B')">UP</button>
+            </div>
+        </div>
+        <p id="circuit-status">Dono switch UP hain = Rasta Poora Hai = Light ON!</p>
+    </div>
+
+    <!-- QUIZ SECTION -->
+    <div class="quiz-section">
+        <h2>📝 Mega Quiz: Kya aapko concept samajh aaya?</h2>
+        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+        
+        <div id="quiz-container">
+            <!-- Questions will be injected here dynamically -->
+        </div>
+
+        <div id="result-card">
+            <h3>🎉 Quiz Poora Hua!</h3>
+            <p id="score-text"></p>
+            <button onclick="restartQuiz()" class="switch-btn" style="background: var(--primary);">Dubara Khele</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let currentLang = 'en'; 
-    let currentIdx = 0;
-    let userScore = 0;
+    // --- 1. INTERACTIVE WIRING LOGIC ---
+    let stateA = "UP";
+    let stateB = "UP";
 
-    const masterBank = [
-        {
-            en_q: "Identify the name of tool layout: Double ended open spanner.",
-            hi_q: "इंजीनियरिंग उपकरण का नाम पहचानें: डबल एंडेड ओपन स्पैनer।",
-            options_en: ["Ring spanner", "Double ended open spanner", "Pipe wrench", "Adjustable spanner"],
-            options_hi: ["रिंग स्पैनर", "डबल एंडेड ओपन स्पैनर", "पाइप रेंच", "एडजस्टेबल स्पैनर"],
-            correct: 1
-        },
-        {
-            en_q: "Expansion of SMS is __________.",
-            hi_q: "SMS का विस्तृत रूप (Full Form) क्या है?",
-            options_en: ["Short Message Service", "Simple Message Service", "Swift Message System", "Short Mail System"],
-            options_hi: ["शॉर्ट मैसेज सर्विस", "सिंपल मैसेज सर्विस", "स्विफ्ट मैसेज सिस्टम", "शॉर्ट मेल सिस्टम"],
-            correct: 0
-        },
-        {
-            en_q: "Values are __________.",
-            hi_q: "मूल्य (Values) क्या होते हैं?",
-            options_en: ["Very costly", "Not punctual", "It achieves some value", "Motivates our attitude and action"],
-            options_hi: ["बहुत महंगे", "समय के पाबंद नहीं", "यह कुछ मूल्य प्राप्त करता है", "हमारे दृष्टिकोण और क्रियाओं को प्रेरित करते हैं"],
-            correct: 3
-        },
-        {
-            en_q: "It is a wireless technology that connects devices to the internet called __________.",
-            hi_q: "यह एक वायरलेस तकनीक है जो डिवाइसेज को इंटरनेट से जोड़ती है, उसे क्या कहते हैं?",
-            options_en: ["Desktop", "Bluetooth", "Router Network", "Wi-Fi"],
-            options_hi: ["डेस्कटॉप", "ब्लूटूथ", "राउटर नेटवर्क", "वाई-फाई"],
-            correct: 3
-        },
-        {
-            en_q: "Dedication to a particular work is called __________.",
-            hi_q: "किसी विशेष कार्य के प्रति समर्पण को क्या कहा जाता है?",
-            options_en: ["Integrity", "Commitment", "Intelligence", "Confidence"],
-            options_hi: ["सत्यनिष्ठा", "प्रतिबद्धता (Commitment)", "बुद्धि", "आत्मविश्वास"],
-            correct: 1
-        },
-        {
-            en_q: "In MS Excel, expansion of work sheet is known as __________.",
-            hi_q: "MS Excel में वर्कशीट के विस्तार को किस रूप में जाना जाता है?",
-            options_en: ["Workbook", "Worksheet", "Spreadsheet", "Data log"],
-            options_hi: ["वर्कबुक", "वर्कशीट", "स्प्रेडशीट", "डेटा लॉग"],
-            correct: 2
-        },
-        {
-            en_q: "In option orientation, the text is printed width wise. Which layout is it?",
-            hi_q: "ओरिएंटेशन विकल्प में, जब टेक्स्ट चौड़ाई के अनुसार प्रिंट होता है तो वह कौन सा लेआउट है?",
-            options_en: ["Portrait", "Margin", "Landscape", "Width style"],
-            options_hi: ["पोर्ट्रेट", "मार्जिन", "लैंडस्केप", "विड्थ स्टाइल"],
-            correct: 2
-        },
-        {
-            en_q: "Fill in the blank with suitable place preposition: 'My house is __________ the third floor.'",
-            hi_q: "उचित स्थान प्रीपोजीशन के साथ रिक्त स्थान भरें: 'My house is __________ the third floor.'",
-            options_en: ["at", "in", "under", "on"],
-            options_hi: ["at", "in", "under", "on"],
-            correct: 3
-        },
-        {
-            en_q: "Which one is NOT a benefit of the role playing?",
-            hi_q: "भूमिका निभाने (Role playing) का कौन सा एक लाभ नहीं है?",
-            options_en: ["Develops creative problem-solving skills", "Develops listening skill", "Builds confidence", "Develops boredom"],
-            options_hi: ["रचनात्मक समस्या समाधान कौशल विकसित करना", "सुनने का कौशल विकसित करना", "आत्मविश्वास का निर्माण", "उबाऊपन विकसित करना"],
-            correct: 3
-        },
-        {
-            en_q: "Which one is a search engine?",
-            hi_q: "इनमें से कौन सा एक सर्च इंजन है?",
-            options_en: ["Facebook", "Hotmail", "Flickr", "Google"],
-            options_hi: ["फेसबुक", "हॉटमेल", "फ्लिकर", "गूगल"],
-            correct: 3
-        },
-        {
-            en_q: "Which one is a polite sentence?",
-            hi_q: "निम्नलिखित में से कौन सा एक विनम्र वाक्य है?",
-            options_en: ["You look bad today", "I have some bad tools", "Listen to what I say", "I have a small dynamic request"],
-            options_hi: ["तुम आज बुरे लग रहे हो", "मेरे पास कुछ खराब उपकरण हैं", "सुनो मैं क्या कहता हूं", "मेरा एक छोटा सा विनम्र अनुरोध है"],
-            correct: 3
-        },
-        {
-            en_q: "Which file extension is not supported for images?",
-            hi_q: "छवियों (Images) के लिए कौन सा फाइल एक्सटेंशन समर्थित नहीं है?",
-            options_en: [".mp3", ".gif", ".png", ".jpeg"],
-            options_hi: [".mp3", ".gif", ".png", ".jpeg"],
-            correct: 0
-        },
-        {
-            en_q: "What is capital letter used for?",
-            hi_q: "कैपिटल लेटर (बड़े अक्षरों) का उपयोग किसके लिए किया जाता है?",
-            options_en: ["Beginning of a sentence", "Names of persons", "Names of places", "All the above"],
-            options_hi: ["वाक्य की शुरुआत में", "व्यक्तियों के नाम में", "स्थानों के नाम में", "ऊपर के सभी"],
-            correct: 3
-        },
-        {
-            en_q: "An activity that stops or reduces stress is called a stress buster. Which of the following is NOT a stress buster?",
-            hi_q: "वह गतिविधि जो तनाव को रोकती या कम करती है, स्ट्रेस बस्टर कहलाती है। निम्नलिखित में से कौन सा स्ट्रेस बस्टर नहीं है?",
-            options_en: ["Spending long hours thinking about the problem", "Gardening", "Listening to music", "Going to beach or a dynamic view"],
-            options_hi: ["समस्या के बारे में लंबे समय तक सोचते रहना", "बागवानी करना", "संगीत सुनना", "समुद्र तट या खुली जगह घूमना"],
-            correct: 0
-        },
-        {
-            en_q: "Spread sheets are saved with extension __________.",
-            hi_q: "स्प्रेडशीट फाइलों को किस एक्सटेंशन के साथ सहेज कर (Save) रखा जाता है?",
-            options_en: [".doc", ".xls", ".pdf", ".mp4"],
-            options_hi: [".doc", ".xls", ".pdf", ".mp4"],
-            correct: 1
-        },
-        {
-            en_q: "Choose the odd word out:",
-            hi_q: "इनमें से विषम (अलग) शब्द चुनिए:",
-            options_en: ["marks", "please", "sorry", "paper"],
-            options_hi: ["अंक (marks)", "कृपया (please)", "माफ करें (sorry)", "कागज (paper)"],
-            correct: 3
-        },
-        {
-            en_q: "Name, full resume, permanent address form a part of one's __________ in the resume.",
-            hi_q: "नाम, पूरा पता, स्थायी संपर्क विवरण रिज्यूमे में किसके हिस्से होते हैं?",
-            options_en: ["Personal information", "Achievements", "Career objectives", "Qualifications"],
-            options_hi: ["व्यक्तिगत विवरण (Personal info)", "उपलब्धियां", "करियर के उद्देश्य", "योग्यताएं"],
-            correct: 0
-        },
-        {
-            en_q: "PIN stands for __________.",
-            hi_q: "PIN का पूर्ण रूप क्या होता है?",
-            options_en: ["Personal Identification Number", "Professional Identification Number", "Personal Income Number", "Personal Instance Number"],
-            options_hi: ["पर्सनल आइडेंटिफिकेशन नंबर", "प्रोफेशनल आइडेंटिफिकेशन नंबर", "पर्सनल इनकम नंबर", "पर्सनल इंस्टेंस नंबर"],
-            correct: 0
-        },
-        {
-            en_q: "A good way to respond to the question 'Shall we start the discussion?' is __________.",
-            hi_q: "चर्चा शुरू करने के प्रश्न 'Shall we start the discussion?' का उत्तर देने का एक अच्छा तरीका क्या है?",
-            options_en: ["To finish later", "Yes, let's start", "To turn up", "But, what do you think?"],
-            options_hi: ["बाद में समाप्त करना", "हां, चलिए शुरू करते हैं", "दिखाई देना", "लेकिन, आप क्या सोचते हैं?"],
-            correct: 1
-        },
-        {
-            en_q: "It is also important to pay attention to customer's __________ while pricing and tracking details.",
-            hi_q: "ग्राहकों के व्यवहार को समझते समय उनकी किन चीजों पर ध्यान देना महत्वपूर्ण है?",
-            options_en: ["Personal needs", "Friends", "Body language", "Home systems"],
-            options_hi: ["व्यक्तिगत जरूरतें", "मित्र", "बॉडी लैंग्वेज (Body language)", "घरेलू व्यवस्था"],
-            correct: 2
-        },
-        {
-            en_q: "Which letter 'A' in SMART criteria stand for?",
-            hi_q: "SMART लक्ष्य निर्धारण मानदंड में अक्षर 'A' का क्या अर्थ है?",
-            options_en: ["Actionable", "Action", "Ambitious", "Achievable"],
-            options_hi: ["एक्शनएबल", "एक्शन", "महत्वाकांक्षी", "प्राप्त करने योग्य (Achievable)"],
-            correct: 3
-        },
-        {
-            en_q: "Which of these is not a characteristic trait of a good leader?",
-            hi_q: "इनमें से कौन सा एक अच्छे लीडर (नेता) का गुण या विशेषता नहीं है?",
-            options_en: ["Integrity", "Impartial", "Creativity", "Arrogant"],
-            options_hi: ["सत्यनिष्ठा", "निष्पक्षता", "रचनात्मकता", "अहंकारी होना (Arrogant)"],
-            correct: 3
-        },
-        {
-            en_q: "To learn a cluster of skills is __________.",
-            hi_q: "कौशलों के समूह को सीखना क्या कहलाता है?",
-            options_en: ["Employability", "Knowledge", "Livelihood", "Job status"],
-            options_hi: ["रोजगार क्षमता (Employability)", "ज्ञान", "आजीविका", "नौकरी की स्थिति"],
-            correct: 0
-        },
-        {
-            en_q: "Time management is __________.",
-            hi_q: "समय प्रबंधन (Time Management) क्या होता है?",
-            options_en: ["Managing time efficiently", "More and more work", "Problem solving", "Complete your work on sleep time"],
-            options_hi: ["समय का कुशलतापूर्वक प्रबंधन", "अधिक से अधिक कार्य करना", "समस्या का समाधान", "सोने के समय अपना कार्य पूरा करना"],
-            correct: 0
-        },
-        {
-            en_q: "Money invested in purchasing of raw materials, payment of wages and salaries, rental, electricity etc comes under __________.",
-            hi_q: "कच्चे माल की खरीद, मजदूरी और वेतन का भुगतान, किराया, बिजली आदि में निवेश किया गया धन किसके अंतर्गत आता है?",
-            options_en: ["Capital income", "Working capital", "Long term capital", "Fixed capital"],
-            options_hi: ["पूंजीगत आय", "कार्यशील पूंजी (Working capital)", "दीर्घकालिक पूंजी", "नियत पूंजी"],
-            correct: 1
-        },
-        {
-            en_q: "Someone is treated differently on their skin color, gender, race or status is called __________.",
-            hi_q: "किसी व्यक्ति के साथ उसकी त्वचा के रंग, लिंग, जाति या स्थिति के आधार पर अलग व्यवहार करना क्या कहलाता है?",
-            options_en: ["Society", "Unity", "Contact", "Discrimination"],
-            options_hi: ["समाज", "एकता", "संपर्क", "भेदभाव (Discrimination)"],
-            correct: 3
+    function toggleSwitch(type) {
+        if(type === 'A') {
+            stateA = stateA === "UP" ? "DOWN" : "UP";
+            document.getElementById('switchA').innerText = stateA;
+            document.getElementById('switchA').className = `switch-btn ${stateA.toLowerCase()}`;
+        } else {
+            stateB = stateB === "UP" ? "DOWN" : "UP";
+            document.getElementById('switchB').innerText = stateB;
+            document.getElementById('switchB').className = `switch-btn ${stateB.toLowerCase()}`;
         }
+
+        const bulb = document.getElementById('bulbInstance');
+        const status = document.getElementById('circuit-status');
+
+        if(stateA === stateB) {
+            bulb.classList.add('on');
+            bulb.innerText = "ON";
+            status.innerText = `Dono switch ${stateA} hain = Rasta Poora Hai = Light ON!`;
+        } else {
+            bulb.classList.remove('on');
+            bulb.innerText = "OFF";
+            status.innerText = `Ek UP hai aur ek DOWN = Rasta Toota Hai = Light OFF!`;
+        }
+    }
+
+    // --- 2. 10 QUIZ QUESTIONS DATA ---
+    const quizData = [
+        { q: "2-Way Switch me total kitne terminals (points) hote hain?", a: ["2", "3", "4"], c: 1 },
+        { q: "Staircase wiring me aamtaur par kis switch ka use hota hai?", a: ["1-Way Switch", "2-Way Switch", "Indicator Switch"], c: 1 },
+        { q: "2-Way switch ke beech wale terminal ko kya kehte hain?", a: ["Traveler Terminal", "Earth Terminal", "Common Terminal"], c: 2 },
+        { q: "Agar Switch 1 'UP' hai aur Switch 2 bhi 'UP' hai, toh bulb ki kya sthiti hogi?", a: ["Bulb ON hoga", "Bulb OFF hoga", "Bulb blast ho jayega"], c: 0 },
+        { q: "Agar Switch A 'UP' hai aur Switch B 'DOWN' hai, toh kya circuit poora hoga?", a: ["Haan", "Nahi", "Keh nahi sakte"], c: 1 },
+        { q: "2-Way wiring me dono switches ko aapas me jodne wali wires ko kya kehte hain?", a: ["Phase wires", "Neutral wires", "Traveler wires"], c: 2 },
+        { q: "Main Phase (Live) wire ko sabse pehle kis terminal me joda jata hai?", a: ["Pehle switch ke Common (Middle) me", "Direct Bulb me", "Switch ke upar wale terminal me"], c: 0 },
+        { q: "Bulb se aane wala Neutral wire kahan joda jata hai?", a: ["Switch me", "Direct Main Neutral supply se", "Earth wire se"], c: 1 },
+        { q: "2-Way switch wiring ka use ghar me kahan sabse zyadatar hota hai?", a: ["Kitchen me", "Bed ke paas aur Seedhiyo (Staircase) me", "Bathroom ke andar"], c: 1 },
+        { q: "Kya hum ek hi bulb ko 3 alag-alag jagah se control karne ke liye sirf do 2-way switch ka use kar sakte hain?", a: ["Haan", "Nahi, uske liye Intermediate switch bhi chahiye", "Hume 1-way switch chahiye"], c: 1 }
     ];
 
-    function startQuiz() {
-        currentIdx = 0;
-        userScore = 0;
-        document.getElementById("quiz-ui").style.with = "block";
-        document.getElementById("result-ui").style.display = "none";
-        loadQuestion();
-    }
+    let currentQuestion = 0;
+    let score = 0;
 
-    function changeLanguage(lang) {
-        currentLang = lang;
-        document.getElementById("btn-en").classList.toggle("active", lang === 'en');
-        document.getElementById("btn-hi").classList.toggle("active", lang === 'hi');
-        loadQuestion();
-    }
-
-    function loadQuestion() {
-        document.getElementById("next-btn").style.display = "none";
-        const qGrid = document.getElementById("options-grid");
-        qGrid.innerHTML = "";
-        const currentData = masterBank[currentIdx];
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
         
-        // Geometric Visualizer display logic for engineering context
-        const drawingBox = document.getElementById("drawing-box");
-        if (currentIdx === 0 || currentIdx >= 20) {
-            drawingBox.style.display = "flex";
-        } else {
-            drawingBox.style.display = "none";
-        }
+        quizData.forEach((data, index) => {
+            let optionsHTML = data.a.map((opt, oIdx) => 
+                `<li class="option-item" onclick="handleAnswer(${index}, ${oIdx})">${opt}</li>`
+            ).join('');
 
-        const currentNum = currentIdx + 1;
-        document.getElementById("q-counter").innerText = currentLang === 'en' ? `Question ${currentNum} of ${masterBank.length}` : `प्रश्न ${currentNum} / ${masterBank.length}`;
-        document.getElementById("progress-fill").style.width = `${(currentIdx / masterBank.length) * 100}%`;
-        document.getElementById("q-text").innerText = currentLang === 'en' ? currentData.en_q : currentData.hi_q;
-
-        const optionsList = currentLang === 'en' ? currentData.options_en : currentData.options_hi;
-        optionsList.forEach((opt, index) => {
-            const btn = document.createElement("button");
-            btn.className = "option-card";
-            btn.innerHTML = `<span>${opt}</span><span id="mark-${index}"></span>`;
-            btn.onclick = () => selectOption(index, btn);
-            qGrid.appendChild(btn);
+            container.innerHTML += `
+                <div class="question-card ${index === 0 ? 'active' : ''}" id="q-${index}">
+                    <h3>Sawal ${index + 1}: ${data.q}</h3>
+                    <ul class="options-list">${optionsHTML}</ul>
+                </div>
+            `;
         });
+        toggleSwitch('A'); // Init light state
     }
 
-    function selectOption(selectedIndex, clickedBtn) {
-        const currentData = masterBank[currentIdx];
-        const correctIndex = currentData.correct;
-        const allButtons = document.getElementById("options-grid").getElementsByClassName("option-card");
-
-        for (let b of allButtons) { b.disabled = true; }
-
-        if (selectedIndex === correctIndex) {
-            clickedBtn.classList.add("correct");
-            document.getElementById(`mark-${selectedIndex}`).innerText = "✅";
-            userScore++;
-        } else {
-            clickedBtn.classList.add("wrong");
-            document.getElementById(`mark-${selectedIndex}`).innerText = "❌";
-            allButtons[correctIndex].classList.add("correct");
-            document.getElementById(`mark-${correctIndex}`).innerText = "✅";
+    // Automatic transition without submit button
+    function handleAnswer(qIdx, selectedIdx) {
+        if(selectedIdx === quizData[qIdx].c) {
+            score++;
         }
-        document.getElementById("next-btn").style.display = "block";
-    }
 
-    function nextAction() {
-        currentIdx++;
-        if (currentIdx < masterBank.length) { loadQuestion(); } 
-        else { document.getElementById("progress-fill").style.width = "100%"; showFinalResults(); }
-    }
+        document.getElementById(`q-${qIdx}`).classList.remove('active');
+        currentQuestion++;
 
-    function showFinalResults() {
-        document.getElementById("quiz-ui").style.display = "none";
-        document.getElementById("result-ui").style.display = "block";
-        document.getElementById("score-display").innerText = `${userScore} / ${masterBank.length}`;
-        const feedbackEl = document.getElementById("res-feedback");
-        const percentage = (userScore / masterBank.length) * 100;
+        // Update progress bar
+        const progressPercent = ((currentQuestion) / quizData.length) * 100;
+        document.getElementById('progress').style.width = `${progressPercent}%`;
 
-        if (currentLang === 'en') {
-            document.getElementById("res-title").innerText = "Skill Matrix Scoreboard 🏆";
-            feedbackEl.innerText = percentage >= 80 ? "Phenomenal! Your Employability Skills are up to corporate industry standards." : percentage >= 50 ? "Good work! Keep learning to boost your placement skills." : "Needs comprehensive revision.";
+        if(currentQuestion < quizData.length) {
+            document.getElementById(`q-${currentQuestion}`).classList.add('active');
         } else {
-            document.getElementById("res-title").innerText = "योग्यता स्कोरबोर्ड 🏆";
-            feedbackEl.innerText = percentage >= 80 ? "असाधारण! आपकी एम्प्लॉयबिलिटी स्किल्स कॉर्पोरेट इंडस्ट्री के मानकों के अनुकूल हैं।" : percentage >= 50 ? "अच्छा काम! प्लेसमेंट स्किल्स को बढ़ाने के लिए नियमित अभ्यास करते रहें।" : "व्यापक पुनरीक्षण की आवश्यकता है।";
+            showResults();
         }
     }
 
-    function resetQuiz() { startQuiz(); }
-    window.onload = () => { startQuiz(); };
+    function showResults() {
+        document.getElementById('quiz-container').style.display = 'none';
+        const resultCard = document.getElementById('result-card');
+        resultCard.style.display = 'block';
+        document.getElementById('score-text').innerText = `Aapne 10 me se ${score} sawalo ke sahi jawab diye hain!`;
+    }
+
+    function restartQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        document.getElementById('progress').style.width = '10%';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('result-card').style.display = 'none';
+        initQuiz();
+    }
+
+    // Start script
+    window.onload = initQuiz;
 </script>
 
 </body>
