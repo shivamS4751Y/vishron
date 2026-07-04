@@ -3,122 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two-Way Switch Wiring - Seekho Aur Khelo</title>
+    <title>व्हीटस्टोन ब्रिज (Wheatstone Bridge) - Real Circuit Diagram</title>
     <style>
         :root {
-            --primary: #007BFF;
-            --success: #28a745;
-            --danger: #dc3545;
-            --dark: #2d3436;
+            --primary: #4a69bd;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            background: #eef2f7;
             margin: 0;
             padding: 20px;
             color: var(--dark);
         }
         .container {
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
         }
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 25px;
+            border: 1px solid #e1e8ed;
         }
         h1, h2, h3 {
-            color: #004085;
+            color: #1e3d59;
             margin-top: 0;
         }
-        /* Simulator Styling */
+
+        /* --- DIAGRAM & SIMULATOR STYLING --- */
         .simulator-box {
-            background: #f8f9fa;
-            border: 2px dashed #b2bec3;
-            border-radius: 8px;
-            padding: 20px;
+            background: #2d3436; /* Dark background for glowing wires */
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
+            color: white;
+            position: relative;
         }
-        .circuit {
+        
+        /* Realistic Diamond Circuit Wrapper */
+        .circuit-diagram {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 20px auto;
+        }
+
+        /* SVG Wiring Connections */
+        .circuit-wires {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .wire-line {
+            stroke: #636e72;
+            stroke-width: 4;
+            fill: none;
+            transition: stroke 0.3s, stroke-width 0.3s;
+        }
+        .wire-line.active {
+            stroke: #ff7675;
+            stroke-width: 5;
+        }
+        .wire-line.balanced-wire {
+            stroke: #55efc4;
+            stroke-width: 5;
+        }
+
+        /* Component Nodes (Nodes on the Diamond) */
+        .node {
+            position: absolute;
+            width: 75px;
+            height: 45px;
+            background: #ffeaa7;
+            border: 3px solid #fdcb6e;
+            color: #2d3436;
+            font-weight: bold;
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            margin: 20px 0;
+            justify-content: center;
+            border-radius: 6px;
+            z-index: 2;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
         }
-        .switch-container {
-            background: #dfe6e9;
+
+        /* Diamond Layout Positions */
+        #res-p { top: 40px; left: 30px; }
+        #res-q { top: 40px; right: 30px; }
+        #res-r { bottom: 40px; left: 30px; }
+        #res-s { bottom: 40px; right: 30px; background: #ff7675; border-color: #d63031; color: white;}
+
+        /* Central Galvanometer */
+        .galvano-center {
+            position: absolute;
+            top: 135px;
+            left: 135px;
+            width: 50px;
+            height: 50px;
+            background: #fab1a0;
+            border: 3px solid #e17055;
+            color: #2d3436;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+        }
+        .galvano-center.balanced {
+            background: #55efc4 !important;
+            border-color: #00b894 !important;
+            box-shadow: 0 0 20px #55efc4;
+        }
+
+        /* Junction Dots (Kone) */
+        .junc {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            z-index: 4;
+            transform: translate(-50%, -50%);
+        }
+        #junc-top    { top: 20px; left: 50%; }
+        #junc-bottom { bottom: 8px; left: 50%; }
+        #junc-left   { top: 50%; left: 15px; }
+        #junc-right  { top: 50%; right: 3px; }
+
+        .control-panel {
+            margin-top: 25px;
+            background: rgba(255,255,255,0.1);
             padding: 15px;
             border-radius: 8px;
-            width: 100px;
         }
-        .switch-btn {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
+        .slider { width: 80%; margin: 10px 0; }
+        #sim-status { font-weight: bold; margin-top: 10px; font-size: 16px;}
+
+        /* --- QUIZ STYLING --- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #f1f2f6;
+            padding: 10px 15px;
+            border-radius: 8px;
             font-weight: bold;
         }
-        .switch-btn.active {
-            background: #0984e3;
-            color: white;
-            border-color: #0984e3;
-        }
-        .bulb {
-            font-size: 70px;
-            transition: transform 0.2s;
-        }
-        .bulb.glow {
-            text-shadow: 0 0 30px #ffeaa7;
-            transform: scale(1.1);
-        }
-        .status-text {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        /* Quiz Styling */
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
         .options-btn {
-            display: block;
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid var(--primary);
+            padding: 14px 20px;
+            border: 2px solid #dcdde1;
             background: white;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             text-align: left;
-            transition: 0.2s;
+            transition: all 0.2s;
+            font-weight: 500;
         }
-        .options-btn:hover {
-            background: #e8f4fd;
-        }
-        .hidden {
-            display: none;
-        }
-        .score {
-            font-size: 24px;
-            color: var(--success);
-            font-weight: bold;
-        }
-        .reset-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .trick-box {
-            background: #e3f2fd;
-            border-left: 5px solid var(--primary);
-            padding: 15px;
-            border-radius: 4px;
+        .options-btn:hover { border-color: var(--primary); background: #f5f7fa; }
+        .options-btn.correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; }
+        .options-btn.incorrect { background: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
+        .hidden { display: none; }
+        .score-display { font-size: 48px; color: var(--success); font-weight: bold; margin: 20px 0; }
+        .btn-action {
+            background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;
         }
     </style>
 </head>
@@ -126,118 +190,147 @@
 
 <div class="container">
 
-    <!-- 1. Introduction Card -->
+    <!-- Introduction -->
     <div class="card">
-        <h1>💡 2-Way Switch Wiring (सीढ़ी की वायरिंग)</h1>
-        <p>जब हमें <strong>एक ही बल्ब को दो अलग-अलग जगहों</strong> (जैसे सीढ़ी के नीचे और ऊपर) से चालू या बंद करना होता है, तो हम 2-Way Switch का इस्तेमाल करते हैं।</p>
-        <div class="trick-box">
-            <strong>याद रखने की जादुई ट्रिक (Cheat Code):</strong><br>
-            • अगर दोनों स्विच की दिशा <strong>SAME (एक जैसी)</strong> होगी ➔ तो बल्ब <strong>जलेगा (ON)</strong>।<br>
-            • अगर दोनों स्विच की दिशा <strong>OPPOSITE (अलग)</strong> होगी ➔ तो बल्ब <strong>बंद (OFF)</strong> रहेगा।
-        </div>
+        <h1>💎 व्हीटस्टोन ब्रिज (Wiring & Circuit Diagram)</h1>
+        <p>नीचे दिए गए रियल सर्किट डायग्राम को देखें। इसमें 4 रेजिस्टेंस <strong>(P, Q, R, S)</strong> एक चतुर्भुज (Diamond) के रूप में जुड़े हुए हैं और उनके बीच में <strong>गैल्वेनोमीटर (G)</strong> एक पुल की तरह लगा हुआ है।</p>
     </div>
 
-    <!-- 2. Interactive Simulator Card -->
+    <!-- Live Simulator Card (New Graphical Layout) -->
     <div class="card">
-        <h2>🛠️ खुद क्लिक करके सीखें (Live Simulator)</h2>
-        <p>नीचे दिए गए दोनों स्विच को दबाकर देखें कि करंट कैसे फ्लो होता है:</p>
+        <h2>🛠️ लाइव सर्किट वायरिंग सिम्युलेटर</h2>
+        <p>स्लाइडर को घुमाकर <strong>S की वैल्यू को 20 Ω पर लाएं</strong>। जैसे ही ब्रिज बैलेंस होगा, सर्किट की तारों का रंग बदल जाएगा और करंट बहना बंद हो जाएगा!</p>
         
         <div class="simulator-box">
-            <div class="circuit">
-                <!-- Switch A -->
-                <div class="switch-container">
-                    <strong>स्विच A (नीचे)</strong>
-                    <button id="swA-up" class="switch-btn active" onclick="toggleSwitch('A', 'UP')">UP ↑</button>
-                    <button id="swA-down" class="switch-btn" onclick="toggleSwitch('A', 'DOWN')">DOWN ↓</button>
-                </div>
+            <div class="circuit-diagram">
+                <!-- Wiring Vector Lines -->
+                <svg class="circuit-wires">
+                    <!-- Top Junction to P and Q -->
+                    <path d="M 160 20 L 67 62" class="wire-line active" id="w1"/>
+                    <path d="M 160 20 L 252 62" class="wire-line active" id="w2"/>
+                    <!-- Left Junction to P and R -->
+                    <path d="M 15 160 L 67 62" class="wire-line active" id="w3"/>
+                    <path d="M 15 160 L 67 258" class="wire-line active" id="w4"/>
+                    <!-- Right Junction to Q and S -->
+                    <path d="M 305 160 L 252 62" class="wire-line active" id="w5"/>
+                    <path d="M 305 160 L 252 258" class="wire-line active" id="w6"/>
+                    <!-- Bottom Junction to R and S -->
+                    <path d="M 160 300 L 67 258" class="wire-line active" id="w7"/>
+                    <path d="M 160 300 L 252 258" class="wire-line active" id="w8"/>
+                    <!-- Center Bridge Wiring for Galvanometer -->
+                    <path d="M 15 160 L 135 160" class="wire-line active" id="w9"/>
+                    <path d="M 185 160 L 305 160" class="wire-line active" id="w10"/>
+                </svg>
 
-                <!-- Live Bulb -->
-                <div>
-                    <div id="bulb-icon" class="bulb glow">💡</div>
-                </div>
+                <!-- Junction Dots -->
+                <div class="junc" id="junc-top"></div>
+                <div class="junc" id="junc-bottom"></div>
+                <div class="junc" id="junc-left"></div>
+                <div class="junc" id="junc-right"></div>
 
-                <!-- Switch B -->
-                <div class="switch-container">
-                    <strong>स्विच B (ऊपर)</strong>
-                    <button id="swB-up" class="switch-btn active" onclick="toggleSwitch('B', 'UP')">UP ↑</button>
-                    <button id="swB-down" class="switch-btn" onclick="toggleSwitch('B', 'DOWN')">DOWN ↓</button>
-                </div>
+                <!-- Resistors Nodes -->
+                <div class="node" id="res-p">P = 10 Ω</div>
+                <div class="node" id="res-q">Q = 10 Ω</div>
+                <div class="node" id="res-r">R = 20 Ω</div>
+                <div class="node" id="res-s">S = 5 Ω</div>
+
+                <!-- Meter -->
+                <div id="main-meter" class="galvano-center">G</div>
             </div>
-            <div id="circuit-status" class="status-text" style="color: var(--success);">करंट चालू है! बल्ब जल रहा है। 😊</div>
+            
+            <div class="control-panel">
+                <label><strong>अज्ञात रेजिस्टेंस S का मान बदलें:</strong></label><br>
+                <input type="range" id="sim-slider" class="slider" min="5" max="35" value="5" oninput="runCircuitLogic(this.value)">
+                <div id="sim-status" style="color: #ff7675;">असंतुलित सर्किट! गैल्वेनोमीटर (G) में करंट बह रहा है। ❌</div>
+            </div>
         </div>
     </div>
 
-    <!-- 3. Smart Quiz Card -->
+    <!-- Smart Quiz Section (10 Dynamic Questions) -->
     <div class="card">
-        <h2>🧠 आपका टेस्ट (Quiz Game)</h2>
-        <p>देखते हैं आपको कितना याद हुआ! (यह गेम बंद होने पर भी यहीं से शुरू होगा)</p>
-        <hr>
-
-        <div id="quiz-box">
-            <h3 id="question-number">Question 1</h3>
-            <p id="question-text" style="font-size: 18px; font-weight: 500;">Loading question...</p>
-            <div id="options-container"></div>
+        <h2>🧠 टॉपिक टेस्ट (Quiz Game)</h2>
+        <div id="quiz-wrapper">
+            <div class="quiz-header">
+                <span id="q-counter">प्रश्न 1 / 10</span>
+                <span id="score-counter" style="color: var(--success);">स्कोर: 0</span>
+            </div>
+            <div id="question-box">
+                <h3 id="q-text">Loading Question...</h3>
+                <div id="options-box" class="options-grid"></div>
+                <div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button id="next-btn" class="btn-action hidden" onclick="goNext()">अगला प्रश्न ➔</button>
+            </div>
         </div>
-        
-        <div id="result-box" class="hidden" style="text-align: center;">
-            <h3>🎉 क्विज़ पूरी हुई!</h3>
-            <p class="score">आपका स्कोर: <span id="final-score">0</span> / <span id="total-questions">0</span></p>
-            <button class="reset-btn" onclick="resetQuiz()">क्विज़ दोबारा शुरू करें</button>
+
+        <div id="result-wrapper" class="hidden" style="text-align: center;">
+            <h2>🎉 क्विज़ समाप्त!</h2>
+            <div class="score-display"><span id="final-score">0</span> / 10</div>
+            <p id="remark-text" style="font-size: 18px; font-weight: bold;"></p>
+            <button class="btn-action" onclick="restartQuiz()" style="background: var(--danger);">फिर से खेलें</button>
         </div>
     </div>
 
 </div>
 
 <script>
-// --- SIMULATOR LOGIC ---
-let stateA = 'UP';
-let stateB = 'UP';
-
-function toggleSwitch(switchName, direction) {
-    if (switchName === 'A') {
-        stateA = direction;
-        document.getElementById('swA-up').classList.toggle('active', direction === 'UP');
-        document.getElementById('swA-down').classList.toggle('active', direction === 'DOWN');
-    } else {
-        stateB = direction;
-        document.getElementById('swB-up').classList.toggle('active', direction === 'UP');
-        document.getElementById('swB-down').classList.toggle('active', direction === 'DOWN');
-    }
-    updateCircuit();
-}
-
-function updateCircuit() {
-    const bulb = document.getElementById('bulb-icon');
-    const status = document.getElementById('circuit-status');
+// --- REALTIME WIRING CIRCUIT LOGIC ---
+function runCircuitLogic(val) {
+    const sNode = document.getElementById('res-s');
+    const meter = document.getElementById('main-meter');
+    const status = document.getElementById('sim-status');
+    const wires = document.querySelectorAll('.wire-line');
     
-    // Magic Rule: Same direction = ON, Opposite = OFF
-    if (stateA === stateB) {
-        bulb.innerHTML = "💡";
-        bulb.classList.add('glow');
-        status.innerText = "करंट चालू है! दोनों स्विच एक ही दिशा में हैं (Circuit Complete) ।";
-        status.style.color = "var(--success)";
+    sNode.innerText = `S = ${val} Ω`;
+    
+    if (parseInt(val) === 20) {
+        // Balanced Condition achieved
+        meter.classList.add('balanced');
+        meter.innerText = "0";
+        status.innerText = "संतुलित (Balanced) अवस्था! बीच के तार में करंट = 0 है। ⚖️💚";
+        status.style.color = "#2ecc71";
+        
+        // Turn wires to green state
+        wires.forEach(w => {
+            w.classList.remove('active');
+            w.classList.add('balanced-wire');
+        });
     } else {
-        bulb.innerHTML = "🌑";
-        bulb.classList.remove('glow');
-        status.innerText = "बल्ब बंद है! दोनों स्विच अलग दिशा में हैं (Circuit Broken) ।";
-        status.style.color = "var(--danger)";
+        // Unbalanced Condition
+        meter.classList.remove('balanced');
+        meter.innerText = "G";
+        status.innerText = "असंतुलित सर्किट! गैल्वेनोमीटर (G) में करंट बह रहा है। ❌";
+        status.style.color = "#ff7675";
+        
+        // Turn wires back to red alert state
+        wires.forEach(w => {
+            w.classList.remove('balanced-wire');
+            w.classList.add('active');
+        });
     }
 }
 
-
-// --- REFRESH-PROOF & SHUFFLE QUIZ LOGIC ---
-const originalQuestions = [
-    { q: "2-Way Switch का इस्तेमाल मुख्य रूप से कहाँ किया जाता है?", options: ["रसोई घर में", "सीढ़ियों की वायरिंग (Staircase) में", "कूलर के अंदर", "सड़क की लाइट में"], answer: "सीढ़ियों की वायरिंग (Staircase) में" },
-    { q: "अगर 2-way वायरिंग में दोनों स्विच UP स्थिति में हैं, तो बल्ब की क्या हालत होगी?", options: ["बल्ब बंद रहेगा", "बल्ब ब्लास्ट हो जाएगा", "बल्ब चालू (ON) हो जाएगा", "बल्ब धीमा जलेगा"], answer: "बल्ब चालू (ON) हो जाएगा" },
-    { q: "यदि स्विच A 'UP' है और स्विच B 'DOWN' है, तो क्या बल्ब जलेगा?", options: ["हाँ, जलेगा", "नहीं, बंद रहेगा (OFF)", "सिर्फ आधा जलेगा", "वायरिंग जल जाएगी"], answer: "नहीं, बंद रहेगा (OFF)" },
-    { q: "2-Way वायरिंग का आसान शॉर्टकट रूल क्या है?", options: ["दिशा अलग तो ON", "दिशा SAME तो ON", "हमेशा OFF रहेगा", "कोई रूल नहीं है"], answer: "दिशा SAME तो ON" }
+// --- SHUFFLE & REFRESH-PROOF QUIZ CODE ---
+const questionBank = [
+    { q: "व्हीटस्टोन ब्रिज का मुख्य उपयोग क्या खोजने के लिए किया जाता है?", options: ["अज्ञात वोल्टेज", "अज्ञात रेजिस्टेंस (Unknown Resistance)", "बैटरी की पावर", "इलेक्ट्रिक करंट"], answer: "अज्ञात रेजिस्टेंस (Unknown Resistance)" },
+    { q: "जब व्हीटस्टोन ब्रिज 'बैलेंस' होता है, तो गैल्वेनोमीटर में से कितना करंट बहता है?", options: ["अधिकतम करंट", "आधा करंट", "शून्य (0) करंट", "1 एम्पीयर"], answer: "शून्य (0) करंट" },
+    { q: "व्हीटस्टोन ब्रिज में कुल कितने रेजिस्टेंस (Resistors) का नेटवर्क लगा होता है?", options: ["2", "3", "4", "6"], answer: "4" },
+    { q: "ब्रिज के बैलेंस होने की सही स्थिति का फॉर्मूला क्या है?", options: ["P + Q = R + S", "P/Q = R/S", "P*R = Q*S", "P-Q = R-S"], answer: "P/Q = R/S" },
+    { q: "गैल्वेनोमीटर में सुई का शून्य पर रुकना क्या कहलाता है?", options: ["Full Deflection", "Null Deflection", "Max Reading", "Error state"], answer: "Null Deflection" },
+    { q: "यदि P=10, Q=10, R=5 है और ब्रिज संतुलित है, तो S का मान क्या होगा?", options: ["5 Ω", "10 Ω", "20 Ω", "1 Ω"], answer: "5 Ω" },
+    { q: "व्हीटस्टोन ब्रिज किस सिद्धांत पर काम करता है?", options: ["ओह्म का नियम", "शून्य विक्षेप सिद्धांत (Null Deflection)", "फैराडे का नियम", "जूल का नियम"], answer: "शून्य विक्षेप सिद्धांत (Null Deflection)" },
+    { q: "ब्रिज के असंतुलित होने पर गैल्वेनोमीटर क्या दिखाता है?", options: ["कुछ नहीं बदलता", "सुई में विक्षेप (Deflection)", "ब्लास्ट हो जाता है", "लाइट जलती है"], answer: "सुई में विक्षेप (Deflection)" },
+    { q: "क्या व्हीटस्टोन ब्रिज से बहुत उच्च (Very High) रेजिस्टेंस सटीकता से नापा जा सकता है?", options: ["हाँ, हमेशा", "नहीं, क्योंकि गैल्वेनोमीटर संवेदनशील नहीं रह जाता", "केवल AC करंट में", "इनमें से कोई नहीं"], answer: "नहीं, क्योंकि गैल्वेनोमीटर संवेदनशील नहीं रह जाता" },
+    { q: "व्हीटस्टोन ब्रिज का मॉडिफाइड (व्यावहारिक) रूप कौन सा है जिसे लैब में इस्तेमाल करते हैं?", options: ["मीटर ब्रिज (Meter Bridge)", "एमीटर", "वोल्टमीटर", "जेनरेटर"], answer: "मीटर ब्रिज (Meter Bridge)" }
 ];
 
-let questions = [];
-let currentQuestionIndex = 0;
+let currentQuestions = [];
+let index = 0;
 let score = 0;
+let isAnswered = false;
 
-function shuffleArray(array) {
+function shuffleArr(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -245,95 +338,118 @@ function shuffleArray(array) {
     return array;
 }
 
-function initQuiz() {
-    const savedQuestions = localStorage.getItem('twoway_questions');
-    const savedIndex = localStorage.getItem('twoway_current_index');
-    const savedScore = localStorage.getItem('twoway_score');
+function initQuizState() {
+    const savedQ = localStorage.getItem('diag_q');
+    const savedIdx = localStorage.getItem('diag_idx');
+    const savedScore = localStorage.getItem('diag_score');
 
-    if (savedQuestions && savedIndex && savedScore) {
-        questions = JSON.parse(savedQuestions);
-        currentQuestionIndex = parseInt(savedIndex);
+    if (savedQ && savedIdx && savedScore) {
+        currentQuestions = JSON.parse(savedQ);
+        index = parseInt(savedIdx);
         score = parseInt(savedScore);
     } else {
-        questions = shuffleArray([...originalQuestions]);
-        currentQuestionIndex = 0;
+        currentQuestions = shuffleArr([...questionBank]);
+        currentQuestions.forEach(item => shuffleArr(item.options));
+        index = 0;
         score = 0;
-        saveState();
+        saveData();
     }
 
-    if (currentQuestionIndex >= questions.length) {
-        showResults();
+    if (index >= currentQuestions.length) {
+        showFinalScore();
     } else {
-        showQuestion();
+        displayQ();
     }
 }
 
-function saveState() {
-    localStorage.setItem('twoway_questions', JSON.stringify(questions));
-    localStorage.setItem('twoway_current_index', currentQuestionIndex);
-    localStorage.setItem('twoway_score', score);
+function saveData() {
+    localStorage.setItem('diag_q', JSON.stringify(currentQuestions));
+    localStorage.setItem('diag_idx', index);
+    localStorage.setItem('diag_score', score);
 }
 
-function showQuestion() {
-    document.getElementById('quiz-box').classList.remove('hidden');
-    document.getElementById('result-box').classList.add('hidden');
+function displayQ() {
+    isAnswered = false;
+    document.getElementById('quiz-wrapper').classList.remove('hidden');
+    document.getElementById('result-wrapper').classList.add('hidden');
+    document.getElementById('next-btn').classList.add('hidden');
+    document.getElementById('feedback').innerText = '';
 
-    const currentQuestion = questions[currentQuestionIndex];
-    document.getElementById('question-number').innerText = `प्रश्न ${currentQuestionIndex + 1} / ${questions.length}`;
-    document.getElementById('question-text').innerText = currentQuestion.q;
+    document.getElementById('q-counter').innerText = `प्रश्न ${index + 1} / ${currentQuestions.length}`;
+    document.getElementById('score-counter').innerText = `स्कोर: ${score}`;
 
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
+    const data = currentQuestions[index];
+    document.getElementById('q-text').innerText = data.q;
 
-    // Options को भी shuffle कर रहे हैं ताकि चीटिंग न हो
-    const shuffledOptions = shuffleArray([...currentQuestion.options]);
+    const box = document.getElementById('options-box');
+    box.innerHTML = '';
 
-    shuffledOptions.forEach(option => {
-        const button = document.createElement('button');
-        button.innerText = option;
-        button.classList.add('options-btn');
-        button.onclick = () => checkAnswer(option);
-        optionsContainer.appendChild(button);
+    data.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.innerText = opt;
+        btn.classList.add('options-btn');
+        btn.onclick = () => checkQuizAns(btn, opt);
+        box.appendChild(btn);
     });
 }
 
-function checkAnswer(selectedOption) {
-    const correctAnswer = questions[currentQuestionIndex].answer;
+function checkQuizAns(btn, opt) {
+    if (isAnswered) return;
+    isAnswered = true;
 
-    if (selectedOption === correctAnswer) {
+    const data = currentQuestions[index];
+    const btns = document.querySelectorAll('.options-btn');
+    
+    if (opt === data.answer) {
+        btn.classList.add('correct');
+        document.getElementById('feedback').innerText = "🌟 बिल्कुल सही उत्तर!";
+        document.getElementById('feedback').style.color = "var(--success)";
         score++;
-    }
-
-    currentQuestionIndex++;
-    saveState();
-
-    if (currentQuestionIndex < questions.length) {
-        showQuestion();
+        document.getElementById('score-counter').innerText = `स्कोर: ${score}`;
     } else {
-        showResults();
+        btn.classList.add('incorrect');
+        document.getElementById('feedback').innerText = `❌ गलत! सही जवाब: ${data.answer}`;
+        document.getElementById('feedback').style.color = "var(--danger)";
+        
+        btns.forEach(b => {
+            if (b.innerText === data.answer) b.classList.add('correct');
+        });
+    }
+    document.getElementById('next-btn').classList.remove('hidden');
+    saveData();
+}
+
+function goNext() {
+    index++;
+    saveData();
+    if (index < currentQuestions.length) {
+        displayQ();
+    } else {
+        showFinalScore();
     }
 }
 
-function showResults() {
-    document.getElementById('quiz-box').classList.add('hidden');
-    document.getElementById('result-box').classList.remove('hidden');
+function showFinalScore() {
+    document.getElementById('quiz-wrapper').classList.add('hidden');
+    document.getElementById('result-wrapper').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
-    document.getElementById('total-questions').innerText = questions.length;
+    
+    const txt = document.getElementById('remark-text');
+    if (score >= 9) txt.innerText = "🎉 अद्भुत! आपको पूरा टॉपिक बहुत अच्छे से समझ आ गया है!";
+    else if (score >= 5) txt.innerText = "👍 अच्छा प्रयास! आप इसे और बेहतर कर सकते हैं।";
+    else txt.innerText = "💪 कोई बात नहीं, एक बार सर्किट को फिर से समझें और दोबारा खेलें!";
 }
 
-function resetQuiz() {
-    localStorage.removeItem('twoway_questions');
-    localStorage.removeItem('twoway_current_index');
-    localStorage.removeItem('twoway_score');
-    initQuiz();
+function restartQuiz() {
+    localStorage.removeItem('diag_q');
+    localStorage.removeItem('diag_idx');
+    localStorage.removeItem('diag_score');
+    initQuizState();
 }
 
-// Page लोड होते ही सब सेट करें
 window.onload = () => {
-    updateCircuit();
-    initQuiz();
+    initQuizState();
 };
 </script>
-
 </body>
 </html>
