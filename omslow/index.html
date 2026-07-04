@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ओह्म का नियम (Ohm's Law) - सीखो और खेलो</title>
+    <style>
+        :root {
+            --primary: #4a69bd;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        .container { max-width: 750px; margin: 0 auto; }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border: 1px solid #e1e8ed;
+        }
+        h1, h2, h3 { color: #1e3d59; margin-top: 0; }
+        
+        .highlight-box {
+            background: #e3faf2;
+            border-left: 5px solid var(--success);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        /* --- TRIANGLE TRICK UX STYLING --- */
+        .triangle-section {
+            display: flex;
+            align-content: center;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .ohm-triangle {
+            width: 200px;
+            height: 180px;
+            position: relative;
+        }
+        .tri-btn {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #2c3e50;
+            background: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .tri-btn:hover, .tri-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.15);
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.5);
+        }
+        #btn-v { top: 15px; left: 75px; }
+        #btn-i { bottom: 25px; left: 35px; }
+        #btn-r { bottom: 25px; right: 35px; }
+        
+        /* Drawing the lines inside triangle container */
+        .triangle-svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .formula-display {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+        }
+
+        /* --- LIVE CIRCUIT SIMULATOR --- */
+        .circuit-box {
+            background: #2d3436;
+            padding: 25px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+        }
+        .visual-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 25px 0;
+        }
+        .component {
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .battery { background: #e74c3c; border: 2px solid #c0392b; }
+        .resistor { background: #f1c40f; border: 2px solid #f39c12; color: #2c3e50; }
+        .current-flow {
+            font-size: 24px;
+            color: #55efc4;
+            text-shadow: 0 0 10px rgba(85,239,196,0.3);
+            transition: transform 0.2s;
+        }
+        .slider { width: 80%; margin: 10px 0; }
+
+        /* --- QUIZ STYLING --- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #f1f2f6;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
+        .options-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #dcdde1;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .options-btn:hover { border-color: var(--primary); background: #f5f7fa; }
+        .options-btn.correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; }
+        .options-btn.incorrect { background: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
+        .hidden { display: none; }
+        .score-display { font-size: 48px; color: var(--success); font-weight: bold; margin: 20px 0; }
+        .btn-action {
+            background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 1. Introduction -->
+    <div class="card">
+        <h1>⚡ ओह्म का नियम (Ohm's Law) क्या है?</h1>
+        <p>इसे एक बहुत ही आसान उदाहरण से समझो: मान लो एक पाइप है जिसमें से <strong>पानी (Current - I)</strong> बह रहा है। पानी को पीछे से धक्का देने वाला जो <strong>प्रेशर (Voltage - V)</strong> है, वह जितना ज्यादा होगा, पानी उतना ही तेज बहेगा! लेकिन पाइप के अंदर जमी <strong>कचरा/रुकावट (Resistance - R)</strong> जितनी ज्यादा होगी, पानी उतना ही धीमा हो जाएगा।</p>
+        
+        <div class="highlight-box">
+            <strong>सरल शब्दों में:</strong> किसी तार में बहने वाला करंट ($I$), वोल्टेज ($V$) के सीधे आनुपातिक (Directly Proportional) होता है और रुकावट ($R$) के व्युत्क्रमानुपातिक (Inversely Proportional) होता है।
+        </div>
+    </div>
+
+    <!-- 2. Triangle Magic Trick -->
+    <div class="card">
+        <h2>📐 जादुई त्रिभुज ट्रिक (Triangle Trick)</h2>
+        <p>नीचे दिए गए त्रिकोण में किसी भी अक्षर पर <strong>क्लिक करें</strong>। जिसका फॉर्मूला जानना हो, उसे अपनी उंगली से छिपा लें, बाकी बचा हुआ आपका फॉर्मूला है!</p>
+        
+        <div class="triangle-section">
+            <div class="ohm-triangle">
+                <svg class="triangle-svg">
+                    <polygon points="100,10 15,160 185,160" style="fill:none;stroke:#2c3e50;stroke-width:4" />
+                    <line x1="100" y1="90" x2="15" y2="90" style="stroke:#2c3e50;stroke-width:3" />
+                    <line x1="100" y1="90" x2="185" y2="90" style="stroke:#2c3e50;stroke-width:3" />
+                    <line x1="100" y1="90" x2="100" y2="160" style="stroke:#2c3e50;stroke-width:3" />
+                </svg>
+                <button id="btn-v" class="tri-btn active" onclick="showFormula('V')">V</button>
+                <button id="btn-i" class="tri-btn" onclick="showFormula('I')">I</button>
+                <button id="btn-r" class="tri-btn" onclick="showFormula('R')">R</button>
+            </div>
+
+            <div class="formula-display" id="formula-box">
+                <h3 id="form-title">V (वोल्टेज) का नियम</h3>
+                <h2 id="form-eq" style="color: var(--primary); margin: 10px 0;">$$V = I \times R$$</h2>
+                <p id="form-desc">वोल्टेज निकालने के लिए करंट (I) और रेजिस्टेंस (R) को आपस में गुणा (Multiply) करें।</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Live Circuit Simulation -->
+    <div class="card">
+        <h2>🛠️ लाइव ओह्म लॉ सिम्युलेटर</h2>
+        <p>वोल्टेज बढ़ाकर देखें कि कैसे करंट तेजी से भागता है और रेजिस्टेंस बढ़ाने पर कैसे करंट धीमा हो जाता है!</p>
+        
+        <div class="circuit-box">
+            <div class="visual-container">
+                <div id="box-v" class="component battery">वोल्टेज (V): 5V</div>
+                <div id="flow-i" class="current-flow">➔ ➔ ➔</div>
+                <div id="box-r" class="component resistor">रेजिस्टेंस (R): 5 Ω</div>
+            </div>
+            
+            <h3 id="calc-current" style="color: #55efc4;">बहने वाला करंट (I) = 1.00 एम्पीयर</h3>
+
+            <div style="margin-top:20px; text-align:left;">
+                <label>🔋 वोल्टेज (V) बढ़ाएं/घटाएं: </label>
+                <input type="range" id="slide-v" class="slider" min="2" max="24" value="5" oninput="updateOhmCircuit()">
+                <br>
+                <label>🚧 रुकावट (R) बढ़ाएं/घटाएं: </label>
+                <input type="range" id="slide-r" class="slider" min="2" max="20" value="5" oninput="updateOhmCircuit()">
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Smart Quiz Game -->
+    <div class="card">
+        <h2>🧠 ओह्म का नियम - महा क्विज़ गेम</h2>
+        <p>इस टॉपिक के 10 सबसे महत्वपूर्ण सवाल।</p>
+        
+        <div id="quiz-wrapper">
+            <div class="quiz-header">
+                <span id="q-counter">प्रश्न 1 / 10</span>
+                <span id="score-counter" style="color: var(--success);">स्कोर: 0</span>
+            </div>
+            <div id="question-box">
+                <h3 id="q-text">Loading...</h3>
+                <div id="options-box" class="options-grid"></div>
+                <div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button id="next-btn" class="btn-action hidden" onclick="goNext()">अगला प्रश्न ➔</button>
+            </div>
+        </div>
+
+        <div id="result-wrapper" class="hidden" style="text-align: center;">
+            <h2>🎉 क्विज़ समाप्त!</h2>
+            <div class="score-display"><span id="final-score">0</span> / 10</div>
+            <p id="remark-text" style="font-size: 18px; font-weight: bold;"></p>
+            <button class="btn-action" onclick="restartQuiz()" style="background: var(--danger);">फिर से खेलें</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// --- TRIANGLE TRICK DESCRIPTIONS ---
+const formulaData = {
+    'V': { title: "V (वोल्टेज) का नियम", eq: "$$V = I \\times R$$", desc: "यदि आपको वोल्टेज निकालना है, तो बचे हुए दोनों अक्षर (I और R) अगल-बगल हैं, इसलिए उन्हें गुणा करें।" },
+    'I': { title: "I (करंट) का नियम", eq: "$$I = \\frac{V}{R}$$", desc: "यदि करंट निकालना है, तो V ऊपर है और R नीचे, इसलिए वोल्टेज को रेजिस्टेंस से भाग (Divide) दें।" },
+    'R': { title: "R (रेजिस्टेंस) का नियम", eq: "$$R = \\frac{V}{I}$$", desc: "यदि रुकावट निकालनी है, तो V ऊपर है और I नीचे, इसलिए वोल्टेज को करंट से भाग (Divide) दें।" }
+};
+
+function showFormula(letter) {
+    document.querySelectorAll('.tri-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`btn-${letter.toLowerCase()}`).classList.add('active');
+    
+    document.getElementById('form-title').innerText = formulaData[letter].title;
+    document.getElementById('form-eq').innerText = formulaData[letter].eq;
+    document.getElementById('form-desc').innerText = formulaData[letter].desc;
+    
+    // Rerender LaTeX formulas dynamically if needed
+    if(window.MathJax) MathJax.typeset();
+}
+
+// --- LIVE SIMULATOR LOGIC ---
+function updateOhmCircuit() {
+    const v = parseFloat(document.getElementById('slide-v').value);
+    const r = parseFloat(document.getElementById('slide-r').value);
+    
+    const i = v / r;
+    
+    document.getElementById('box-v').innerText = `वोल्टेज (V): ${v}V`;
+    document.getElementById('box-r').innerText = `रेजिस्टेंस (R): ${r} Ω`;
+    document.getElementById('calc-current').innerText = `बहने वाला करंट (I) = ${i.toFixed(2)} एम्पीयर`;
+    
+    // Change speed/scale of current flow arrows based on value
+    const flow = document.getElementById('flow-i');
+    if (i > 3) {
+        flow.innerText = "➔➔➔➔➔";
+        flow.style.color = "#2ecc71";
+    } else if (i < 1) {
+        flow.innerText = "➔";
+        flow.style.color = "#e74c3c";
+    } else {
+        flow.innerText = "➔ ➔ ➔";
+        flow.style.color = "#55efc4";
+    }
+}
+
+// --- SHUFFLE & REFRESH-PROOF QUIZ CODE ---
+const questionBank = [
+    { q: "ओह्म के नियम का सही सूत्र (Formula) क्या है?", options: ["V = I / R", "V = I × R", "I = V × R", "R = I / V"], answer: "V = I × R" },
+    { q: "यदि किसी परिपथ में वोल्टेज बढ़ाया जाए, तो करंट पर क्या असर होगा?", options: ["करंट कम हो जाएगा", "करंट बढ़ जाएगा", "करंट शून्य हो जाएगा", "कोई बदलाव नहीं होगा"], answer: "करंट बढ़ जाएगा" },
+    { q: "रेजिस्टेंस (प्रतिरोध) का मात्रक (Unit) क्या होता है?", options: ["एम्पीयर", "वोल्ट", "ओह्म (Ω)", "वाट"], answer: "ओह्म (Ω)" },
+    { q: "करंट (I) को नापने की इकाई क्या है?", options: ["वोल्ट", "ओह्म", "वाट", "एम्पीयर"], answer: "एम्पीयर" },
+    { q: "यदि वोल्टेज 10V है और रेजिस्टेंस 2Ω है, तो करंट कितना होगा?", options: ["20 एम्पीयर", "5 एम्पीयर", "12 एम्पीयर", "0.2 एम्पीयर"], answer: "5 एम्पीयर" },
+    { q: "ओह्म के त्रिकोण ट्रिक में सबसे ऊपर कौन सा अक्षर होता है?", options: ["I", "R", "V", "G"], answer: "V" },
+    { q: "रेजिस्टेंस का मुख्य काम क्या होता है?", options: ["करंट को बढ़ावा देना", "करंट के रास्ते में रुकावट डालना", "वोल्टेज पैदा करना", "बैटरी चार्ज करना"], answer: "करंट के रास्ते में रुकावट डालना" },
+    { q: "यदि किसी तार का रेजिस्टेंस बहुत अधिक बढ़ा दिया जाए, तो करंट क्या होगा?", options: ["बहुत तेज बहेगा", "घट जाएगा या बंद हो जाएगा", "उतना ही रहेगा", "तार ठंडा हो जाएगा"], answer: "घट जाएगा या बंद हो जाएगा" },
+    { q: "ओह्म का नियम किस वैज्ञानिक ने दिया था?", options: ["अल्बर्ट आइंस्टीन", "जॉर्ज साइमन ओह्म", "माइकल फैराडे", "न्यूटन"], answer: "जॉर्ज साइमन ओह्म" },
+    { q: "क्या ओह्म का नियम सभी परिस्थितियों में तापमान बदलने पर भी बिल्कुल स्थिर रहता है?", options: ["हाँ", "नहीं, तापमान नियत (Constant) होना चाहिए", "केवल सर्दियों में", "इनमें से कोई नहीं"], answer: "नहीं, तापमान नियत (Constant) होना चाहिए" }
+];
+
+let currentQuestions = [];
+let index = 0;
+let score = 0;
+let isAnswered = false;
+
+function shuffleArr(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Memory State Engine
+function initQuizState() {
+    const savedQ = localStorage.getItem('ohm_q');
+    const savedIdx = localStorage.getItem('ohm_idx');
+    const savedScore = localStorage.getItem('ohm_score');
+
+    if (savedQ && savedIdx && savedScore) {
+        currentQuestions = JSON.parse(savedQ);
+        index = parseInt(savedIdx);
+        score = parseInt(savedScore);
+    } else {
+        currentQuestions = shuffleArr([...questionBank]);
+        currentQuestions.forEach(item => shuffleArr(item.options));
+        index = 0;
+        score = 0;
+        saveData();
+    }
+
+    if (index >= currentQuestions.length) {
+        showFinalScore();
+    } else {
+        displayQ();
+    }
+}
+
+function saveData() {
+    localStorage.setItem('ohm_q', JSON.stringify(currentQuestions));
+    localStorage.setItem('ohm_idx', index);
+    localStorage.setItem('ohm_score', score);
+}
+
+function displayQ() {
+    isAnswered = false;
+    document.getElementById('quiz-wrapper').classList.remove('hidden');
+    document.getElementById('result-wrapper').classList.add('hidden');
+    document.getElementById('next-btn').classList.add('hidden');
+    document.getElementById('feedback').innerText = '';
+
+    document.getElementById('q-counter').innerText = `प्रश्न ${index + 1} / ${currentQuestions.length}`;
+    document.getElementById('score-counter').innerText = `स्कोर: ${score}`;
+
+    const data = currentQuestions[index];
+    document.getElementById('q-text').innerText = data.q;
+
+    const box = document.getElementById('options-box');
+    box.innerHTML = '';
+
+    data.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.innerText = opt;
+        btn.classList.add('options-btn');
+        btn.onclick = () => checkQuizAns(btn, opt);
+        box.appendChild(btn);
+    });
+}
+
+function checkQuizAns(btn, opt) {
+    if (isAnswered) return;
+    isAnswered = true;
+
+    const data = currentQuestions[index];
+    const btns = document.querySelectorAll('.options-btn');
+    
+    if (opt === data.answer) {
+        btn.classList.add('correct');
+        document.getElementById('feedback').innerText = "🌟 बिल्कुल सही उत्तर!";
+        document.getElementById('feedback').style.color = "var(--success)";
+        score++;
+        document.getElementById('score-counter').innerText = `स्कोर: ${score}`;
+    } else {
+        btn.classList.add('incorrect');
+        document.getElementById('feedback').innerText = `❌ गलत! सही जवाब: ${data.answer}`;
+        document.getElementById('feedback').style.color = "var(--danger)";
+        
+        btns.forEach(b => {
+            if (b.innerText === data.answer) b.classList.add('correct');
+        });
+    }
+    document.getElementById('next-btn').classList.remove('hidden');
+    saveData();
+}
+
+function goNext() {
+    index++;
+    saveData();
+    if (index < currentQuestions.length) {
+        displayQ();
+    } else {
+        showFinalScore();
+    }
+}
+
+function showFinalScore() {
+    document.getElementById('quiz-wrapper').classList.add('hidden');
+    document.getElementById('result-wrapper').classList.remove('hidden');
+    document.getElementById('final-score').innerText = score;
+    
+    const txt = document.getElementById('remark-text');
+    if (score >= 9) txt.innerText = "🎉 अद्भुत! आप तो ओह्म्स लॉ के सुपर हीरो बन गए!";
+    else if (score >= 5) txt.innerText = "👍 बहुत अच्छा! थोड़े और अभ्यास से पूरे नंबर आ सकते हैं।";
+    else txt.innerText = "💪 हिम्मत न हारें! एक बार स्लाइडर को ऊपर-नीचे करके फिर से समझें और दोबारा खेलें।";
+}
+
+function restartQuiz() {
+    localStorage.removeItem('ohm_q');
+    localStorage.removeItem('ohm_idx');
+    localStorage.removeItem('ohm_score');
+    initQuizState();
+}
+
+// MathJax configuration for rendering equations if available
+window.onload = () => {
+    initQuizState();
+    updateOhmCircuit();
+};
+</script>
+
+<!-- MathJax CDN for clean rendering of formulas -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</body>
+</html>
