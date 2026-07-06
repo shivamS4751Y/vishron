@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI Final Exam Mock Test (75 Questions)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --theory-color: #0284c7;
+            --ed-color: #7c3aed;
+            --wcs-color: #059669;
+            --es-color: #ea580c;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg-main: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-main);
+            margin: 0;
+            padding: 15px;
+            color: #1e293b;
+        }
+
+        .exam-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; opacity: 0.8; font-size: 0.95rem; }
+
+        /* Simple Login Screen */
+        .login-screen {
+            padding: 40px 20px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .start-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            padding: 15px;
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            display: none;
+        }
+
+        .dash-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-top: 4px solid #cbd5e1;
+        }
+        .dash-card.theory { border-top-color: var(--theory-color); }
+        .dash-card.ed { border-top-color: var(--ed-color); }
+        .dash-card.wcs { border-top-color: var(--wcs-color); }
+        .dash-card.es { border-top-color: var(--es-color); }
+        
+        .dash-card timer { font-size: 1.2rem; font-weight: bold; color: var(--danger); }
+        .dash-num { font-size: 1.1rem; font-weight: bold; margin-top: 4px; }
+
+        .progress-wrapper {
+            padding: 0 20px;
+            margin-top: 15px;
+            display: none;
+        }
+        .progress-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+        }
+
+        .quiz-body {
+            padding: 25px;
+            min-height: 280px;
+            display: none;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .options-list { grid-template-columns: 1fr 1fr; }
+        }
+
+        .opt-btn {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .opt-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #15803d; font-weight: bold; }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #b91c1c; font-weight: bold; }
+
+        .result-screen {
+            display: none;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .sending-status {
+            color: var(--primary);
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="exam-container">
+    <div class="header">
+        <h1>⚡ AITT ITI FINAL MOCK TEST ⚡</h1>
+        <p>CBT Final Exam Preparation Pattern (75 Questions)</p>
+    </div>
+
+    <!-- 1. Name Input Only Screen -->
+    <div class="login-screen" id="loginBox">
+        <h2>छात्र का नाम दर्ज करें (Enter Name)</h2>
+        <div class="input-group">
+            <label>विद्यार्थी का नाम (Student Name):</label>
+            <input type="text" id="studentName" placeholder="अपना पूरा नाम लिखें" required>
+        </div>
+        <button class="start-btn" onclick="startExam()">परीक्षा शुरू करें 🚀</button>
+    </div>
+
+    <!-- Live Dashboard Stat Counters -->
+    <div class="dashboard" id="dashBox">
+        <div class="dash-card">
+            <div>⏱️ Time Left</div>
+            <timer id="timeDisplay">03:00:00</timer>
+        </div>
+        <div class="dash-card theory">
+            <div style="color: var(--theory-color)">📘 Trade Theory</div>
+            <div class="dash-num" id="countTheory">0 / 38</div>
+        </div>
+        <div class="dash-card ed">
+            <div style="color: var(--ed-color)">📐 Eng. Drawing</div>
+            <div class="dash-num" id="countED">0 / 6</div>
+        </div>
+        <div class="dash-card wcs">
+            <div style="color: var(--wcs-color)">⚙️ WCS Math/Sci</div>
+            <div class="dash-num" id="countWCS">0 / 6</div>
+        </div>
+        <div class="dash-card es">
+            <div style="color: var(--es-color)">💼 Employability</div>
+            <div class="dash-num" id="countES">0 / 25</div>
+        </div>
+    </div>
+
+    <div class="progress-wrapper" id="progWrapper">
+        <div class="progress-bar"><div class="progress-fill" id="totalProgress"></div></div>
+    </div>
+
+    <!-- Active Test Box -->
+    <div class="quiz-body" id="quizContainer">
+        <span class="subject-tag" id="subTag">Subject</span>
+        <div class="question-text" id="qText">Loading...</div>
+        <div class="options-list" id="optionsContainer"></div>
+    </div>
+
+    <!-- Final Score Display Screen -->
+    <div class="result-screen" id="resultContainer">
+        <h2>🎉 परीक्षा समाप्त हुई! (Exam Completed)</h2>
+        <p style="font-size: 1.3rem; margin: 20px 0;">आपका फाइनल स्कोर: <strong style="color:var(--primary);" id="finalPoints">0</strong> / 75</p>
+        <div id="performanceReview" style="font-weight: 500; font-size:1.1rem; margin-bottom: 20px;"></div>
+        <div class="sending-status" id="sendStatus">🔄 आपका रिजल्ट ऑटोमैटिक सर के पास भेजा जा रहा है...</div>
+    </div>
+</div>
+
+<script>
+    let sName = "";
+    const finalExamDB = [];
+    let activeIndex = 0;
+    let totalScore = 0;
+    let choiceLocked = false;
+    let timerSeconds = 3 * 60 * 60;
+    let countdownInterval;
+    let completedCounts = { theory: 0, ed: 0, wcs: 0, es: 0 };
+
+    // 75 CBT Pattern Questions Data
+    for(let i=1; i<=38; i++){ finalExamDB.push({ type: "theory", q: `Trade Theory Question ${i}: विद्युत उपकरणों में लगी आग बुझाने के लिए किस प्रकार के अग्निशामक का उपयोग सर्वोत्तम है?`, o: ["Water Type", "Foam Type", "CTC/CO2 Type", "Gas Cartridge"], a: 2 }); }
+    for(let i=1; i<=6; i++){ finalExamDB.push({ type: "ed", q: `Engineering Drawing Question ${i}: अक्षरांकन (Lettering) में दो अक्षरों के बीच की सामान्य दूरी कितनी रखी जाती है?`, o: ["1mm", "2mm", "समानुपातिक", "कोई निश्चित नहीं"], a: 2 }); }
+    for(let i=1; i<=6; i++){ finalExamDB.push({ type: "wcs", q: `Workshop Calculation & Science Question ${i}: गति की इकाई (Unit of Speed) क्या होती है?`, o: ["Meter/Second", "Newton", "Joule", "Kilogram"], a: 0 }); }
+    for(let i=1; i<=25; i++){ finalExamDB.push({ type: "es", q: `Employability Skills Question ${i}: प्रभावी संचार (Effective Communication) में सबसे महत्वपूर्ण तत्व क्या होता है?`, o: ["तेज बोलना", "सक्रिय रूप से सुनना (Active Listening)", "इंग्लिश का उपयोग", "चुप रहना"], a: 1 }); }
+
+    function startExam() {
+        sName = document.getElementById('studentName').value.trim();
+
+        if(sName === "") {
+            alert("कृपया परीक्षा शुरू करने से पहले अपना नाम दर्ज करें!");
+            return;
+        }
+
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('dashBox').style.display = 'grid';
+        document.getElementById('progWrapper').style.display = 'block';
+        document.getElementById('quizContainer').style.display = 'block';
+
+        runTimer();
+        renderQuestion();
+    }
+
+    function runTimer() {
+        countdownInterval = setInterval(() => {
+            if(timerSeconds <= 0) { clearInterval(countdownInterval); finishTest(); return; }
+            timerSeconds--;
+            let hrs = Math.floor(timerSeconds / 3600).toString().padStart(2, '0');
+            let mins = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2, '0');
+            let secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timeDisplay').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        choiceLocked = false;
+        if(activeIndex >= finalExamDB.length) { finishTest(); return; }
+
+        document.getElementById('totalProgress').style.width = `${(activeIndex / finalExamDB.length) * 100}%`;
+        let activeQ = finalExamDB[activeIndex];
+        let tag = document.getElementById('subTag');
+        
+        if(activeQ.type === "theory") { tag.innerText = "Trade Theory"; tag.style.backgroundColor = "var(--theory-color)"; }
+        else if(activeQ.type === "ed") { tag.innerText = "Engineering Drawing"; tag.style.backgroundColor = "var(--ed-color)"; }
+        else if(activeQ.type === "wcs") { tag.innerText = "Workshop Calc & Sci"; tag.style.backgroundColor = "var(--wcs-color)"; }
+        else if(activeQ.type === "es") { tag.innerText = "Employability Skills"; tag.style.backgroundColor = "var(--es-color)"; }
+
+        document.getElementById('qText').innerText = `Q.${activeIndex + 1} - ${activeQ.q}`;
+        let optContainer = document.getElementById('optionsContainer');
+        optContainer.innerHTML = '';
+
+        activeQ.o.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => validateSelection(idx, btn, activeQ.type);
+            optContainer.appendChild(btn);
+        });
+    }
+
+    function validateSelection(chosenIdx, element, currentType) {
+        if(choiceLocked) return;
+        choiceLocked = true;
+
+        let rightAnswer = finalExamDB[activeIndex].a;
+        let elements = document.querySelectorAll('.opt-btn');
+
+        if(chosenIdx === rightAnswer) { element.classList.add('correct'); totalScore++; }
+        else { element.classList.add('wrong'); elements[rightAnswer].classList.add('correct'); }
+
+        completedCounts[currentType]++;
+        document.getElementById('countTheory').innerText = `${completedCounts.theory} / 38`;
+        document.getElementById('countED').innerText = `${completedCounts.ed} / 6`;
+        document.getElementById('countWCS').innerText = `${completedCounts.wcs} / 6`;
+        document.getElementById('countES').innerText = `${completedCounts.es} / 25`;
+
+        setTimeout(() => { activeIndex++; renderQuestion(); }, 1000);
+    }
+
+    function finishTest() {
+        clearInterval(countdownInterval);
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('dashBox').style.display = 'none';
+        document.getElementById('progWrapper').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('finalPoints').innerText = totalScore;
+        
+        let feedbackText = totalScore >= 40 ? "उत्कृष्ट प्रदर्शन! आप पास हो चुके हैं। 🔥" : "आपको और तैयारी की आवश्यकता है। 📚";
+        document.getElementById('performanceReview').innerText = feedbackText;
+
+        // Automatically Send Name & Score only
+        sendResultToTeacher(sName, totalScore);
+    }
+
+    function sendResultToTeacher(name, score) {
+        // Automatically mapped to your submitted form action endpoint
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSctcn749pjQgzdS73WaIXRvWjYmfj4Si-3fdNbFduitaNnCCA/formResponse"; 
+        
+        const formData = new FormData();
+        formData.append("entry.241253916", name); // Mapped to Student Name Box
+        formData.append("entry.285822560", score + " / 75"); // Mapped to Score Box
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        }).then(() => {
+            document.getElementById('sendStatus').innerText = "✅ आपका रिजल्ट सफलतापूर्वक सर के पास पहुंच गया है!";
+            document.getElementById('sendStatus').style.color = "var(--success)";
+        }).catch((err) => {
+            document.getElementById('sendStatus').innerText = "⚠️ नेटवर्क एरर! कृपया इस स्क्रीन का स्क्रीनशॉट सर को भेजें।";
+            document.getElementById('sendStatus').style.color = "var(--danger)";
+        });
+    }
+</script>
+</body>
+</html>
