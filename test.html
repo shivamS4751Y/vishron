@@ -45,7 +45,6 @@
         .header h1 { margin: 0; font-size: 1.9rem; font-weight: 800; letter-spacing: 0.5px; }
         .header p { margin: 10px 0 0 0; opacity: 0.8; font-size: 1rem; }
 
-        /* Welcome/Login Screen */
         .login-screen {
             padding: 40px 25px;
             text-align: center;
@@ -97,9 +96,6 @@
             transition: transform 0.2s;
         }
 
-        .start-btn:active { transform: scale(0.98); }
-
-        /* Dashboard & Progress */
         .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -144,7 +140,6 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Quiz Main Body */
         .quiz-body {
             padding: 30px 20px;
             min-height: 300px;
@@ -161,7 +156,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .question-text {
@@ -197,30 +191,17 @@
             box-sizing: border-box;
         }
 
-        .opt-btn:hover {
-            border-color: #cbd5e1;
-            background: #f8fafc;
-            transform: translateY(-2px);
-        }
-
+        .opt-btn:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); }
         .opt-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #15803d !important; font-weight: 700; }
         .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #b91c1c !important; font-weight: 700; }
 
-        /* Result Screen */
         .result-screen {
             display: none;
             padding: 50px 20px;
             text-align: center;
         }
         .result-screen h2 { color: #0f172a; font-size: 2rem; margin-bottom: 15px; }
-        
-        .score-badge {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 20px 0;
-            display: block;
-        }
+        .score-badge { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 20px 0; display: block; }
 
         .sending-status {
             background: #eff6ff;
@@ -239,20 +220,18 @@
 <div class="exam-container">
     <div class="header">
         <h1>⚡ AITT ITI FINAL MOCK TEST ⚡</h1>
-        <p>CBT Exam System Pattern (75 Questions)</p>
+        <p>CBT Exam System Pattern (75 Different Questions)</p>
     </div>
 
-    <!-- 1. Name Input Only Screen -->
     <div class="login-screen" id="loginBox">
         <h2>परीक्षा शुरू करने के लिए नाम लिखें</h2>
         <div class="input-group">
             <label>विद्यार्थी का नाम (Student Name):</label>
             <input type="text" id="studentName" placeholder="अपना पूरा नाम दर्ज करें..." required>
         </div>
-        <button class="start-btn" onclick="startExam()">परीक्षा शुरू करें 🚀</button>
+        <button class="start-btn" onclick="startExam()">...परीक्षा शुरू करें 🚀</button>
     </div>
 
-    <!-- Live Status Dashboard -->
     <div class="dashboard" id="dashBox">
         <div class="dash-card">
             <div style="color: #64748b; font-weight: 600;">⏱️ बचा हुआ समय</div>
@@ -280,14 +259,12 @@
         <div class="progress-bar"><div class="progress-fill" id="totalProgress"></div></div>
     </div>
 
-    <!-- Active Test Frame -->
     <div class="quiz-body" id="quizContainer">
         <span class="subject-tag" id="subTag">Subject</span>
         <div class="question-text" id="qText">Loading...</div>
         <div class="options-list" id="optionsContainer"></div>
     </div>
 
-    <!-- Final Score Display Screen -->
     <div class="result-screen" id="resultContainer">
         <h2>🎉 परीक्षा समाप्त हुई!</h2>
         <p>आपका फाइनल स्कोर कार्ड</p>
@@ -299,19 +276,97 @@
 
 <script>
     let sName = "";
-    const finalExamDB = [];
+    const finalExamDB = [
+        // --- TRADE THEORY (38 DISTINCT QUESTIONS) ---
+        { type: "theory", q: "विद्युत उपकरणों या तारों में लगी आग को बुझाने के लिए किस अग्निशामक (Extinguisher) का उपयोग किया जाता है?", o: ["पानी (Water)", "झाग (Foam)", "सीटीसी / हैलोन (CTC)", "गैस कार्ट्रिज"], a: 2 },
+        { type: "theory", q: "ओम का नियम (Ohm's Law) किस विद्युत राशि के बीच संबंध स्थापित करता है?", o: ["Current & Resistance", "Voltage & Resistance", "Voltage, Current & Resistance", "Power & Energy"], a: 2 },
+        { type: "theory", q: "शुष्क सेल (Dry Cell) का विद्युत वाहक बल (EMF) लगभग कितना होता है?", o: ["1.1 V", "1.5 V", "2.2 V", "2.5 V"], a: 1 },
+        { type: "theory", q: "दिष्टधारा (DC) की आवृत्ति (Frequency) कितनी होती है?", o: ["50 Hz", "60 Hz", "0 Hz", "100 Hz"], a: 2 },
+        { type: "theory", q: "विद्युत वायरिंग में प्रयुक्त होने वाले फ्यूज तार का गलनांक (Melting Point) कैसा होना चाहिए?", o: ["बहुत उच्च", "निम्न (Low)", "माध्यम", "तांबे के बराबर"], a: 1 },
+        { type: "theory", q: "सुरक्षा चिह्नों में वर्गाकार आकृति और हरे रंग की पृष्ठभूमि किस चिह्न को दर्शाती है?", o: ["निषेधात्मक", "अनिवार्य", "चेतावनी", "सूचनात्मक"], a: 3 },
+        { type: "theory", q: "कृत्रिम श्वसन की किस विधि का उपयोग तब किया जाता है जब पीड़ित के सीने और पेट में चोट हो?", o: ["सिल्वेस्टर विधि", "शेफर विधि", "मुंह से मुंह विधि", "मुंह से नाक विधि"], a: 0 },
+        { type: "theory", q: "तांबे के परमाणु के तीसरे कक्ष में कितने इलेक्ट्रॉन होते हैं?", o: ["2", "8", "18", "29"], a: 2 },
+        { type: "theory", q: "अर्धचालक (Semiconductor) पदार्थ का तापमान बढ़ाने पर उसके प्रतिरोध पर क्या प्रभाव पड़ता है?", o: ["बढ़ता है", "घटता है (Decreases)", "समान रहता है", "शून्य हो जाता है"], a: 1 },
+        { type: "theory", q: "प्रतिरोधकता (Resistivity) की इकाई क्या है?", o: ["ओम", "ओम-मीटर", "महो", "ओम/मीटर"], a: 1 },
+        { type: "theory", q: "श्रेणी परिपथ (Series Circuit) में कुल प्रतिरोध का मान क्या होता है?", o: ["घटता है", "R1 + R2 + R3...", "1/R1 + 1/R2...", "समान रहता है"], a: 1 },
+        { type: "theory", q: "व्हीटस्टोन ब्रिज (Wheatstone Bridge) का उपयोग किसे मापने के लिए किया जाता है?", o: ["अज्ञात प्रतिरोध", "उच्च वोल्टेज", "विद्युत धारा", "आवृत्ति"], a: 0 },
+        { type: "theory", q: "विशिष्ट प्रतिरोध का मान किस पर निर्भर करता है?", o: ["तार की लम्बाई पर", "तार के व्यास पर", "तार के पदार्थ की प्रकृति पर", "अनुप्रस्थ काट क्षेत्रफल पर"], a: 2 },
+        { type: "theory", q: "चुंबकीय फ्लक्स घनत्व (Flux Density) की SI इकाई क्या है?", o: ["वेबर", "टेस्ला (Tesla)", "मैक्सवेल", "ampere-turn"], a: 1 },
+        { type: "theory", q: "परमिएबिलिटी (Permeability) की विद्युत परिपथ में किसके समान तुलना की जा सकती है?", o: ["प्रतिरोध", "कंडक्टेंस (Conductance)", "करंट", "वोल्टेज"], a: 1 },
+        { type: "theory", q: "संधारित्र (Capacitor) की धारिता की इकाई क्या है?", o: ["महो", "हेनरी", "फैराड (Farad)", "कूलाम"], a: 2 },
+        { type: "theory", q: "लेड एसिड बैटरी के इलेक्ट्रोलाइट में किस अम्ल का प्रयोग किया जाता है?", o: ["Hydrochloric Acid", "Nitric Acid", "Sulphuric Acid (H2SO4)", "Acetic Acid"], a: 2 },
+        { type: "theory", q: "बैटरी की क्षमता (Capacity) को किसमें व्यक्त किया जाता है?", o: ["Volt", "Watt", "Ampere-Hour (AH)", "Ampere"], a: 2 },
+        { type: "theory", q: "चुंबकीय क्षेत्र की दिशा ज्ञात करने के लिए किस नियम का उपयोग किया जाता है?", o: ["फ्लेमिंग का वामहस्त नियम", "फ्लेमिंग का दक्षिणहस्त नियम", "दाहिने हाथ की हथेली का नियम", "लेंज़ का नियम"], a: 2 },
+        { type: "theory", q: "AC परिपथ में फॉर्म फैक्टर (Form Factor) का मान कितना होता है?", o: ["1.00", "1.11", "1.414", "0.707"], a: 1 },
+        { type: "theory", q: "थ्री-फ़ेज़ प्रणाली में दो फेज़ों के बीच का कोणीय विस्थापन (Phase Difference) कितना होता है?", o: ["90 डिग्री", "120 डिग्री", "180 डिग्री", "360 डिग्री"], a: 1 },
+        { type: "theory", q: "अर्थिंग (Earthing) का मुख्य उद्देश्य क्या होता है?", o: ["मशीन को ओवरलोड से बचाना", "मानव जीवन को बिजली के झटके से बचाना", "वोल्टेज स्थिर रखना", "लाइन लॉस कम करना"], a: 1 },
+        { type: "theory", q: "डीसी जनरेटर किस सिद्धांत पर कार्य करता है?", o: ["लेंज़ का नियम", "फैराडे के विद्युत चुंबकीय प्रेरण नियम", "फ्लेमिंग का नियम", "म्युचुअल इंडक्शन"], a: 1 },
+        { type: "theory", q: "डीसी जनरेटर में योक (Yoke) का मुख्य कार्य क्या होता है?", o: ["करंट एकत्र करना", "चुंबकीय फ्लक्स के लिए रास्ता प्रदान करना", "आर्मेचर को घुमाना", "स्पार्किंग कम करना"], a: 1 },
+        { type: "theory", q: "डीसी मोटर के आर्मेचर के घूमने की दिशा किस नियम से ज्ञात की जाती है?", o: ["Fleming's Left Hand Rule", "Fleming's Right Hand Rule", "Right Hand Grip Rule", "Cork Screw Rule"], a: 0 },
+        { type: "theory", q: "डीसी मोटर में बैक ईएमएफ (Back EMF) का कार्य क्या होता है?", o: ["मोटर की गति बढ़ाना", "आर्मेचर करंट को नियंत्रित करना", "फील्ड फ्लक्स बढ़ाना", "मोटर को रोकना"], a: 1 },
+        { type: "theory", q: "ट्रांसफार्मर किस सिद्धांत पर कार्य करता है?", o: ["स्व-प्रेरण", "अन्योन्य प्रेरण (Mutual Induction)", "एडीडी करंट", "स्थैतिक प्रेरण"], a: 1 },
+        { type: "theory", q: "ट्रांसफार्मर कोर लैमिनेटेड क्यों की जाती है?", o: ["कॉपर लॉस कम करने के लिए", "हिस्टेरेसिस लॉस कम करने के लिए", "भंवर धारा (Eddy Current) हानि कम करने के लिए", "वजन कम करने के लिए"], a: 2 },
+        { type: "theory", q: "अल्टरनेटर की रेटिंग किस इकाई में व्यक्त की जाती है?", o: ["KW", "HP", "KVA", "MW"], a: 2 },
+        { type: "theory", q: "इंडक्शन मोटर का सिंक्रोनस स्पीड सूत्र क्या है?", o: ["Ns = 120f/P", "Ns = 120P/f", "Ns = fP/120", "Ns = 60f/P"], a: 0 },
+        { type: "theory", q: "घरेलू मिक्सर में किस प्रकार की मोटर का उपयोग किया जाता है?", o: ["Shaded Pole Motor", "Universal Motor", "Capacitor Start Motor", "Repulsion Motor"], a: 1 },
+        { type: "theory", q: "मूविंग कॉइल (MC) प्रकार के यंत्र का उपयोग केवल किस सप्लाई पर किया जा सकता है?", o: ["केवल AC", "केवल DC", "AC और DC दोनों", "पल्सटिंग AC"], a: 1 },
+        { type: "theory", q: "एक शुद्ध इंडक्टिव सर्किट का पावर फैक्टर (Power Factor) कितना होता है?", o: ["इकाई (1)", "शून्य (0)", "0.8 लैगिंग", "0.5 लीडिंग"], a: 1 },
+        { type: "theory", q: "सुरक्षा गुणांक (Safety Factor) का मान हमेशा क्या होता है?", o: ["1 से कम", "1 से अधिक", "शून्य", "0.5"], a: 1 },
+        { type: "theory", q: "इंसुलेशन प्रतिरोध मापने के लिए किस उपकरण का उपयोग किया जाता है?", o: ["ओह्ममीटर", "मल्टीमीटर", "मेगर (Megger)", "क्लैंप मीटर"], a: 2 },
+        { type: "theory", q: "सिलिकॉन डायोड का बैरियर पोटेंशियल (Barrier Potential) कितना होता है?", o: ["0.3 V", "0.7 V", "1.1 V", "1.5 V"], a: 1 },
+        { type: "theory", q: "एक शुद्ध धातु का प्रतिरोध तापमान बढ़ने पर क्या होता है?", o: ["घटता है", "बढ़ता है (Increases)", "अपरिवर्तित रहता है", "शून्य हो जाता है"], a: 1 },
+        { type: "theory", q: "घरेलू रेफ्रिजरेटर में कौन सी मोटर उपयोग होती है?", o: ["DC Series Motor", "Universal Motor", "Single Phase Induction Motor", "Synchronous Motor"], a: 2 },
+
+        // --- ENGINEERING DRAWING (6 DISTINCT QUESTIONS) ---
+        { type: "ed", q: "अक्षरांकन (Lettering) करते समय दो शब्दों (Words) के बीच सामान्यतः कितनी दूरी छोड़ी जाती है?", o: ["अक्षरों की चौड़ाई के बराबर", "अक्षरों की ऊंचाई के बराबर", "2 mm fixed", "कोई दूरी नहीं"], a: 1 },
+        { type: "ed", q: "D2 ड्राइंग बोर्ड का मानक आकार (Standard Size) कितना होता है?", o: ["1500 x 1000 mm", "1000 x 700 mm", "700 x 500 mm", "500 x 350 mm"], a: 2 },
+        { type: "ed", q: "ड्राइंग में छिपे हुए भागों (Hidden Parts) को दिखाने के लिए किस प्रकार की रेखा का उपयोग किया जाता है?", o: ["Continuous Thick Line", "Dashed Thin Line", "Chain Thin Line", "Continuous Thin Line"], a: 1 },
+        { type: "ed", q: "इंजीनियरिंग ड्राइंग में सबसे कठोर ग्रेड (Hardest Grade) की पेंसिल कौन सी है?", o: ["HB", "9H", "7B", "4B"], a: 1 },
+        { type: "ed", q: "A4 साइज के ड्राइंग पेपर का वास्तविक माप कितना होता है?", o: ["210 x 297 mm", "297 x 420 mm", "420 x 594 mm", "148 x 210 mm"], a: 0 },
+        { type: "ed", q: "शीर्षक ब्लॉक (Title Block) ड्राइंग शीट पर किस कोने में बनाया जाता है?", o: ["शीर्ष बाईं ओर", "नीचे दाईं ओर (Bottom Right)", "नीचे बाईं ओर", "शीर्ष दाईं ओर"], a: 1 },
+
+        // --- WORKSHOP CALCULATION & SCIENCE (6 DISTINCT QUESTIONS) ---
+        { type: "wcs", q: "गति की SI इकाई (Unit of Speed) निम्नलिखित में से कौन सी है?", o: ["मीटर / सेकंड (m/s)", "न्यूटन (N)", "जूल (J)", "किलोग्राम (kg)"], a: 0 },
+        { type: "wcs", q: "पानी की विशिष्ट ऊष्मा (Specific Heat of Water) का मान कितना होता है?", o: ["0", "0.5", "1", "2"], a: 2 },
+        { type: "wcs", q: "MKS प्रणाली में बल (Force) की इकाई क्या होती है?", o: ["डाइन", "न्यूटन (Newton)", "जूल", "वाट"], a: 1 },
+        { type: "wcs", q: "0.456 दशमलव भिन्न को प्रतिशत में बदलिए?", o: ["4.56%", "45.6%", "0.456%", "456%"], a: 1 },
+        { type: "wcs", q: "धातु का वह गुण जिसके कारण उसे बिना टूटे तारों में खींचा जा सकता है, कहलाता है?", o: ["भंगुरता", "लचीलापन (Ductility)", "आघातवर्धनीयता", "कठोरता"], a: 1 },
+        { type: "wcs", q: "गतिज ऊर्जा (Kinetic Energy) का सही सूत्र क्या है?", o: ["mgh", "1/2 mv²", "mv", "F x d"], a: 1 },
+
+        // --- EMPLOYABILITY SKILLS (25 DISTINCT QUESTIONS) ---
+        { type: "es", q: "किसी भी इंटरव्यू (Job Interview) में सफलता पाने के लिए सबसे महत्वपूर्ण सॉफ्ट स्किल कौन सी है?", o: ["तेज दौड़ना", "प्रभावी संचार (Good Communication)", "स्टाइलिश कपड़े", "चुप रहना"], a: 1 },
+        { type: "es", q: "MS Word में किसी डॉक्यूमेंट की सभी टेक्स्ट को एक साथ सेलेक्ट करने की शॉर्टकट कुंजी क्या है?", o: ["Ctrl + C", "Ctrl + V", "Ctrl + A", "Ctrl + X"], a: 2 },
+        { type: "es", q: "इंटरनेट पर की जाने वाली अवैध गतिविधि या अपराध को क्या कहा जाता है?", o: ["सोशल वर्क", "साइबर क्राइम (Cyber Crime)", "ऑनलाइन चैटिंग", "सर्चिंग"], a: 1 },
+        { type: "es", q: "सफलता प्राप्त करने के लिए इनमें से कौन सा तत्व सबसे आवश्यक है?", o: ["कड़ी मेहनत और समर्पण", "भाग्य पर निर्भर रहना", "शॉर्टकट अपनाना", "काम टालना"], a: 0 },
+        { type: "es", q: "एक सुरक्षित कंप्यूटर पासवर्ड में क्या-क्या होना चाहिए?", o: ["केवल आपका नाम", "123456", "अक्षर, संख्या और विशेष वर्णों का मिश्रण", "केवल मोबाइल नंबर"], a: 2 },
+        { type: "es", q: "सकारात्मक दृष्टिकोण (Positive Attitude) का क्या लाभ है?", o: ["तनाव बढ़ना", "समस्या समाधान और बेहतर निर्णय क्षमता", "लड़ाई होना", "बीमार होना"], a: 1 },
+        { type: "es", q: "दिए गए वाक्यों में से 'Interjection' पहचानें: 'Wow! That is a beautiful car.'", o: ["Beautiful", "Car", "Wow!", "That"], a: 2 },
+        { type: "es", q: "लिखित संचार (Written Communication) का उदाहरण कौन सा है?", o: ["फोन कॉल", "ईमेल (Email)", "आमने-सामने बातचीत", "इशारे करना"], a: 1 },
+        { type: "es", q: "स्मार्ट (SMART) लक्ष्यों के निर्धारण में 'R' का क्या अर्थ होता है?", o: ["Random", "Realistic (वास्तविक)", "Rigid", "Run"], a: 1 },
+        { type: "es", q: "किसी व्यावसायिक ईमेल को लिखते समय 'Subject Line' कैसी होनी चाहिए?", o: ["बहुत लंबी और विस्तृत", "स्पष्ट और संक्षिप्त (Clear & Short)", "खाली छोड़ देना चाहिए", "मजाकिया"], a: 1 },
+        { type: "es", q: "इनमें से कौन सा एक सर्च इंजन (Search Engine) है?", o: ["Google", "WhatsApp", "Facebook", "Instagram"], a: 0 },
+        { type: "es", q: "KYC का पूर्ण रूप (Full Form) क्या होता है?", o: ["Know Your Computer", "Know Your Customer", "Keep Your Cash", "Know Your Company"], a: 1 },
+        { type: "es", q: "जीडी (Group Discussion) के दौरान आपको क्या करना चाहिए?", o: ["दूसरों पर चिल्लाना", "दूसरों की बात ध्यान से सुनना और अपनी बात तमीज से रखना", "चुपचाप बैठे रहना", "बार-बार टोकना"], a: 1 },
+        { type: "es", q: "कस्टमर से बात करते समय हमेशा कैसा व्यवहार करना चाहिए?", o: ["क्रोधित", "विनम्र और मददगार (Polite)", "अशिष्ट", "लापरवाह"], a: 1 },
+        { type: "es", q: "LAN का पूर्ण रूप क्या होता है?", o: ["Local Area Network", "Long Area Network", "Land Line Network", "Local Access Number"], a: 0 },
+        { type: "es", q: "इनमें से कौन सा आउटपुट डिवाइस (Output Device) है?", o: ["Keyboard", "Mouse", "Monitor", "Scanner"], a: 2 },
+        { type: "es", q: "कार्यालय में सहकर्मियों के साथ किए जाने वाले उचित व्यवहार को क्या कहते हैं?", o: ["पॉलिटिक्स", "कार्यस्थल शिष्टाचार (Workplace Etiquette)", "गॉसिप", "टाइम वेस्ट"], a: 1 },
+        { type: "es", q: "एक उद्यमी (Entrepreneur) का मुख्य कार्य क्या होता है?", o: ["केवल नौकरी ढूंढना", "नया व्यवसाय शुरू करना और जोखिम उठाना", "दूसरों की नकल करना", "आलस करना"], a: 1 },
+        { type: "es", q: "सॉफ्ट स्किल्स (Soft Skills) के अंतर्गत क्या आता है?", o: ["मशीन चलाना", "वेल्डिंग करना", "टाइम मैनेजमेंट और टीमवर्क", "वायरिंग करना"], a: 2 },
+        { type: "es", q: "ATM का पूर्ण रूप क्या है?", o: ["Any Time Money", "Automated Teller Machine", "Auto Tech Machine", "All Time Money"], a: 1 },
+        { type: "es", q: "पर्यावरण को बचाने के लिए 3R का सही क्रम क्या है?", o: ["Reduce, Reuse, Recycle", "Run, Read, Real", "Read, Write, Speak", "Remove, Repair, Repeat"], a: 0 },
+        { type: "es", q: "रिज्यूम (Resume) में क्या लिखना अनिवार्य नहीं होता?", o: ["आपकी योग्यता", "आपका नाम और संपर्क", "आपकी गुप्त पारिवारिक बातें", "आपकी स्किल्स"], a: 2 },
+        { type: "es", q: "जीमेल में आई किसी फाइल को कंप्यूटर में सेव करने को क्या कहते हैं?", o: ["Upload", "Download", "Send", "Forward"], a: 1 },
+        { type: "es", q: "इनमें से कौन सा असुरक्षित व्यवहार (Unsafe Condition) का उदाहरण है?", o: ["सुरक्षा हेलमेट पहनना", "फर्श पर तेल बिखरा होना", "मशीन की अर्थिंग होना", "साफ-सफाई रखना"], a: 1 },
+        { type: "es", q: "भविष्य के करियर नियोजन के लिए क्या आवश्यक है?", o: ["बिना सोचे समझे काम करना", "अपनी ताकत और रुचियों को पहचानना (SWOT)", "दोस्तों की नकल करना", "चिंता करना"], a: 1 }
+    ];
+
     let activeIndex = 0;
     let totalScore = 0;
     let choiceLocked = false;
     let timerSeconds = 3 * 60 * 60;
     let countdownInterval;
     let completedCounts = { theory: 0, ed: 0, wcs: 0, es: 0 };
-
-    // Generating 75 Standard Mock Questions
-    for(let i=1; i<=38; i++){ finalExamDB.push({ type: "theory", q: `Trade Theory Q.${i}: विद्युत उपकरणों या तारों में लगी आग को बुझाने के लिए किस अग्निशामक (Extinguisher) का उपयोग किया जाता है?`, o: ["पानी का प्रकार (Water)", "झाग प्रकार (Foam)", "सीटीसी / हैलोन प्रकार (CTC)", "गैस कार्ट्रिज प्रकार"], a: 2 }); }
-    for(let i=1; i<=6; i++){ finalExamDB.push({ type: "ed", q: `Engineering Drawing Q.${i}: अक्षरांकन (Lettering) करते समय दो शब्दों (Words) के बीच सामान्यतः कितनी दूरी छोड़ी जाती है?`, o: ["अक्षरों की चौड़ाई के बराबर", "अक्षरों की ऊंचाई के बराबर", "2 mm fixed", "कोई दूरी नहीं छोड़ी जाती"], a: 1 }); }
-    for(let i=1; i<=6; i++){ finalExamDB.push({ type: "wcs", q: `Workshop Calculation & Science Q.${i}: गति की SI इकाई (Unit of Speed) निम्नलिखित में से कौन सी है?`, o: ["मीटर / सेकंड (m/s)", "न्यूटन (N)", "जूल (Joule)", "किलोग्राम (kg)"], a: 0 }); }
-    for(let i=1; i<=25; i++){ finalExamDB.push({ type: "es", q: `Employability Skills Q.${i}: किसी भी इंटरव्यू (Job Interview) में सफलता पाने के लिए सबसे महत्वपूर्ण सॉफ्ट स्किल कौन सी है?`, o: ["तेज दौड़ना", "प्रभावी संचार कौशल (Good Communication)", "स्टाइलिश कपड़े पहनना", "कंप्यूटर को खोलना"], a: 1 }); }
 
     function startExam() {
         sName = document.getElementById('studentName').value.trim();
@@ -350,7 +405,7 @@
         else if(activeQ.type === "wcs") { tag.innerText = "Workshop Calc & Sci"; tag.style.backgroundColor = "var(--wcs-color)"; }
         else if(activeQ.type === "es") { tag.innerText = "Employability Skills"; tag.style.backgroundColor = "var(--es-color)"; }
 
-        document.getElementById('qText').innerText = activeQ.q;
+        document.getElementById('qText').innerText = `Q.${activeIndex + 1} - ${activeQ.q}`;
         let optContainer = document.getElementById('optionsContainer');
         optContainer.innerHTML = '';
 
@@ -407,7 +462,6 @@
         formData.append("entry.241253916", name); 
         formData.append("entry.285822560", score + " / 75");
 
-        // Advanced Safe submission mode to guarantee flawless execution
         fetch(formURL, {
             method: "POST",
             mode: "no-cors",
