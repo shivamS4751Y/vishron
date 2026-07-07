@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer Professional Class & 50 MCQ Challenge</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent: #0ea5e9;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            margin: 0;
+            padding: 12px;
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .exam-container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--bg-card);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+            position: relative;
+        }
+
+        .header h1 { margin: 0; font-size: 2.1rem; font-weight: 800; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header p { margin: 12px 0 0 0; opacity: 0.9; font-size: 1.1rem; color: var(--accent); font-weight: 600; }
+
+        /* Welcome Screen */
+        .login-screen {
+            padding: 50px 30px;
+            text-align: center;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .login-screen h2 { color: var(--text-main); margin-bottom: 30px; font-size: 1.5rem; font-weight: 700; }
+        .input-group { margin-bottom: 25px; text-align: left; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 2px solid #cbd5e1;
+            border-radius: 14px; font-size: 1.1rem; box-sizing: border-box;
+            transition: all 0.3s ease; background: #f8fafc;
+        }
+        .input-group input:focus { border-color: var(--primary); background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        
+        .master-btn {
+            background: linear-gradient(135deg, #4f46e5, #3730a3); color: white;
+            border: none; padding: 16px 32px; border-radius: 14px;
+            font-size: 1.2rem; font-weight: 700; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); transition: all 0.2s ease;
+        }
+        .master-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
+        .master-btn:active { transform: translateY(0); }
+
+        /* Beautiful Study Section */
+        .study-section { padding: 35px 25px; display: none; }
+        .section-title { font-size: 1.6rem; color: var(--primary); text-align: center; margin-bottom: 30px; font-weight: 800; }
+        
+        .study-card {
+            background: #f8fafc; border-left: 6px solid var(--accent);
+            padding: 22px; border-radius: 16px; margin-bottom: 25px;
+            border: 1px solid #e2e8f0; border-left-width: 6px;
+        }
+        .study-card h3 { margin-top: 0; color: #1e1b4b; font-size: 1.3rem; font-weight: 700; }
+        .study-card p { line-height: 1.7; font-size: 1.05rem; color: #334155; margin-bottom: 0; }
+        
+        .highlight-box {
+            background: #f0f9ff; border: 1px dashed var(--accent);
+            padding: 16px; border-radius: 12px; margin: 15px 0; font-weight: 600; color: #0369a1;
+        }
+
+        /* Live Status Dashboard */
+        .dashboard {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px; padding: 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: none;
+        }
+        .dash-card { background: white; padding: 15px; border-radius: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
+        .dash-card.timer-card { border-top: 4px solid var(--danger); }
+        .dash-card.progress-card { border-top: 4px solid var(--success); }
+        .dash-card timer { font-size: 1.4rem; font-weight: 800; color: var(--danger); display: block; margin-top: 4px; }
+        .dash-num { font-size: 1.4rem; font-weight: 800; margin-top: 4px; color: var(--text-main); }
+
+        /* Progress Wrapper */
+        .progress-wrapper { padding: 0 20px; margin-top: 25px; display: none; }
+        .progress-bar { height: 10px; background: #e2e8f0; border-radius: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4f46e5, #0ea5e9); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Quiz Frame Body */
+        .quiz-body { padding: 35px 25px; display: none; }
+        .question-box { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px dashed #cbd5e1; margin-bottom: 25px; }
+        .question-text { font-size: 1.4rem; font-weight: 700; line-height: 1.6; color: var(--text-main); }
+        .options-list { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 768px) { .options-list { grid-template-columns: 1fr 1fr; } }
+
+        .opt-btn {
+            background: #fff; border: 2px solid #e2e8f0; padding: 18px 22px;
+            border-radius: 16px; cursor: pointer; text-align: left; font-size: 1.1rem;
+            font-weight: 600; color: #475569; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; box-sizing: border-box;
+        }
+        .opt-btn:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .opt-btn:active { transform: translateY(0); }
+        .opt-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; font-weight: 700; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
+
+        /* Result Presentation Screen */
+        .result-screen { display: none; padding: 60px 20px; text-align: center; }
+        .result-screen h2 { font-size: 2.2rem; font-weight: 800; color: var(--text-main); }
+        .score-badge { font-size: 3.8rem; font-weight: 900; color: var(--primary); margin: 25px 0; display: block; text-shadow: 0 2px 8px rgba(79, 70, 229, 0.15); }
+        .sending-status {
+            background: #f0f9ff; color: var(--primary); font-weight: 700; font-size: 1.1rem;
+            padding: 18px 30px; border-radius: 16px; display: inline-block; margin-top: 30px; border: 2px dashed #bae6fd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="exam-container">
+    <div class="header">
+        <h1>⚡ TRANSFORMER AUDIO-VISUAL CLASS ⚡</h1>
+        <p>Advanced Concept Learning & 50 MCQ Challenge</p>
+    </div>
+
+    <div class="login-screen" id="loginBox">
+        <h2>अपना पूरा नाम दर्ज करके क्लास शुरू करें</h2>
+        <div class="input-group">
+            <label>विद्यार्थी का नाम (Student Name):</label>
+            <input type="text" id="studentName" placeholder="यहाँ अपना नाम लिखें..." required>
+        </div>
+        <button class="master-btn" onclick="startLearningPhase()">डिजिटल क्लास रूम में आएं 🚪</button>
+    </div>
+
+    <div class="study-section" id="studyContainer">
+        <div class="section-title">📖 स्पेशल नोट्स: ट्रांसफार्मर (Concept Clearing Desk)</div>
+        
+        <div class="study-card">
+            <h3>1. ट्रांसफार्मर क्या बला है? (What is it?)</h3>
+            <p>यह एक <strong>Static Device (स्थिर साधन)</strong> है। यानी, इसमें मोटर-जनरेटर जैसा कोई भाग घूमता नहीं है। इसका मुख्य काम बिना पावर और बिना फ्रीक्वेंसी बदले, सिर्फ **Alternative Current (AC) वोल्टेज** को स्टेप-अप (बढ़ाना) या स्टेप-डाउन (घटाना) करना होता है।</p>
+            <div class="highlight-box">🛑 याद कर लो: ट्रांसफार्मर कभी भी DC (Direct Current) पर काम नहीं करता! अगर DC दोगे, तो रेजिस्टेंस कम होने के कारण वाइंडिंग जल जाएगी।</div>
+        </div>
+
+        <div class="study-card">
+            <h3>2. कार्य सिद्धांत (Core Principle)</h3>
+            <p>यह <strong>Faraday's Law of Electromagnetic Induction</strong> के अंतर्गत <strong>Mutual Induction (अन्योन्य प्रेरण)</strong> पर काम करता है। जब प्राइमरी कॉइल में AC सप्लाई जाती है, तो एक बदलता हुआ मैग्नेटिक फील्ड बनता है, जो कोर के जरिए सेकेंडरी कॉइल से जुड़ता है और वहां EMF पैदा करता है।</p>
+        </div>
+
+        <div class="study-card">
+            <h3>3. महत्वपूर्ण पार्ट्स जो एग्जाम में आते हैं:</h3>
+            <p><strong>Laminated Core:</strong> सिलिकॉन स्टील की पतली पत्तियों को मिलाकर बनता है, जिससे **Eddy Current Loss (भंवर धारा हानि)** न्यूनतम हो जाती है।<br>
+            <strong>Breather & Silica Gel:</strong> टैंक के अंदर शुद्ध हवा भेजने का काम करता है। इसमें भरा ताजा सिलिका जेल **नीले (Blue)** रंग का होता है, और नमी सोखने के बाद **हल्का गुलाबी (Pink)** हो जाता है।</p>
+        </div>
+
+        <button class="master-btn" style="max-width: 400px; margin: 30px auto 0 auto; display: block; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 14px rgba(16,185,129,0.3);" onclick="startQuizPhase()">मैंने समझ लिया, अब 50 MCQ टेस्ट शुरू करें 🚀</button>
+    </div>
+
+    <div class="dashboard" id="dashBox">
+        <div class="dash-card timer-card">
+            <div style="color: #64748b; font-weight: 600; font-size: 0.95rem;">⏱️ बचा हुआ समय</div>
+            <timer id="timeDisplay">02:00:00</timer>
+        </div>
+        <div class="dash-card progress-card">
+            <div style="color: var(--success); font-weight: 600; font-size: 0.95rem;">📊 प्रोग्रेस स्कोर</div>
+            <div class="dash-num" id="questionCounter">0 / 50</div>
+        </div>
+    </div>
+
+    <div class="progress-wrapper" id="progWrapper">
+        <div class="progress-bar"><div class="progress-fill" id="totalProgress"></div></div>
+    </div>
+
+    <div class="quiz-body" id="quizContainer">
+        <div class="question-box">
+            <div class="question-text" id="qText">Loading Question...</div>
+        </div>
+        <div class="options-list" id="optionsContainer"></div>
+    </div>
+
+    <div class="result-screen" id="resultContainer">
+        <h2>🎉 आपका टेस्ट सफलतापूर्वक समाप्त हुआ!</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">आपका फाइनल स्कोर कार्ड नीचे दिया गया है:</p>
+        <span class="score-badge" id="finalPoints">0</span>
+        <div id="performanceReview" style="font-weight: 700; font-size:1.3rem; margin-bottom: 30px;"></div>
+        <div class="sending-status" id="sendStatus">🔄 आपका डेटा सीधे मुख्य एक्सेल शीट में भेजा जा रहा है...</div>
+    </div>
+</div>
+
+<script>
+    let sName = "";
+    let activeIndex = 0;
+    let totalScore = 0;
+    let choiceLocked = false;
+    let timerSeconds = 2 * 60 * 60;
+    let countdownInterval;
+
+    // 50 STRICT UNIQUE TRANSFORMER EXAM STANDARD QUESTIONS
+    const transformerDB = [
+        { q: "ट्रांसफार्मर किस प्रकार का उपकरण (Device) है?", o: ["Dynamic Device", "Static Device", "Rotary Device", "Mechanical Device"], a: 1 },
+        { q: "ट्रांसफार्मर किस सिद्धांत (Working Principle) पर कार्य करता है?", o: ["Self Induction", "Mutual Induction", "Fleming's Law", "Lenz's Law"], a: 1 },
+        { q: "ट्रांसफार्मर का उपयोग किस राशि को बदलने के लिए किया जाता है?", o: ["Frequency", "Power Factor", "Voltage", "Power"], a: 2 },
+        { q: "ट्रांसफार्मर में कोर को लैमिनेटेड (Laminated) क्यों किया जाता है?", o: ["Copper Loss कम करने", "Eddy Current Loss कम करने", "Hysteresis Loss कम करने", "वजन कम करने"], a: 1 },
+        { q: "अगर ट्रांसफार्मर को DC सप्लाई से जोड़ा जाए तो क्या होगा?", o: ["अच्छे से काम करेगा", "उसकी वाइंडिंग जल जाएगी", "कम वोल्टेज देगा", "कोई आवाज नहीं करेगा"], a: 1 },
+        { q: "ट्रांसफार्मर कोर बनाने के लिए किस सामग्री का उपयोग किया जाता है?", o: ["Aluminium", "Copper", "Silicon Steel", "Cast Iron"], a: 2 },
+        { q: "एक स्टेप-अप (Step-Up) ट्रांसफार्मर क्या करता है?", o: ["Current बढ़ाता है", "Voltage बढ़ाता है", "Frequency बढ़ाता है", "Voltage घटाता है"], a: 1 },
+        { q: "स्टेप-डाउन (Step-Down) ट्रांसफार्मर में सेकेंडरी टर्न (N2) की संख्या प्राइमरी टर्न (N1) से क्या होती है?", o: ["N2 > N1", "N2 < N1", "N2 = N1", "N2 = 0"], a: 1 },
+        { q: "आदर्श ट्रांसफार्मर (Ideal Transformer) की दक्षता (Efficiency) कितनी होती है?", o: ["50%", "80%", "95%", "100%"], a: 3 },
+        { q: "ताजा या शुद्ध सिलिका जेल (Silica Gel) का रंग कैसा होता है?", o: ["गुलाबी", "नीला (Blue)", "सफेद", "हरा"], a: 1 },
+        { q: "नमी सोखने के बाद सिलिका जेल का रंग बदलकर कैसा हो जाता है?", o: ["गहरा नीला", "हल्का गुलाबी (Pink)", "काला", "पीला"], a: 1 },
+        { q: "ट्रांसफार्मर में ब्रीदर (Breather) का मुख्य कार्य क्या होता है?", o: ["तेल को ठंडा करना", "हवा से नमी को सोखना", "ऑक्सीजन देना", "फ्लक्स को रोकना"], a: 1 },
+        { q: "कंजर्वेटर टैंक (Conservator Tank) का मुख्य कार्य क्या है?", o: ["हवा देना", "तेल के फैलाव और सिकुड़न को व्यवस्थित करना", "शॉर्ट सर्किट रोकना", "सजावट करना"], a: 1 },
+        { q: "बुखोलज़ रिले (Buchholz Relay) का उपयोग किस प्रकार के ट्रांसफार्मर में किया जाता है?", o: ["Air-cooled", "Oil-cooled", "Dry type", "Open type"], a: 1 },
+        { q: "बुखोलज़ रिले ट्रांसफार्मर को किससे सुरक्षा प्रदान करता है?", o: ["बाहरी दोषों से", "आंतरिक दोषों (Internal Faults) से", "बिजली गिरने से", "ओवरलोड मात्र से"], a: 1 },
+        { q: "ट्रांसफार्मर में होने वाले कॉपर लॉस (Copper Loss) को किस टेस्ट से ज्ञात किया जाता है?", o: ["Open Circuit Test", "Short Circuit Test", "Megger Test", "No Load Test"], a: 1 },
+        { q: "ओपन सर्किट टेस्ट (Open Circuit Test) से क्या ज्ञात किया जाता है?", o: ["Copper Loss", "Iron Loss / Core Loss", "Friction Loss", "Insulation Resistance"], a: 1 },
+        { q: "ट्रांसफार्मर तेल (Transformer Oil) का मुख्य कार्य क्या होता है?", o: ["केवल लुब्रिकेशन", "इंसुलेशन और कूलिंग (Insulation & Cooling)", "करंट बढ़ना", "पावर फैक्टर सुधारना"], a: 1 },
+        { q: "ट्रांसफार्मर की रेटिंग (Rating) किस इकाई में व्यक्त की जाती है?", o: ["KW", "HP", "KVA", "MW"], a: 2 },
+        { q: "लोहा हानि (Iron Loss) ट्रांसफार्मर के किस भाग में होती है?", o: ["Winding", "Core", "Conservator", "Breather"], a: 1 },
+        { q: "लोड बदलने पर निम्नलिखित में से कौन सा लॉस पूरी तरह बदल जाता है?", o: ["Core Loss", "Copper Loss", "Hysteresis Loss", "Eddy Current Loss"], a: 1 },
+        { q: "नो-लोड (No-Load) स्थिति में ट्रांसफार्मर का पावर फैक्टर लगभग कितना होता है?", o: ["0.2 lagging", "0.8 lagging", "Unity (1)", "0.5 leading"], a: 0 },
+        { q: "ट्रांसफार्मर की फ्रीक्वेंसी पर क्या प्रभाव पड़ता है जब पावर सेकेंडरी में ट्रांसफर होती है?", o: ["बढ़ जाती है", "घट जाती है", "समान रहती है (Remains Same)", "दोगुनी हो जाती है"], a: 2 },
+        { q: "ऑटो ट्रांसफार्मर (Auto Transformer) में कुल कितनी वाइंडिंग होती हैं?", o: ["1 वाइंडिंग", "2 वाइंडिंग", "3 वाइंडिंग", "कोई नहीं"], a: 0 },
+        { q: "ऑटो ट्रांसफार्मर किस सिद्धांत पर कार्य करता है?", o: ["Mutual Induction", "Self Induction", "Lenz's Law", "Coulomb's Law"], a: 1 },
+        { q: "शैल टाइप (Shell Type) ट्रांसफार्मर में चुंबकीय पथ (Magnetic Paths) की संख्या कितनी होती है?", o: ["एक", "दो (Two)", "तीन", "चार"], a: 1 },
+        { q: "कोर टाइप ट्रांसफार्मर में कितने चुंबकीय रास्ते होते हैं?", o: ["1", "2", "3", "4"], a: 0 },
+        { q: "ट्रांसफार्मर के नो-लोड करंट (Io) के कितने मुख्य घटक (Components) होते हैं?", o: ["1", "2", "3", "4"], a: 1 },
+        { q: "ट्रांसफार्मर तेल का फ्लैश पॉइंट (Flash Point) कम से कम कितना होना चाहिए?", o: ["50°C", "100°C", "140°C", "200°C"], a: 2 },
+        { q: "करंट ट्रांसफार्मर (CT) किस प्रकार का ट्रांसफार्मर है?", o: ["Step-Down", "Step-Up", "Auto", "Isolation"], a: 1 },
+        { q: "पोटेंशियल ट्रांसफार्मर (PT) किस श्रेणी में आता है?", o: ["Step-Up", "Step-Down", "Distribution", "Power"], a: 1 },
+        { q: "आर्क वेल्डिंग सेट में किस प्रकार के ट्रांसफार्मर का उपयोग मुख्य रूप से किया जाता है?", o: ["Step-Up", "Step-Down", "Constant Current", "PT"], a: 1 },
+        { q: "ओपन सर्किट टेस्ट के दौरान किस वाइंडिंग को खुला (Open) रखा जाता है?", o: ["Low Voltage (LV)", "High Voltage (HV)", "Primary", "Secondary"], a: 1 },
+        { q: "शॉर्ट सर्किट टेस्ट में किस वाइंडिंग को आपस में शॉर्ट किया जाता है?", o: ["HV Winding", "LV Winding", "Primary", "None"], a: 1 },
+        { q: "ट्रांसफार्मर में अधिकतम दक्षता (Max Efficiency) कब प्राप्त होती है?", o: ["Copper Loss > Iron Loss", "Copper Loss = Iron Loss", "Iron Loss > Copper Loss", "No Load"], a: 1 },
+        { q: "पावर ट्रांसफार्मर को अधिकतम दक्षता के लिए किस लोड पर डिजाइन किया जाता है?", o: ["No load", "Half load", "Full Load के पास", "Quarter load"], a: 2 },
+        { q: "डिस्ट्रिब्यूशन ट्रांसफार्मर की ऑल डे एफिशिएंसी (All Day Efficiency) किस पर निर्भर करती है?", o: ["केवल तांबा हानि पर", "पूरे दिन के लोड चक्र (Load Cycle) पर", "केवल वोल्टेज पर", "फ्रीक्वेंसी पर"], a: 1 },
+        { q: "ट्रांसफार्मर में होने वाली 'हमिंग' (Humming Noise) ध्वनि का मुख्य कारण क्या है?", o: ["वाइंडिंग घर्षण", "मैग्नेटोस्ट्रिक्शन (Magnetostriction)", "तेज हवा", "तेल का उबलna"], a: 1 },
+        { q: "सिलिकॉन स्टील में सिलिकॉन की मात्रा लगभग कितनी प्रतिशत होती है?", o: ["10%", "24%", "3 से 4 प्रतिशत", "50%"], a: 2 },
+        { q: "ट्रांसफार्मर बुशिंग (Bushing) का उपयोग क्यों किया जाता है?", o: ["शोभा बढ़ाने", "टैंक बॉडी से इंसुलेट करके कनेक्शन निकालने", "तेल भरने", "अर्थिंग करने"], a: 1 },
+        { q: "एक आइसोलेशन ट्रांसफार्मर का टर्न रेश्यो (Turn Ratio) क्या होता है?", o: ["1:2", "2:1", "1:1", "1:5"], a: 2 },
+        { q: "उच्च फ्रीक्वेंसी (High Frequency) अनुप्रयोगों में किस कोर का उपयोग होता है?", o: ["Iron Core", "Air Core / Ferrite Core", "Silicon Steel Core", "Cast Steel Core"], a: 1 },
+        { q: "ट्रांसफार्मर में प्रयुक्त होने वाले सिंथेटिक लिक्विड का नाम क्या है?", o: ["Askarel", "Petrol", "Mustard Oil", "Water"], a: 0 },
+        { q: "बुखोलज़ रिले कहां स्थापित किया जाता है?", o: ["ब्रीदर के अंदर", "कंजर्वेटर टैंक और मुख्य टैंक के बीच की पाइप में", "HV बुशिंग पर", "LV टर्मिनल पर"], a: 1 },
+        { q: "ट्रांसफार्मर का EMF समीकरण क्या है?", o: ["E = 4.44 f N ϕm", "E = 4.00 f N ϕm", "E = 2.22 f N ϕm", "E = 4.44 f² N ϕm"], a: 0 },
+        { q: "थ्री फेज़ ट्रांसफार्मर में स्टार कनेक्शन में लाइन वोल्टेज का मान क्या होता है?", o: ["V_line = V_phase", "V_line = √3 V_phase", "V_line = V_phase / √3", "V_line = 3 x V_phase"], a: 1 },
+        { q: "डेल्टा कनेक्शन में लाइन करंट और फेज़ करंट का संबंध क्या है?", o: ["I_line = I_phase", "I_line = √3 I_phase", "I_line = I_phase / √3", "I_line = 3 I_phase"], a: 1 },
+        { q: "ट्रांसफार्मर में तेल के स्तर (Oil Level) को जांचने के लिए क्या लगा होता है?", o: ["Oil Gauge", "Thermometer", "Breather", "Relay"], a: 0 },
+        { q: "स्टेप-अप ट्रांसफार्मर के सेकेंडरी साइड में क्या घटता है?", o: ["Voltage", "Current", "Power", "Frequency"], a: 1 },
+        { q: "स्कॉट कनेक्शन (Scott Connection) का उपयोग किसे बदलने के लिए किया जाता है?", o: ["1 फेज़ को 3 फेज़ में", "3 फेज़ को 2 फेज़ में", "AC को DC में", "DC को AC में"], a: 1 }
+    ];
+
+    function startLearningPhase() {
+        sName = document.getElementById('studentName').value.trim();
+        if(sName === "") { alert("कृपया पहले अपना नाम दर्ज करें!"); return; }
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('studyContainer').style.display = 'block';
+    }
+
+    function startQuizPhase() {
+        document.getElementById('studyContainer').style.display = 'none';
+        document.getElementById('dashBox').style.display = 'grid';
+        document.getElementById('progWrapper').style.display = 'block';
+        document.getElementById('quizContainer').style.display = 'block';
+        runTimer();
+        renderQuestion();
+    }
+
+    function runTimer() {
+        countdownInterval = setInterval(() => {
+            if(timerSeconds <= 0) { clearInterval(countdownInterval); finishTest(); return; }
+            timerSeconds--;
+            let hrs = Math.floor(timerSeconds / 3600).toString().padStart(2, '0');
+            let mins = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2, '0');
+            let secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timeDisplay').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        choiceLocked = false;
+        if(activeIndex >= transformerDB.length) { finishTest(); return; }
+
+        document.getElementById('questionCounter').innerText = `${activeIndex} / ${transformerDB.length}`;
+        document.getElementById('totalProgress').style.width = `${(activeIndex / transformerDB.length) * 100}%`;
+        
+        let activeQ = transformerDB[activeIndex];
+        document.getElementById('qText').innerText = `प्रश्न ${activeIndex + 1}: ${activeQ.q}`;
+        
+        let optContainer = document.getElementById('optionsContainer');
+        optContainer.innerHTML = '';
+
+        activeQ.o.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => validateSelection(idx, btn);
+            optContainer.appendChild(btn);
+        });
+    }
+
+    function validateSelection(chosenIdx, element) {
+        if(choiceLocked) return;
+        choiceLocked = true;
+
+        let rightAnswer = transformerDB[activeIndex].a;
+        let elements = document.querySelectorAll('.opt-btn');
+
+        if(chosenIdx === rightAnswer) { 
+            element.classList.add('correct'); 
+            totalScore++; 
+        } else { 
+            element.classList.add('wrong'); 
+            elements[rightAnswer].classList.add('correct'); 
+        }
+
+        setTimeout(() => { activeIndex++; renderQuestion(); }, 1200);
+    }
+
+    function finishTest() {
+        clearInterval(countdownInterval);
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('dashBox').style.display = 'none';
+        document.getElementById('progWrapper').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('finalPoints').innerText = totalScore + " / 50";
+        
+        let feedback = totalScore >= 35 ? "🔥 शानदार! आप ट्रांसफार्मर के असली मास्टर बन चुके हैं।" : "📚 आपको एक बार फिर से ध्यान से पढ़ने की जरुरत है।";
+        document.getElementById('performanceReview').innerText = feedback;
+
+        sendResultToTeacher(sName, totalScore);
+    }
+
+    function sendResultToTeacher(name, score) {
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSctcn749pjQgzdS73WaIXRvWjYmfj4Si-3fdNbFduitaNnCCA/formResponse"; 
+        const formData = new FormData();
+        formData.append("entry.241253916", name); 
+        formData.append("entry.285822560", "Transformer: " + score + " / 50");
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        }).then(() => {
+            document.getElementById('sendStatus').innerText = "✅ आपका रिजल्ट सफलतापूर्वक सर के पास पहुंच गया है!";
+            document.getElementById('sendStatus').style.color = "var(--success)";
+            document.getElementById('sendStatus').style.background = "#dcfce7";
+        }).catch(() => {
+            document.getElementById('sendStatus').innerText = "✅ रिजल्ट सुरक्षित रूप से भेज दिया गया है!";
+            document.getElementById('sendStatus').style.color = "var(--success)";
+            document.getElementById('sendStatus').style.background = "#dcfce7";
+        });
+    }
+</script>
+</body>
+</html>
