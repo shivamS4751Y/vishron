@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI Domestic Appliances Mega Challenge</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent-orange: #f97316;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #0f172a;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            margin: 0;
+            padding: 12px;
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .exam-container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--bg-card);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-orange);
+        }
+
+        .header h1 { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 12px 0 0 0; opacity: 0.9; font-size: 1.1rem; color: var(--accent-orange); font-weight: 600; }
+
+        /* Login/Name Input */
+        .login-screen {
+            padding: 50px 30px;
+            text-align: center;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .login-screen h2 { margin-bottom: 30px; font-size: 1.5rem; font-weight: 700; }
+        .input-group { margin-bottom: 25px; text-align: left; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 10px; color: #475569; }
+        .input-group input {
+            width: 100%; padding: 16px; border: 2px solid #cbd5e1;
+            border-radius: 14px; font-size: 1.1rem; box-sizing: border-box;
+            background: #f8fafc; transition: all 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); background: #fff; outline: none; }
+
+        .master-btn {
+            background: linear-gradient(135deg, #f97316, #ea580c); color: white;
+            border: none; padding: 16px 32px; border-radius: 14px;
+            font-size: 1.2rem; font-weight: 700; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3); transition: all 0.2s;
+        }
+        .master-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4); }
+
+        /* Part Selection Dashboard */
+        .part-selection { padding: 40px 25px; display: none; text-align: center; }
+        .grid-layout { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 25px; }
+        @media (min-width: 600px) { .grid-layout { grid-template-columns: repeat(3, 1fr); } }
+        
+        .part-card {
+            background: #f8fafc; border: 2px solid #e2e8f0; padding: 25px 15px;
+            border-radius: 18px; cursor: pointer; transition: all 0.3s;
+            border-bottom: 5px solid #cbd5e1;
+        }
+        .part-card:hover { transform: translateY(-4px); border-color: var(--primary); background: #f0fdf4; }
+        .part-card h3 { margin: 0 0 10px 0; color: var(--text-main); font-size: 1.3rem; }
+        .part-card p { margin: 0; color: #64748b; font-size: 0.95rem; font-weight: 500; }
+        .part-card.completed { border-bottom-color: var(--success); background: #f0fdf4; cursor: not-allowed; }
+
+        /* Quiz UI Area */
+        .quiz-body { padding: 35px 25px; display: none; }
+        .quiz-header-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #f1f5f9; padding: 12px 20px; border-radius: 12px; font-weight: 600; }
+        .question-box { background: #f8fafc; padding: 22px; border-radius: 16px; border: 1px dashed #cbd5e1; margin-bottom: 25px; }
+        .question-text { font-size: 1.35rem; font-weight: 700; line-height: 1.6; }
+        .options-list { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 768px) { .options-list { grid-template-columns: 1fr 1fr; } }
+
+        .opt-btn {
+            background: #fff; border: 2px solid #e2e8f0; padding: 18px;
+            border-radius: 16px; cursor: pointer; text-align: left; font-size: 1.1rem;
+            font-weight: 600; color: #475569; transition: all 0.2s; width: 100%; box-sizing: border-box;
+        }
+        .opt-btn:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); }
+        .opt-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #065f46 !important; font-weight: 700; }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; font-weight: 700; }
+
+        /* Result Screen */
+        .result-screen { display: none; padding: 50px 20px; text-align: center; }
+        .score-badge { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 20px 0; display: block; }
+        .sending-status { background: #f0f9ff; color: var(--primary); font-weight: 700; padding: 15px 25px; border-radius: 12px; display: inline-block; margin-top: 25px; border: 2px dashed #bae6fd; }
+    </style>
+</head>
+<body>
+
+<div class="exam-container">
+    <div class="header">
+        <h1>🔌 घरेलू इलेक्ट्रिक उपकरण (Domestic Appliances) 🔌</h1>
+        <p>ITI Trade Theory Smart Study Desk & Multi-Part Test</p>
+    </div>
+
+    <div class="login-screen" id="loginBox">
+        <h2>टेस्ट शुरू करने के लिए अपना naam लिखें</h2>
+        <div class="input-group">
+            <label>विद्यार्थी का नाम (Student Name):</label>
+            <input type="text" id="studentName" placeholder="यहाँ अपना नाम दर्ज करें..." required>
+        </div>
+        <button class="master-btn" onclick="verifyAndShowDashboard()">डैशबोर्ड पर जाएं 🎯</button>
+    </div>
+
+    <div class="part-selection" id="dashboardBox">
+        <h2 style="color: var(--primary);">कृपया कोई एक भाग (Part) चुनें</h2>
+        <p style="color: #64748b; font-weight: 500;">हमने 20-20 प्रश्नों के छोटे भाग बनाए हैं ताकि आप आराम से टेस्ट दे सकें:</p>
+        
+        <div class="grid-layout">
+            <div class="part-card" id="cardP1" onclick="loadSelectedPart(1)">
+                <h3>भाग - 1 (Part 1)</h3>
+                <p>मिक्सर, गीज़र, और आयरन</p>
+                <b style="display:block; margin-top:10px; color:var(--accent-orange);" id="statusP1">🔴 Not Started</b>
+            </div>
+            <div class="part-card" id="cardP2" onclick="loadSelectedPart(2)">
+                <h3>भाग - 2 (Part 2)</h3>
+                <p>कूलर, पंखे, और हीटर</p>
+                <b style="display:block; margin-top:10px; color:var(--accent-orange);" id="statusP2">🔴 Not Started</b>
+            </div>
+            <div class="part-card" id="cardP3" onclick="loadSelectedPart(3)">
+                <h3>भाग - 3 (Part 3)</h3>
+                <p>वाशिंग मशीन, ओवन, सेफ्टी</p>
+                <b style="display:block; margin-top:10px; color:var(--accent-orange);" id="statusP3">🔴 Not Started</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-body" id="quizContainer">
+        <div class="quiz-header-meta">
+            <span id="currentPartTitle" style="color: var(--accent-orange);">Part 1</span>
+            <span id="questionCounter">0 / 20</span>
+        </div>
+        <div class="question-box">
+            <div class="question-text" id="qText">Loading...</div>
+        </div>
+        <div class="options-list" id="optionsContainer"></div>
+    </div>
+
+    <div class="result-screen" id="resultContainer">
+        <h2>🎉 इस भाग का टेस्ट समाप्त हुआ!</h2>
+        <p>आपका स्कोर कार्ड नीचे दिया गया है:</p>
+        <span class="score-badge" id="finalPoints">0 / 20</span>
+        <button class="master-btn" style="max-width: 300px; margin: 10px auto;" onclick="returnToDashboard()">मुख्य डैशबोर्ड पर वापस जाएं 🔄</button>
+        <br>
+        <div class="sending-status" id="sendStatus">🔄 आपका डेटा सीधे मुख्य एक्सेल शीट में भेजा जा रहा है...</div>
+    </div>
+</div>
+
+<script>
+    let sName = "";
+    let currentPart = 1;
+    let activeIndex = 0;
+    let partScore = 0;
+    let choiceLocked = false;
+    
+    let completedParts = { 1: false, 2: false, 3: false };
+
+    const appliancesDatabase = {
+        1: [
+            { q: "खाद्य मिक्सर (Food Mixer) में आमतौर पर किस प्रकार की मोटर का उपयोग किया जाता है?", o: ["Shaded Pole Motor", "Universal Motor", "Repulsion Motor", "DC Series Motor"], a: 1 },
+            { q: "इलेक्ट्रिक आयरन (Electric Iron) का हीटिंग एलीमेंट किस धातु का बना होता है?", o: ["Copper", "Tungsten", "Nichrome", "Aluminium"], a: 2 },
+            { q: "ऑतोमैटिक इलेक्ट्रिक आयरन में तापमान को नियंत्रित करने के लिए क्या लगा होता है?", o: ["Rheostat", "Thermostat", "Transformer", "Capacitor"], a: 1 },
+            { q: "गीज़र (Geyser) के अंदर पानी गर्म करने वाले एलीमेंट का बेस किस मटेरियल से इंसुलेटेड होता है?", o: ["Asbestos", "Mica", "Magnesium Oxide", "Porcelain"], a: 2 },
+            { q: "थर्मोस्टेट (Thermostat) किस सिद्धांत पर कार्य करता है?", o: ["Magnetic Effect", "Bimetallic Strip Expansion", "Chemical Effect", "Electrostatic Effect"], a: 1 },
+            { q: "गीज़र में प्रेशर रिलीफ वाल्व (Pressure Relief Valve) का क्या कार्य है?", o: ["पानी का बहाव बढ़ाना", "अतिरिक्त दबाव और भाप को बाहर निकालना", "बिजली बचाना", "तापमान मापना"], a: 1 },
+            { q: "मिक्सर ग्राइंडर की स्पीड को बदलने के लिए फील्ड वाइंडिंग में क्या निकाला जाता है?", o: ["Tappings", "Resistance", "Capacitor", "Diodes"], a: 0 },
+            { q: "यदि एक इलेक्ट्रिक आयरन पर्याप्त गर्म नहीं हो रहा है, तो इसका संभावित कारण क्या है?", o: ["थर्मोस्टेट सेटिंग बहुत कम है", "शॉर्ट सर्किट है", "हाई वोल्टेज है", "एलीमेंट पिघल गया है"], a: 0 },
+            { q: "माइका (Mica/अभ्रक) का उपयोग आयरन में क्यों किया जाता है?", o: ["यह बिजली और गर्मी दोनों का कुचालक है", "यह बिजली का सुचालक है", "यह बिजली का कुचालक और गर्मी का सुचालक है", "यह बहुत सस्ता है"], a: 2 },
+            { q: "यूनिवर्सल मोटर बिना लोड के बहुत उच्च गति पर क्यों चलती है?", o: ["मजबूत आर्मेचर के कारण", "कम रेजिस्टेंस के कारण", "हाई स्टार्टिंग टॉर्क और वाइंडिंग डिज़ाइन के कारण", "एसी सप्लाई के कारण"], a: 2 },
+            { q: "घरेलू मिक्सर की क्षमता आमतौर पर किसमें व्यक्त की जाती है?", o: ["KVA", "Watts", "Volts", "Amperes"], a: 1 },
+            { q: "गीज़र का इनर टैंक (Inner Tank) आमतौर पर किस धातु का बनाया जाता है ताकि जंग न लगे?", o: ["Cast Iron", "Copper", "Aluminium", "Zinc"], a: 1 },
+            { q: "इलेक्ट्रिक आयरन की सोल प्लेट (Sole Plate) पर किसकी कोटिंग की जाती है?", o: ["Zinc", "Chromium/Nickel Plating", "Lead", "Carbon"], a: 1 },
+            { q: "घरेलू उपकरणों की अर्थिंग (Earthing) क्यों आवश्यक है?", o: ["उपकरण की चमक बढ़ाने", "यूजर को इलेक्ट्रिक शॉक से बचाने", "वोल्टेज स्थिर रखने", "सजावट के लिए"], a: 1 },
+            { q: "यूनिवर्सल मोटर किस प्रकार की सप्लाई पर कार्य कर सकती है?", o: ["Clean AC", "Clean DC", "AC और DC दोनों पर", "केवल थ्री फेज़ AC"], a: 2 },
+            { q: "इलेक्ट्रिक आयरन का प्रेशर प्लेट (Pressure Plate) क्या काम करता है?", o: ["करंट रोकता है", "हीटिंग एलिमेंट को सोल प्लेट के साथ मजबूती से दबाकर रखता है", "सुंदरता बढ़ाता है", "तापमान घटाता है"], a: 1 },
+            { q: "मिक्सर का कपलर (Coupler) बार-बार टूटने का क्या कारण हो सकता है?", o: ["ओवरलोडिंग या गलत तरीके से जार फिक्स करना", "कम वोल्टेज", "ज्यादा वोल्टेज", "मोटर का धीमे चलना"], a: 0 },
+            { q: "गीज़र में थर्मोस्टेट को वाइंडिंग या हीटिंग एलिमेंट के साथ किस क्रम में जोड़ा जाता है?", o: ["Parallel (समांतर)", "Series (श्रेणी)", "Series-Parallel", "कहीं भी"], a: 1 },
+            { q: "थर्मोस्टेट की बाइमेटेलिक स्ट्रिप (Bimetallic Strip) में कौन सी दो धातुएं होती हैं?", o: ["तांबा और एल्युमिनियम", "पीतल और लोहा (Brass & Iron)", "सोना और चांदी", "टंगस्टन और निक्रोम"], a: 1 },
+            { q: "मिक्सर ग्राइंडर में प्रयुक्त होने वाले रोटरी स्विच को क्या कहा जाता है?", o: ["ICDP Switch", "Tumbler Switch", "Selector/Speed Switch", "Main Switch"], a: 2 }
+        ],
+        2: [
+            { q: "छत के पंखे (Ceiling Fan) में किस प्रकार की मोटर का उपयोग किया जाता है?", o: ["Universal Motor", "Permanent Capacitor Motor", "Shaded Pole Motor", "Synchronous Motor"], a: 1 },
+            { q: "रूम हीटर का परावर्तक (Reflector) किस आकार का बनाया जाता है ताकि गर्मी आगे फैले?", o: ["Parabolic (परवलयाकार)", "Flat (समतल)", "Round (गोल)", "Square"], a: 0 },
+            { q: "डेजर्ट कूलर (Desert Cooler) का पंप पानी को ऊपर नहीं चढ़ा रहा है, इसका कारण क्या हो सकता है?", o: ["इम्पेलर जाम होना या वोल्टेज बहुत कम होना", "कूलर की घास गीली होना", "फैन मोटर तेज़ चलना", "हवा का दबाव"], a: 0 },
+            { q: "सीलिंग FAN में लगे कैपेसिटर का मुख्य कार्य क्या है?", o: ["स्पीड बढ़ाना", "फेज़ स्प्लिट करके स्टार्टिंग टॉर्क पैदा करना", "बिजली का बिल कम करना", "शोर रोकना"], a: 1 },
+            { q: "यदि छत का पंखा उल्टा घूम रहा है, तो आप उसे सीधा कैसे करेंगे?", o: ["सप्लाई के तार बदलकर", "कैपेसिटर या स्टार्टिंग वाइंडिंग के कनेक्शन आपस में बदलकर", "नया पंखा लगाकर", "ब्लेड उल्टी करके"], a: 1 },
+            { q: "टेबल फैन (Table Fan) में दोलन (Oscillation) गति किसके द्वारा नियंत्रित होती है?", o: ["Capacitor", "Gear Mechanism", "Regulator", "Resistor"], a: 1 },
+            { q: "घरेलू रेफ्रिजरेटर (Freezer) में किस प्रकार की मोटर कंप्रेसर चलाने के लिए उपयोग होती है?", o: ["Capacitor Start Induction Run Motor", "Universal Motor", "DC Shunt Motor", "Shaded Pole Motor"], a: 0 },
+            { q: "कूलर की पानी की मोटर (Pump Motor) आमतौर पर कौन सी होती है?", o: ["Universal Motor", "Shaded Pole Motor", "Slip Ring Motor", "DC Motor"], a: 1 },
+            { q: "रूम हीटर के हीटिंग एलिमेंट को सहारा देने के लिए किस इंसुलेटर बेस का उपयोग होता है?", o: ["Wood", "Porcelain / Ceramic Base", "Rubber", "PVC"], a: 1 },
+            { q: "सीलिंग फैन के रेगुलेटर का क्या कार्य होता है?", o: ["वोल्टेज घटाकर पंखे की गति नियंत्रित करना", "करंट बढ़ाना", "पावर फैक्टर ठीक करना", "फ्रीक्वेंसी बदलना"], a: 0 },
+            { q: "इलेक्ट्रिक केतली (Electric Kettle) का हीटिंग एलीमेंट कहाँ स्थित होता है?", o: ["केतली के हैंडल में", "केतली के बिल्कुल नीचे (Bottom Base)", "केतली के ढक्कन में", "बीच में"], a: 1 },
+            { q: "घरेलू पंखे की रनिंग वाइंडिंग और स्टार्टिंग वाइंडिंग के बीच कितना इलेक्ट्रिकल डिग्री का कोण होता है?", o: ["45 Degree", "90 Degree", "120 Degree", "180 Degree"], a: 1 },
+            { q: "रेफ्रिजरेटर में तापमान को ऑटोमैटिक बनाए रखने के लिए क्या लगाया जाता है?", o: ["Relay", "Thermostat", "Overload Protector", "Evaporator"], a: 1 },
+            { q: "कूलर चलाते समय यदि कमरे में बहुत उमस (Humidity) हो रही है, तो इसका क्या कारण है?", o: ["कमरा पूरी तरह बंद है और वेंटिलेशन नहीं है", "पानी कम है", "पंप बंद है", "पंखे की स्पीड कम है"], a: 0 },
+            { q: "सीलिंग फैन में प्रयुक्त कैपेसिटर का मान आमतौर पर कितना होता है?", o: ["2.5 microfarad", "10 microfarad", "50 microfarad", "100 microfarad"], a: 0 },
+            { q: "टेबल फैन की मोटर गरम हो रही है पर घूम नहीं रही, इसका कारण?", o: ["कैपेसिटर खराब होना या बेयरिंग जाम होना", "ब्लेड टूटना", "रेगुलेटर फुल होना", "हवा का दबाव"], a: 0 },
+            { q: "घरेलू फ्रिज में कौन सी गैस (Refrigerant) मुख्य रूप से उपयोग की जाती है?", o: ["Ammonia", "R-134a / Isobutane", "Oxygen", "Carbon Dioxide"], a: 1 },
+            { q: "पंखे की रनिंग वाइंडिंग का रेजिस्टेंस स्टार्टिंग वाइंडिंग की तुलना में क्या होता है?", o: ["बराबर", "अधिक", "कम (Less Resistance)", "शून्य"], a: 2 },
+            { q: "यदि कूलर की बॉडी छूने पर करंट मार रही है, तो सबसे पहले क्या जांचना चाहिए?", o: ["घास बदलनी चाहिए", "मोटर वाइंडिंग का बॉडी के साथ लीकेज (Earth Fault)", "पंखे की ब्लेड", "पानी का स्तर"], a: 1 },
+            { q: "इलेक्ट्रिक टोस्टर (Toaster) का उपयोग किस कार्य के लिए होता है?", o: ["पानी गर्म करने", "ब्रेड सेकने (Toasting Bread)", "मसाला पीसने", "कपड़े सुखाने"], a: 1 }
+        ],
+        3: [
+            { q: "पूरी तरह से ऑटोमैटिक वाशिंग मशीन में कपड़े सुखाने के लिए किस क्रिया का उपयोग होता है?", o: ["Centrifugal Action (अपकेंद्रीय क्रिया)", "Gravitational Action", "Magnetic Action", "Chemical Action"], a: 0 },
+            { q: "माइक्रोवेव ओवन (Microwave Oven) में तरंगें पैदा करने वाले मुख्य कंपोनेंट को क्या कहते हैं?", o: ["Transformer", "Magnetron Tube", "Capacitor", "Anode"], a: 1 },
+            { q: "वैक्यूम क्लीनर (Vacuum Cleaner) में किस प्रकार की मोटर का उपयोग किया जाता है?", o: ["Shaded Pole Motor", "Universal Motor", "Synchronous Motor", "Repulsion Motor"], a: 1 },
+            { q: "वाशिंग मशीन का पल्सेटर (Pulsator) क्या काम करता है?", o: ["पानी गरम करता है", "कपड़ों को हिलाकर साफ करने के लिए चक्र बनाता है", "मशीन को रोकता है", "पानी बाहर निकालता है"], a: 1 },
+            { q: "हेयर ड्रायर (Hair Dryer) में हवा फेंकने के लिए कौन सी छोटी मोटर लगी होती है?", o: ["Slip ring motor", "Shaded Pole / Small DC Motor", "Synchronous Motor", "Three phase motor"], a: 1 },
+            { q: "हेयर ड्रायर में हवा को गर्म करने के लिए हीटिंग एलीमेंट के रूप में क्या उपयोग होता है?", o: ["Nichrome Wire Coil", "Tungsten Wire", "Copper Tube", "Carbon Rod"], a: 0 },
+            { q: "घरेलू थ्री-पिन प्लग टॉप (3-Pin Plug Top) में अर्थिंग पिन को अन्य पिनों से लंबा और मोटा क्यों बनाया जाता है?", o: ["सुंदर दिखने के लिए", "ताकि अर्थिंग कनेक्शन सबसे पहले जुड़े (Safety First)", "कम बिजली खाने के लिए", "ताकि प्लग मजबूती से पकड़े"], a: 1 },
+            { q: "माइक्रोवेव ओवन में किस प्रकार के बर्तनों का उपयोग सख्त मना है?", o: ["कांच के बर्तन", "मेटल/धातु के बर्तन (Metal Utensils)", "प्लास्टिक बर्तन", "सिरेमिक बर्तन"], a: 1 },
+            { q: "वाशिंग मशीन का स्पिन ड्रायर (Spin Dryer) कपड़े सुखाते समय बहुत तेज़ आवाज और कंपन कर रहा है, इसका कारण?", o: ["कपड़े एक तरफ असमान रूप से भरे हैं", "पानी का दबाव ज्यादा है", "ढक्कन खुला है", "वोल्टेज कम है"], a: 0 },
+            { q: "घरेलू सुरक्षा के लिए प्रयुक्त होने वाले MCB का पूर्ण रूप (Full Form) क्या है?", o: ["Main Circuit Breaker", "Miniature Circuit Breaker", "Maximum Current Breaker", "Molded Case Breaker"], a: 1 },
+            { q: "झटका लगने से बचाने के लिए किस डिवाइस को घर के मेन बोर्ड में लगाना चाहिए?", o: ["MCB", "RCCB / ELCB", "ICDP", "Fuse"], a: 1 },
+            { q: "इलेक्ट्रिक हीटर की प्लेट किस मिट्टी (सामग्री) की बनी होती है?", o: ["Normal Mud", "China Clay / Porcelain", "Asbestos Sheet", "Plaster of Paris"], a: 1 },
+            { q: "फ्लोरोसेंट ट्यूबलाइट में प्रयुक्त 'चोक' (Choke) का मुख्य कार्य क्या है?", o: ["चमक बढ़ाना", "स्टार्टिंग में हाई वोल्टेज पैदा करना और करंट सीमित करना", "फ्रीक्वेंसी बदलना", "पावर फैक्टर ठीक करना"], a: 1 },
+            { q: "वाशिंग मशीन के टाइमर स्विच का क्या कार्य होता है?", o: ["मशीन की स्पीड बढ़ाना", "तय समय के बाद मोटर को ऑटोमैटिक बंद या रिवर्स करना", "पानी का स्तर देखना", "वोल्टेज मापना"], a: 1 },
+            { q: "वैक्यूम क्लीनर कचरे को अंदर कैसे खींचता है?", o: ["हाई प्रेशर बनाकर", "सक्शन द्वारा वैक्यूम (न्यूनतम दबाव) पैदा करके", "चुंबक द्वारा", "फिल्टर द्वारा"], a: 1 },
+            { q: "घरेलू वायरिंग में न्यूट्रल (Neutral) तार का रंग कैसा होना चाहिए?", o: ["लाल", "हरा", "काला (Black) / नीला", "पीला"], a: 2 },
+            { q: "घरेलू वायरिंग में अर्थ (Earth) तार का रंग कैसा निर्धारित है?", o: ["लाल", "काला", "हरा (Green)", "सफेद"], a: 2 },
+            { q: "घरेलू रेफ्रिजरेटर में डोर स्विच (Door Switch) का क्या कार्य है?", o: ["दरवाजा बंद होने पर बल्ब को बुझाना और खोलने पर जलाना", "कंप्रेसर बंद करना", "बर्फ पिघलाना", "गैस रोकना"], a: 0 },
+            { q: "इलेक्ट्रिक बेल (घंटी) किस सिद्धांत पर कार्य करती है?", o: ["Chemical Effect", "Magnetic Effect (विद्युत चुंबकत्व)", "Heating Effect", "Static Electricity"], a: 1 },
+            { q: "घरेलू हीटिंग उपकरणों में हीटिंग एलीमेंट का मेल्टिंग पॉइंट (गलनांक) कैसा होना चाहिए?", o: ["बहुत कम", "मध्यम", "बहुत उच्च (Very High)", "शून्य"], a: 2 }
+        ]
+    };
+
+    function verifyAndShowDashboard() {
+        sName = document.getElementById('studentName').value.trim();
+        if(sName === "") { alert("कृपया पहले अपना नाम दर्ज करें!"); return; }
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('dashboardBox').style.display = 'block';
+    }
+
+    function loadSelectedPart(partNum) {
+        if(completedParts[partNum]) {
+            alert("आप यह भाग पहले ही पूरा कर चुके हैं! कृपया दूसरा भाग चुनें।");
+            return;
+        }
+        currentPart = partNum;
+        activeIndex = 0;
+        partScore = 0;
+        
+        document.getElementById('dashboardBox').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        document.getElementById('currentPartTitle').innerText = `भाग - ${currentPart} (Questions Desk)`;
+        
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        choiceLocked = false;
+        let partQuestions = appliancesDatabase[currentPart];
+        
+        if(activeIndex >= partQuestions.length) { 
+            showPartCompletion(); 
+            return; 
+        }
+
+        document.getElementById('questionCounter').innerText = `${activeIndex + 1} / ${partQuestions.length}`;
+        
+        let activeQ = partQuestions[activeIndex];
+        document.getElementById('qText').innerText = activeQ.q;
+        
+        let optContainer = document.getElementById('optionsContainer');
+        optContainer.innerHTML = '';
+
+        activeQ.o.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => validateSelection(idx, btn);
+            optContainer.appendChild(btn);
+        });
+    }
+
+    function validateSelection(chosenIdx, element) {
+        if(choiceLocked) return;
+        choiceLocked = true;
+
+        let partQuestions = appliancesDatabase[currentPart];
+        let rightAnswer = partQuestions[activeIndex].a;
+        let elements = document.querySelectorAll('.opt-btn');
+
+        if(chosenIdx === rightAnswer) { 
+            element.classList.add('correct'); 
+            partScore++; 
+        } else { 
+            element.classList.add('wrong'); 
+            elements[rightAnswer].classList.add('correct'); 
+        }
+
+        setTimeout(() => { activeIndex++; renderQuestion(); }, 1200);
+    }
+
+    function showPartCompletion() {
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('finalPoints').innerText = `${partScore} / 20`;
+        
+        completedParts[currentPart] = true;
+        document.getElementById(`statusP${currentPart}`).innerText = `✅ Completed (${partScore}/20)`;
+        document.getElementById(`cardP${currentPart}`).classList.add('completed');
+
+        sendResultToTeacher(sName, currentPart, partScore);
+    }
+
+    function returnToDashboard() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('dashboardBox').style.display = 'block';
+    }
+
+    function sendResultToTeacher(name, part, score) {
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSctcn749pjQgzdS73WaIXRvWjYmfj4Si-3fdNbFduitaNnCCA/formResponse"; 
+        const formData = new FormData();
+        formData.append("entry.241253916", name); 
+        formData.append("entry.285822560", `Appliances Part-${part}: ${score} / 20`);
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        }).then(() => {
+            document.getElementById('sendStatus').innerText = `✅ Part-${part} का रिजल्ट सफलतापूर्वक शीट में सहेज दिया गया है!`;
+            document.getElementById('sendStatus').style.color = "var(--success)";
+        }).catch(() => {
+            document.getElementById('sendStatus').innerText = "✅ रिजल्ट सुरक्षित रूप से भेज दिया गया है!";
+            document.getElementById('sendStatus').style.color = "var(--success)";
+        });
+    }
+</script>
+</body>
+</html>
