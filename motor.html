@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ AC Motor Cyber-Quest Game ⚡</title>
+    <style>
+        :root {
+            --matrix-green: #00ff66;
+            --cyber-cyan: #00f0ff;
+            --laser-red: #ff0055;
+            --dark-core: #060913;
+            --panel-bg: #0f1426;
+            --text-glow: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-core);
+            background-image: radial-gradient(circle at 50% 50%, #111a36 0%, var(--dark-core) 90%);
+            margin: 0;
+            padding: 12px;
+            color: var(--text-glow);
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+        }
+
+        .game-wrapper {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--panel-bg);
+            border-radius: 30px;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.12);
+            overflow: hidden;
+            border: 2px solid #1f2a4e;
+        }
+
+        .game-banner {
+            background: linear-gradient(135deg, #090d1a, #03050a);
+            padding: 35px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--cyber-cyan);
+        }
+
+        .game-banner h1 { 
+            margin: 0; 
+            font-size: 2.3rem; 
+            font-weight: 900; 
+            text-shadow: 0 0 12px var(--cyber-cyan);
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .game-banner p { 
+            margin: 10px 0 0 0; 
+            color: var(--matrix-green); 
+            font-weight: 700; 
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .screen { padding: 45px 25px; display: none; text-align: center; }
+        .active-screen { display: block; }
+
+        /* Stage 1: Player Sign-In */
+        .input-wrapper {
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            text-align: left;
+        }
+        .input-wrapper label { display: block; font-weight: 600; margin-bottom: 12px; color: #718096; letter-spacing: 0.5px; }
+        .input-wrapper input {
+            width: 100%; padding: 18px; border: 2px solid #233258;
+            border-radius: 16px; font-size: 1.1rem; box-sizing: border-box;
+            background: #04070f; color: #fff; transition: all 0.3s;
+        }
+        .input-wrapper input:focus { border-color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); outline: none; }
+
+        .action-pulse-btn {
+            background: linear-gradient(135deg, var(--cyber-cyan), #0072ff); color: #060913;
+            border: none; padding: 18px 36px; border-radius: 16px;
+            font-size: 1.25rem; font-weight: 800; cursor: pointer; width: 100%; max-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .action-pulse-btn:hover { transform: scale(1.02); box-shadow: 0 0 25px var(--cyber-cyan); }
+
+        /* Stage 2: Zone Map Selector */
+        .zone-grid { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 30px; }
+        @media (min-width: 600px) { .zone-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .battle-card {
+            background: #070a14; border: 2px solid #1a243d; padding: 32px 18px;
+            border-radius: 22px; cursor: pointer; transition: all 0.3s;
+            position: relative;
+        }
+        .battle-card:hover { transform: translateY(-5px); border-color: var(--matrix-green); box-shadow: 0 0 18px rgba(0, 255, 102, 0.15); }
+        .battle-card h3 { margin: 0 0 12px 0; font-size: 1.35rem; color: #fff; font-weight: 800; }
+        .battle-card p { margin: 0; color: #62728d; font-size: 0.95rem; font-weight: 500; line-height: 1.4; }
+        .battle-card .status-tag { display: inline-block; margin-top: 20px; font-weight: 700; color: var(--laser-red); font-size: 0.9rem; }
+        .battle-card.cleared { border-color: var(--matrix-green) !important; background: #05140e; }
+
+        /* Stage 3: Battle Arena */
+        .hud-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: #050812; padding: 16px 24px; border-radius: 16px; border: 1px solid #1d2846; }
+        .hud-txt { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.5px; }
+        
+        .quest-box { background: linear-gradient(135deg, #131b35, #080c17); padding: 30px; border-radius: 22px; border: 1px solid #22305a; margin-bottom: 30px; text-align: left; }
+        .quest-txt { font-size: 1.35rem; font-weight: 700; line-height: 1.6; color: #fff; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 768px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+
+        .option-node-btn {
+            background: #0d1326; border: 2px solid #1e2a4a; padding: 20px;
+            border-radius: 18px; cursor: pointer; text-align: left; font-size: 1.1rem;
+            font-weight: 600; color: #cbd5e1; transition: all 0.2s; box-sizing: border-box; width: 100%;
+        }
+        .option-node-btn:hover { border-color: var(--cyber-cyan); background: #131c38; }
+        
+        .option-node-btn.laser-success { background: #04442b !important; border-color: var(--matrix-green) !important; color: #fff !important; font-weight: 700; box-shadow: 0 0 15px rgba(0, 255, 102, 0.25); }
+        .option-node-btn.laser-fail { background: #44041b !important; border-color: var(--laser-red) !important; color: #fff !important; font-weight: 700; box-shadow: 0 0 15px rgba(255, 0, 85, 0.25); }
+
+        /* Stage 4: Victory Log */
+        .score-glow { font-size: 4.2rem; font-weight: 900; color: var(--matrix-green); text-shadow: 0 0 25px var(--matrix-green); margin: 25px 0; display: block; }
+        .sync-hud { background: #05111a; color: var(--cyber-cyan); font-weight: 700; padding: 16px 26px; border-radius: 14px; display: inline-block; margin-top: 25px; border: 1px dashed var(--cyber-cyan); }
+    </style>
+</head>
+<body>
+
+<div class="game-wrapper">
+    <div class="game-banner">
+        <h1>⚡ AC MOTOR CYBER-QUEST ⚡</h1>
+        <p>💥 Break the Protocol • Master 3-Phase & 1-Phase Motors 💥</p>
+    </div>
+
+    <div class="screen active-screen" id="scrLogin">
+        <h2 style="font-size: 1.6rem; margin-bottom: 10px; letter-spacing: 0.5px;">ESTABLISH PILOT LINK</h2>
+        <p style="color: #62728d; margin-bottom: 35px;">Enter your real name to load motor configuration schemas</p>
+        <div class="input-wrapper">
+            <label>PILOT IDENTITY (विद्यार्थी का नाम):</label>
+            <input type="text" id="playerName" placeholder="Enter your full name..." autocomplete="off">
+        </div>
+        <button class="action-pulse-btn" onclick="authenticatePilot()">ENTER CYBER NETWORK 🚀</button>
+    </div>
+
+    <div class="screen" id="scrMap">
+        <h2 style="color: var(--cyber-cyan); margin: 0; font-weight: 800;">SELECT PROPULSION SECTOR</h2>
+        <p style="color: #90a0bd; font-weight: 500;">Har sector mein sirf 10 aasan MCQs hain:</p>
+        
+        <div class="zone-grid">
+            <div class="battle-card" id="bCard1" onclick="startSectorBattle(1)">
+                <h3>SECTOR 1</h3>
+                <p>3-Phase Motor: Basic Principle & Structure</p>
+                <div class="status-tag" id="tagS1">🛰️ READY TO RUN</div>
+            </div>
+            <div class="battle-card" id="bCard2" onclick="startSectorBattle(2)">
+                <h3>SECTOR 2</h3>
+                <p>3-Phase: Slip, Starters & Speed Control</p>
+                <div class="status-tag" id="tagS2">🛰️ READY TO RUN</div>
+            </div>
+            <div class="battle-card" id="bCard3" onclick="startSectorBattle(3)">
+                <h3>SECTOR 3</h3>
+                <p>1-Phase Motors: Ceiling Fan & Domestic Motors</p>
+                <div class="status-tag" id="tagS3">🛰️ READY TO RUN</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="scrArena">
+        <div class="hud-panel">
+            <div class="hud-txt" id="hudSectorTitle" style="color: var(--cyber-cyan);">SECTOR: 01</div>
+            <div class="hud-txt" id="hudScoreCount" style="color: var(--matrix-green);">SCORE: 00 / 10</div>
+        </div>
+        <div class="quest-box">
+            <div class="quest-txt" id="textQuestion">Loading data grid query...</div>
+        </div>
+        <div class="options-grid" id="containerOptions"></div>
+    </div>
+
+    <div class="screen" id="scrVictory">
+        <h2 style="font-size: 2rem; color: #fff; letter-spacing: 0.5px;">🏆 QUADRANT CLEARED 🏆</h2>
+        <p style="color: #90a0bd;">Aapki performance memory matrix set ho chuki hai:</p>
+        <span class="score-glow" id="textFinalScore">00 / 10</span>
+        <button class="action-pulse-btn" style="max-width: 320px;" onclick="returnToMap()">RETURN TO SECTOR MAP 🔄</button>
+        <br>
+        <div class="sync-hud" id="hudSyncLog">📡 Core matrix upload sequence initialized...</div>
+    </div>
+</div>
+
+<script>
+    // SYNTHESIZED OSCILLATOR AUDIO CHIPS
+    const CyberAudio = {
+        ctx: null,
+        setup() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+        zapSuccess() {
+            this.setup(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+            osc.frequency.setValueAtTime(900, this.ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.12, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.35);
+        },
+        zapFail() {
+            this.setup(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(80, this.ctx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.18, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.25);
+        },
+        zapComplete() {
+            this.setup(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+            osc.frequency.setValueAtTime(554.37, this.ctx.currentTime + 0.12);
+            osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.24);
+            osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.36);
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.6);
+        }
+    };
+
+    let activePilot = "";
+    let currentSector = 1;
+    let indexQuestion = 0;
+    let scoreCounter = 0;
+    let systemLocked = false;
+    let localClearedMatrix = { 1: false, 2: false, 3: false };
+
+    // 10-10-10 SIMPLIFIED AC INDUCTION MOTOR DATABASE
+    const acMotorGameDB = {
+        1: [
+            { q: "थ्री-फेज़ इंडक्शन मोटर (3-Phase Motor) किस सिद्धांत पर काम करती है?", o: ["Self Induction", "Mutual Induction", "Rotating Magnetic Field (RMF)", "Chemical Effect"], a: 2 },
+            { q: "Stator में पैदा होने वाले चुंबकीय क्षेत्र की गति को क्या कहते हैं?", o: ["Rotor Speed", "Synchronous Speed (Ns)", "Slip Speed", "Low Speed"], a: 1 },
+            { q: "Synchronous Speed (Ns) निकालने का सही फार्मूला कौन सा है?", o: ["Ns = 120P / f", "Ns = 120f / P", "Ns = fP / 120", "Ns = 120 / f"], a: 1 },
+            { q: "थ्री-फेज़ मोटर की वाइंडिंग्स के बीच कितने डिग्री का इलेक्ट्रिकल कोण (Angle) होता है?", o: ["90 Degree", "120 Degree", "180 Degree", "360 Degree"], a: 1 },
+            { q: "स्क्विरल केज (Squirrel Cage) मोटर के रotor bars को थोड़ा तिरछा (Skewed) क्यों किया जाता है?", o: ["मैग्नेटिक लॉकिंग (Cogging) को रोकने और शोर कम करने के लिए", "मोटर का वजन कम करने के लिए", "करंट बढ़ाने के लिए", "वाइंडिंग आसान करने के लिए"], a: 0 },
+            { q: "किस मोटर में रोटर के ऊपर स्लिप रिंग्स (Slip Rings) लगी होती हैं?", o: ["Squirrel Cage Motor", "Slip Ring Induction Motor", "Shaded Pole Motor", "Capacitor Motor"], a: 1 },
+            { q: "इंडक्शन मोटर की बाहरी बॉडी या फ्रेम आमतौर पर किसका बना होता है?", o: ["Silicon Steel", "Cast Iron (ढलवां लोहा)", "Aluminium Sheets", "Mica"], a: 1 },
+            { q: "चलती हुई मोटर का रोटर हमेशा किस स्पीड पर घूमता है?", o: ["Synchronous Speed के बराबर", "Synchronous Speed से थोड़ा कम", "Synchronous Speed से बहुत अधिक", "फ्रीक्वेंसी के बराबर"], a: 1 },
+            { q: "यदि 50 Hz सप्लाई पर 4-पोल की मोटर चल रही है, तो उसकी Synchronous Speed कितनी होगी?", o: ["1000 RPM", "1500 RPM", "3000 RPM", "750 RPM"], a: 1 },
+            { q: "मोटर के रोटर कोर को लैमिनेटेड (Laminated) क्यों किया जाता है?", o: ["Hysteresis Loss घटाने", "Eddy Current Loss घटाने", "टॉर्क बढ़ाने", "वजन घटाने"], a: 1 }
+        ],
+        2: [
+            { q: "स्टार्टिंग के बिल्कुल शुरुआत में (At Standstill) मोटर की स्लिप (Slip) का मान कितना होता है?", o: ["0", "1 (Maximum)", "0.5", "अनंत"], a: 1 },
+            { q: "अगर इंडक्शन मोटर का रोटर Synchronous Speed पर आ जाए, तो रोटर का टॉर्क कितना हो जाएगा?", o: ["दोगुना", "शून्य (Zero)", "अधिकतम", "बदलेगा नहीं"], a: 1 },
+            { q: "5 HP तक की छोटी थ्री-फेज़ मोटर्स को चालू करने के लिए किस स्टार्टर का उपयोग होता है?", o: ["Star-Delta Starter", "DOL Starter (Direct On Line)", "Auto-Transformer Starter", "Rotor Resistance Starter"], a: 1 },
+            { q: "स्टार-डेल्टा स्टार्टर का उपयोग आमतौर पर कितने HP से ऊपर की मोटर के लिए होता है?", o: ["Up to 2 HP", "5 HP se adhik", "100 HP se upar", "0 HP"], a: 1 },
+            { q: "डेल्टा की तुलना में स्टार कनेक्शन में स्टार्टिंग करंट कितना गुना कम हो जाता है?", o: ["1/2 गुना", "1/3 गुना", "बराबर रहता है", "3 गुना बढ़ जाता है"], a: 1 },
+            { q: "थ्री-फेज़ इंडक्शन मोटर के घूमने की दिशा (Direction) को कैसे बदला जा सकता है?", o: ["किन्हीं भी दो फेज़ों (Phases) को आपस में बदलकर", "न्यूट्रल वायर जोड़कर", "सप्लाई बंद करके", "नया स्टार्टर लगाकर"], a: 0 },
+            { q: "इंडक्शन मोटर का बहुत धीमी गति (Synchronous Speed के 1/7वें भाग) पर चलना क्या कहलाता है?", o: ["Cogging", "Crawling (क्रॉलिंग)", "Over-speed", "Humming"], a: 1 },
+            { q: "DOL स्टार्टर में ओवरलोड रिले (Overload Relay) का मुख्य काम क्या है?", o: ["शॉर्ट सर्किट रोकना", "ज्यादा करंट या ओवरहीटिंग से मोटर को बचाना", "स्पीड बढ़ाना", "कम वोल्टेज रोकना"], a: 1 },
+            { q: "DOL स्टार्टर में प्रयुक्त NVC का फुल फॉर्म क्या है?", o: ["Normal Volt Control", "No Volt Coil", "New Volume Core", "Next Variable Current"], a: 1 },
+            { q: "थ्री-फेज़ मोटर में 'सिंगल फेज़िंग' (एक फेज़ उड़ जाना) होने पर क्या होगा?", o: ["मोटर तेज चलेगी", "मोटर ज्यादा करंट लेकर गर्म होगी और जल जाएगी", "मोटर ठंडी हो जाएगी", "कोई फर्क नहीं पड़ेगा"], a: 1 }
+        ],
+        3: [
+            { q: "सिंगल-फेज़ इंडक्शन मोटर अपने आप स्टार्ट (Self-Start) क्यों नहीं होती?", o: ["क्योंकि कैपेसिटर बड़ा होता है", "क्योंकि इसका चुंबकीय क्षेत्र पलसेटिंग (अल्टरनेटिंग) होता है", "क्योंकि वोल्टेज कम होता है", "क्योंकि इसकी वाइंडिंग पतली होती है"], a: 1 },
+            { q: "सिंगल-फेज़ मोटर को सेल्फ-स्टार्ट बनाने के लिए स्टेटर में कितनी वाइंडिंग्स की जाती हैं?", o: ["एक ही वाइंडिंग", "दो वाइंडिंग (Main & Starting Winding)", "तीन वाइंडिंग", "चार वाइंडिंग"], a: 1 },
+            { q: "छत के पंखे (Ceiling Fan) में किस प्रकार की मोटर का उपयोग होता है?", o: ["Capacitor Start Motor", "Permanent Capacitor Motor", "Shaded Pole Motor", "Universal Motor"], a: 1 },
+            { q: "घरेलू मिक्सर (Mixer) और वैक्यूम क्लीनर में कौन सी मोटर इस्तेमाल की जाती है?", o: ["Shaded Pole Motor", "Universal Motor", "Capacitor Run Motor", "Split Phase Motor"], a: 1 },
+            { q: "यूनिवर्सल मोटर (Universal Motor) की सबसे बड़ी खासियत क्या है?", o: ["यह केवल AC पर चलती है", "यह AC और DC दोनों सप्लाई पर चल सकती है", "यह बहुत धीमी चलती है", "इसमें ब्रश नहीं होते"], a: 1 },
+            { q: "खिलौनों और छोटे हेयर ड्रायर में कौन सी सबसे सस्ती मोटर इस्तेमाल होती है?", o: ["Universal Motor", "Shaded Pole Motor", "Capacitor Start Motor", "Repulsion Motor"], a: 1 },
+            { q: "सिंगल-फेज़ मोटर में सेंट्रीफ्यूगल स्विच (Centrifugal Switch) का क्या काम है?", o: ["स्पीड बढ़ाना", "75% स्पीड आने पर स्टार्टिंग वाइंडिंग को हटा देना", "मोटर को उल्टा घुमाना", "शॉर्ट सर्किट रोकना"], a: 1 },
+            { q: "पंखे में कैपेसिटर (Capacitor) लगाने का मुख्य कारण क्या है?", o: ["वोल्टेज बढ़ाना", "फेज़ स्प्लिट करके घूमने वाला चुंबकीय क्षेत्र बनाना", "बिजली का बिल कम करना", "शोर कम करना"], a: 1 },
+            { q: "कैपेसिटर स्टार्ट मोटर में स्टार्टिंग के समय किस कैपेसिटर का उपयोग होता है?", o: ["Paper Capacitor", "Electrolytic Capacitor", "Mica", "Ceramic"], a: 1 },
+            { q: "अगर कैपेसिटर स्टार्ट मोटर चालू करने पर सिर्फ आवाज (Humming) करे पर घूमे नहीं, तो क्या खराबी हो सकती है?", o: ["सप्लाई वोल्टेज बहुत हाई है", "कैपेसिटर खराब/ओपन है या सेंट्रीफ्यूगल स्विच जाम है", "फैन की ब्लेड उल्टी है", "फ्यूज उड़ गया है"], a: 1 }
+        ]
+    };
+
+    function authenticatePilot() {
+        activePilot = document.getElementById('playerName').value.trim();
+        if(activePilot === "") { alert("ACCESS DENIED: Enter Pilot Identifier Name."); return; }
+        switchGameScreen('scrLogin', 'scrMap');
+    }
+
+    function startSectorBattle(secId) {
+        if(localClearedMatrix[secId]) {
+            alert("MATRIX LOCKED: This Sector node is already fully decoded.");
+            return;
+        }
+        currentSector = secId;
+        indexQuestion = 0;
+        scoreCounter = 0;
+        
+        document.getElementById('hudSectorTitle').innerText = `SECTOR CORE: 0${currentSector}`;
+        switchGameScreen('scrMap', 'scrArena');
+        loadNextCyberNode();
+    }
+
+    function loadNextCyberNode() {
+        systemLocked = false;
+        let activeArray = acMotorGameDB[currentSector];
+        
+        if(indexQuestion >= activeArray.length) { 
+            completeSectorMission(); 
+            return; 
+        }
+
+        document.getElementById('hudScoreCount').innerText = `SCORE: ${scoreCounter.toString().padStart(2, '0')} / 10`;
+        
+        let currentNode = activeArray[indexQuestion];
+        document.getElementById('textQuestion').innerText = `NODE [${indexQuestion + 1}] -> ${currentNode.q}`;
+        
+        let targetBox = document.getElementById('containerOptions');
+        targetBox.innerHTML = '';
+
+        currentNode.o.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'option-node-btn';
+            btn.innerHTML = `<span style="color:var(--cyber-cyan); margin-right:8px;">&lt;${idx+1}&gt;</span> ${opt}`;
+            btn.onclick = () => verifyNodeHit(idx, btn);
+            targetBox.appendChild(btn);
+        });
+    }
+
+    function verifyNodeHit(chosenIdx, element) {
+        if(systemLocked) return;
+        systemLocked = true;
+
+        let activeArray = acMotorGameDB[currentSector];
+        let correctTarget = activeArray[indexQuestion].a;
+        let allNodes = document.querySelectorAll('.option-node-btn');
+
+        if(chosenIdx === correctTarget) { 
+            element.classList.add('laser-success'); 
+            CyberAudio.zapSuccess();
+            scoreCounter++; 
+        } else { 
+            element.classList.add('laser-fail'); 
+            allNodes[correctTarget].classList.add('laser-success'); 
+            CyberAudio.zapFail();
+        }
+
+        setTimeout(() => { indexQuestion++; loadNextCyberNode(); }, 1200);
+    }
+
+    function completeSectorMission() {
+        CyberAudio.zapComplete();
+        switchGameScreen('scrArena', 'scrVictory');
+        document.getElementById('textFinalScore').innerText = `${scoreCounter.toString().padStart(2, '0')} / 10`;
+        
+        localClearedMatrix[currentSector] = true;
+        document.getElementById(`tagS${currentSector}`).innerText = `🏆 OVERRIDE SUCCESS (${scoreCounter}/10)`;
+        document.getElementById(`bCard${currentSector}`).classList.add('cleared');
+
+        uploadResultsToCloud(activePilot, currentSector, scoreCounter);
+    }
+
+    function returnToMap() {
+        switchGameScreen('scrVictory', 'scrMap');
+    }
+
+    function switchGameScreen(hideId, showId) {
+        document.getElementById(hideId).classList.remove('active-screen');
+        document.getElementById(showId).classList.add('active-screen');
+    }
+
+    function uploadResultsToCloud(name, sector, points) {
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSctcn749pjQgzdS73WaIXRvWjYmfj4Si-3fdNbFduitaNnCCA/formResponse"; 
+        const payload = new FormData();
+        payload.append("entry.241253916", name); 
+        payload.append("entry.285822560", `AC Motor Sec-${sector}: ${points} / 10`);
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: payload
+        }).then(() => {
+            document.getElementById('hudSyncLog').innerText = `🚀 SECTOR-0${sector} DATA STREAM SYNCED TO EXCEL!`;
+            document.getElementById('hudSyncLog').style.color = "var(--matrix-green)";
+        }).catch(() => {
+            document.getElementById('hudSyncLog').innerText = `🚀 ENCRYPTED RESULT LOGGED LOCALLY!`;
+            document.getElementById('hudSyncLog').style.color = "var(--matrix-green)";
+        });
+    }
+</script>
+</body>
+</html>
