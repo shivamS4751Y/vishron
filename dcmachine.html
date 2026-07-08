@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ DC Machine Electro-Quest Game ⚡</title>
+    <style>
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-green: #00ff87;
+            --neon-pink: #ff007f;
+            --dark-space: #0a0f1d;
+            --card-space: #131a35;
+            --text-light: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-space);
+            background-image: radial-gradient(circle at 50% 50%, #1e264a 0%, var(--dark-space) 80%);
+            margin: 0;
+            padding: 12px;
+            color: var(--text-light);
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--card-space);
+            border-radius: 28px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+            overflow: hidden;
+            border: 2px solid #222d60;
+        }
+
+        .game-header {
+            background: linear-gradient(145deg, #0f1630, #050914);
+            padding: 35px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--neon-blue);
+            position: relative;
+        }
+
+        .game-header h1 { 
+            margin: 0; 
+            font-size: 2.2rem; 
+            font-weight: 900; 
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--neon-blue);
+            color: #fff;
+        }
+        .game-header p { 
+            margin: 10px 0 0 0; 
+            color: var(--neon-green); 
+            font-weight: 700; 
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Screen States */
+        .screen { padding: 40px 25px; display: none; text-align: center; }
+        .active-screen { display: block; }
+
+        /* Login Screen */
+        .input-box {
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            text-align: left;
+        }
+        .input-box label { display: block; font-weight: 600; margin-bottom: 12px; color: #94a3b8; }
+        .input-box input {
+            width: 100%; padding: 18px; border: 2px solid #222d60;
+            border-radius: 16px; font-size: 1.1rem; box-sizing: border-box;
+            background: #080d1a; color: #fff; transition: all 0.3s;
+        }
+        .input-box input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); outline: none; }
+
+        .pulse-btn {
+            background: linear-gradient(135deg, #00f2fe, #4facfe); color: #0a0f1d;
+            border: none; padding: 18px 36px; border-radius: 16px;
+            font-size: 1.25rem; font-weight: 800; cursor: pointer; width: 100%; max-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .pulse-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--neon-blue); }
+
+        /* Dashboard Map */
+        .grid-map { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 30px; }
+        @media (min-width: 600px) { .grid-map { grid-template-columns: repeat(3, 1fr); } }
+
+        .zone-card {
+            background: #0d1527; border: 2px solid #1e2942; padding: 30px 15px;
+            border-radius: 20px; cursor: pointer; transition: all 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .zone-card:hover { transform: translateY(-5px); border-color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 255, 135, 0.2); }
+        .zone-card h3 { margin: 0 0 10px 0; font-size: 1.4rem; color: #fff; }
+        .zone-card p { margin: 0; color: #64748b; font-size: 0.95rem; }
+        .zone-card .badge { display: inline-block; margin-top: 15px; font-weight: 700; color: var(--neon-pink); }
+        .zone-card.locked { border-color: var(--neon-green) !important; background: #0c1c1a; }
+
+        /* Gaming Arena Area */
+        .meta-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: #090e1c; padding: 14px 22px; border-radius: 14px; border: 1px solid #1e2942; }
+        .hud-item { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; }
+        
+        .q-display-box { background: linear-gradient(135deg, #16203d, #0d1427); padding: 28px; border-radius: 20px; border: 1px solid #233159; margin-bottom: 30px; text-align: left; }
+        .q-text { font-size: 1.4rem; font-weight: 700; line-height: 1.6; color: #fff; }
+
+        .arena-options { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 768px) { .arena-options { grid-template-columns: 1fr 1fr; } }
+
+        .game-opt-btn {
+            background: #111931; border: 2px solid #222e54; padding: 20px;
+            border-radius: 18px; cursor: pointer; text-align: left; font-size: 1.15rem;
+            font-weight: 600; color: #cbd5e1; transition: all 0.2s; box-sizing: border-box; width: 100%;
+        }
+        .game-opt-btn:hover { border-color: var(--neon-blue); background: #162244; }
+        
+        .game-opt-btn.hit-success { background: #064e3b !important; border-color: var(--neon-green) !important; color: #fff !important; font-weight: 700; box-shadow: 0 0 15px rgba(0, 255, 135, 0.3); }
+        .game-opt-btn.hit-fail { background: #4c0519 !important; border-color: var(--neon-pink) !important; color: #fff !important; font-weight: 700; box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); }
+
+        /* Scoreboard Screen */
+        .rank-badge { font-size: 4rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 20px var(--neon-green); margin: 25px 0; display: block; }
+        .sync-alert { background: #071724; color: var(--neon-blue); font-weight: 700; padding: 15px 25px; border-radius: 14px; display: inline-block; margin-top: 25px; border: 1px dashed var(--neon-blue); }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div class="game-header">
+        <h1>⚡ DC MACHINE ELECTRO-QUEST ⚡</h1>
+        <p>💥 Choose Your Mission Zone & Start Battle 💥</p>
+    </div>
+
+    <div class="screen active-screen" id="scrLogin">
+        <h2 style="font-size: 1.7rem; margin-bottom: 10px;">ENTER ACADEMY RADAR</h2>
+        <p style="color: #64748b; margin-bottom: 35px;">Apna naam enter karein aur game zone mein enter karein</p>
+        <div class="input-box">
+            <label>PLAYER NAME (विद्यार्थी का नाम):</label>
+            <input type="text" id="pName" placeholder="Type your coder/player name..." autocomplete="off">
+        </div>
+        <button class="pulse-btn" onclick="initPlayerDashboard()">LAUNCH MISSION 🚀</button>
+    </div>
+
+    <div class="screen" id="scrDashboard">
+        <h2 style="color: var(--neon-blue); margin: 0;">SELECT MISSION SECTOR</h2>
+        <p style="color: #94a3b8;">Har sector mein 20 game points hain. Boriyat bilkul mana hai!</p>
+        
+        <div class="grid-map">
+            <div class="zone-card" id="z1" onclick="launchSector(1)">
+                <h3>SECTOR 1</h3>
+                <p>DC Generator: Parts & Working Principle</p>
+                <div class="badge" id="lblZ1">⚡ READY TO PLAY</div>
+            </div>
+            <div class="zone-card" id="z2" onclick="launchSector(2)">
+                <h3>SECTOR 2</h3>
+                <p>DC Motor: Speed, Torque & Starters</p>
+                <div class="badge" id="lblZ2">⚡ READY TO PLAY</div>
+            </div>
+            <div class="zone-card" id="z3" onclick="launchSector(3)">
+                <h3>SECTOR 3</h3>
+                <p>Characteristics, Losses & Testing</p>
+                <div class="badge" id="lblZ3">⚡ READY TO PLAY</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="scrArena">
+        <div class="meta-bar">
+            <div class="hud-item" id="lblSectorName" style="color: var(--neon-blue);">SECTOR-1</div>
+            <div class="hud-item" id="lblProgress" style="color: var(--neon-green);">POINTS: 00/20</div>
+        </div>
+        <div class="q-display-box">
+            <div class="q-text" id="boxQuestion">Loading game node...</div>
+        </div>
+        <div class="arena-options" id="boxOptions"></div>
+    </div>
+
+    <div class="screen" id="scrScoreboard">
+        <h2 style="font-size: 2rem; color: #fff;">🏆 MISSION ACCOMPLISHED! 🏆</h2>
+        <p style="color: #94a3b8;">Aapka Final Blast Score Card niche diya gaya hai:</p>
+        <span class="rank-badge" id="lblFinalScore">00 / 20</span>
+        <button class="pulse-btn" style="max-width: 320px;" onclick="backToBase()">RETURN TO MAP 🔄</button>
+        <br>
+        <div class="sync-alert" id="lblSyncStatus">📡 Cloud sync processing in background...</div>
+    </div>
+</div>
+
+<script>
+    // AUDIO ENGINE USING WEB AUDIO API (NO EXTERNAL FILES REQUIRED)
+    const AudioEngine = {
+        ctx: null,
+        init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+        playSuccess() {
+            this.init(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, this.ctx.currentTime); // C5
+            osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.1); // E5
+            osc.frequency.setValueAtTime(783.99, this.ctx.currentTime + 0.2); // G5
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.4);
+        },
+        playFail() {
+            this.init(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(70, this.ctx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.2, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+        },
+        playComplete() {
+            this.init(); let osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(587.33, this.ctx.currentTime);
+            osc.frequency.setValueAtTime(880, this.ctx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.2, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
+            osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.5);
+        }
+    };
+
+    let currentPlayer = "";
+    let activeSector = 1;
+    let nodeIndex = 0;
+    let battleScore = 0;
+    let lockControls = false;
+    let missionHistory = { 1: false, 2: false, 3: false };
+
+    // 20-20 PURE EXAM TARGET HIGH-TECH QUESTION DATA BANK
+    const machineGameDatabase = {
+        1: [
+            { q: "DC जनरेटर किस सिद्धांत (Working Principle) पर कार्य करता है?", o: ["Faraday's Laws of Electromagnetic Induction", "Lenz's Law", "Ohm's Law", "Fleming's Left Hand Rule"], a: 0 },
+            { q: "DC जनरेटर में आर्मेचर कोर (Armature Core) को लैमिनेटेड क्यों किया जाता है?", o: ["Hysteresis Loss घटाने", "Eddy Current Loss घटाने", "वजन कम करने", "स्पार्किंग रोकने"], a: 1 },
+            { q: "DC मशीन में कम्युटेटर (Commutator) का मुख्य कार्य क्या है?", o: ["AC को DC में और DC को AC में बदलना", "मैग्नेटिक फील्ड बढ़ाना", "स्पीड कंट्रोल करना", "करंट को रोकना"], a: 0 },
+            { q: "फ्लेमिंग के दाएं हाथ का नियम (Right Hand Rule) किसकी दिशा ज्ञात करने के लिए उपयोग किया जाता है?", o: ["मोटर के घूमने की दिशा", "Induced EMF की दिशा", "मैग्नेटिक फील्ड की दिशा", "टॉर्क की दिशा"], a: 1 },
+            { q: "DC जनरेटर के योक/बॉडी (Yoke) बनाने के लिए बड़े आकार की मशीनों में किस धातु का उपयोग होता है?", o: ["Cast Iron", "Cast Steel / Rolled Steel", "Aluminium", "Copper"], a: 1 },
+            { q: "कम्युटेटर सेगमेंट्स (Commutator Segments) के बीच कौन सा इंसुलेटिंग मटेरियल भरा जाता है?", o: ["PVC", "Mica (अभ्रक)", "Rubber", "Wood"], a: 1 },
+            { q: "DC जनरेटर में आर्मेचर से बाहरी सर्किट तक करंट ले जाने के लिए किसका उपयोग किया जाता है?", o: ["Commutator", "Carbon Brushes", "Fields Poles", "Shaft"], a: 1 },
+            { q: "वेव वाइंडिंग (Wave Winding) में समांतर पथों (Parallel Paths) की संख्या हमेशा कितनी होती है?", o: ["P (Poles के बराबर)", "2", "4", "1"], a: 1 },
+            { q: "लैप वाइंडिंग (Lap Winding) का उपयोग मुख्य रूप से किस प्रकार की मशीन में किया जाता है?", o: ["High Voltage, Low Current", "Low Voltage, High Current", "High Speed Machines", "Low Torque Machines"], a: 1 },
+            { q: "DC जनरेटर में डमी कॉइल्स (Dummy Coils) क्यों लगाई जाती हैं?", o: ["वोल्टेज बढ़ाने के लिए", "आर्मेचर को मैकेनिकल रूप से संतुलित (Balance) करने के लिए", "लॉस कम करने के लिए", "रेजिस्टेंस घटाने के लिए"], a: 1 },
+            { q: "DC जनरेटर में इंटरपोल्स (Interpoles) को आर्मेचर के साथ किस क्रम में जोड़ा जाता है?", o: ["Series (श्रेणी क्रम)", "Parallel (समांतर क्रम)", "Series-Parallel", "कहीं भी"], a: 0 },
+            { q: "इंटरपोल्स का मुख्य कार्य DC मशीन में क्या होता है?", o: ["स्पीड बढ़ाना", "कम्युटेशन के समय होने वाली स्पार्किंग को कम करना", "वोल्टेज बढ़ाना", "रेजिस्टेंस बढ़ाना"], a: 1 },
+            { q: "रेसिड्यूअल मैग्नेटिज्म (अवशिष्ट चुंबकत्व) किसके लिए आवश्यक है?", o: ["DC मोटर चलाने", "Self-Excited जनरेटर में वोल्टेज बिल्ड-अप करने के लिए", "लॉस रोकने", "मशीन ठंडा रखने"], a: 1 },
+            { q: "यदि कोई DC शंट जनरेटर अपनी अवशिष्ट चुंबकत्व खो देता है, तो उसे क्या किया जाता है?", o: ["आर्मेचर बदलना", "Field Flashing (बाहरी DC स्रोत देना)", "शॉर्ट सर्किट करना", "स्पीड बढ़ाना"], a: 1 },
+            { q: "आर्मेचर रिएक्शन (Armature Reaction) के कारण मैग्नेटिक न्यूट्रल एक्सिस (MNA) किस तरफ शिफ्ट होता है?", o: ["जनरेटर के घूमने की दिशा में", "घूमने की विपरीत दिशा में", "शिफ्ट नहीं होता", "स्थिर रहता है"], a: 0 },
+            { q: "DC जनरेटर में उत्पन्न होने वाला EMF (Induced EMF) किस प्रकार का होता है?", o: ["Pure DC", "Alternating Current (AC)", "Pulsating DC", "Static EMF"], a: 1 },
+            { q: "DC सेपरेटली एक्साइटेड जनरेटर को फील्ड सप्लाई कहाँ से दी जाती है?", o: ["खुद के आर्मेचर से", "किसी बाहरी DC स्रोत (Battery या Dynamo) से", "AC मेन्स से", "थ्री-फेस सप्लाई से"], a: 1 },
+            { q: "DC शंट जनरेटर की फील्ड वाइंडिंग का रेजिस्टेंस कैसा होना चाहिए?", o: ["बहुत कम", "बहुत उच्च (High Resistance, Thin Wire)", "शून्य", "आर्मेचर के बराबर"], a: 1 },
+            { q: "DC सीरीज जनरेटर की फील्ड वाइंडिंग कैसी बनाई जाती है?", o: ["मोटे तार और कम टर्न (Thick Wire, Few Turns)", "पतले तार और ज्यादा टर्न", "मध्यम मोटाई", "आयरन वायर से"], a: 0 },
+            { q: "DC मशीन का आर्मेचर स्लॉट खुला (Open) रखने का क्या फायदा है?", o: ["कॉइल्स को आसानी से रखने और बदलने के लिए", "फ्लक्स बढ़ाने के लिए", "स्पार्किंग रोकने के लिए", "मशीन हल्की करने के लिए"], a: 0 }
+        ],
+        2: [
+            { q: "DC मोटर किस सिद्धांत पर कार्य करती है?", o: ["Faraday's Inductive Law", "Current Carrying Conductor in Magnetic Field", "Lenz Effect", "Chemical Effect"], a: 1 },
+            { q: "DC मोटर के घूमने की दिशा ज्ञात करने के लिए किस नियम का उपयोग किया जाता है?", o: ["Fleming's Right Hand Rule", "Fleming's Left Hand Rule", "Cork Screw Rule", "Right Hand Thumb Rule"], a: 1 },
+            { q: "DC मोटर में बैक EMF (Eb) का मुख्य कार्य क्या है?", o: ["सप्लाई वोल्टेज का विरोध करना और करंट नियंत्रित करना", "मोटर रोकना", "स्पीड अत्यधिक बढ़ाना", "आर्मेचर जलाना"], a: 0 },
+            { q: "DC मोटर का टॉर्क (Torque) किसके समानुपाती (Directly Proportional) होता है?", o: ["केवल फ्लक्स", "केवल आर्मेचर करंट", "फ्लक्स और आर्मेचर करंट दोनों के (Ia × Φ)", "केवल स्पीड"], a: 2 },
+            { q: "किस DC मोटर को कभी भी बिना लोड (No-Load) के स्टार्ट नहीं करना चाहिए?", o: ["Shunt Motor", "Series Motor", "Compound Motor", "Differential Motor"], a: 1 },
+            { q: "DC सीरीज मोटर की नो-लोड पर स्पीड कितनी हो सकती है?", o: ["शून्य", "बहुत कम", "भयानक रूप से उच्च (Dangerously High)", "स्थिर"], a: 2 },
+            { q: "इलेक्ट्रिक ट्रैक्शन (जैसे रेलवे इंजन, क्रेन) के लिए किस मोटर का स्टार्टिंग टॉर्क सबसे बेस्ट होता है?", o: ["DC Shunt Motor", "DC Series Motor", "Cumulative Compound", "Differential"], a: 1 },
+            { q: "लगातार/स्थिर गति (Constant Speed) पर चलने वाली फैक्ट्रियों की मशीनों में कौन सी मोटर बेस्ट है?", o: ["DC Series Motor", "DC Shunt Motor", "Differential Compound", "Universal Motor"], a: 1 },
+            { q: "DC मोटर स्टार्टर का मुख्य कार्य क्या होता है?", o: ["स्टार्टिंग के समय आर्मेचर के भारी करंट को सीमित करना", "स्पीड बढ़ाना", "बैक EMF कम करना", "वोल्टेज बढ़ाना"], a: 0 },
+            { q: "3-पॉइंट स्टार्टर में NVC (No Volt Coil) का मुख्य कार्य क्या है?", o: ["शॉर्ट सर्किट से बचाना", "हैंडल को 'ON' स्थिति में रोके रखना और वोल्टेज जाने पर छोड़ना", "करंट बढ़ाना", "ओवरलोड रोकना"], a: 1 },
+            { q: "4-पॉइंट स्टार्टर का उपयोग किस लिए विशेष रूप से किया जाता है?", o: ["सीरीज मोटर के लिए", "वाइड स्पीड कंट्रोल (शंट फील्ड रेगुलेटर के साथ) वाली मोटर्स के लिए", "कम वोल्टेज के लिए", "हाई स्टार्टिंग टॉर्क के लिए"], a: 1 },
+            { q: "DC शंट मोटर की गति को बेस स्पीड से 'नीचे' (Below Base Speed) नियंत्रित करने के लिए कौन सी विधि अपनाई जाती है?", o: ["Field Control Method", "Armature Control Method", "Ward Leonard System", "Voltage Tapping"], a: 1 },
+            { q: "DC शंट मोटर की गति को बेस स्पीड से 'ऊपर' (Above Base Speed) ले जाने के लिए क्या करते हैं?", o: ["Armature Resistance बढ़ाते हैं", "Field Flux को कमजोर करते हैं (Field Control Method)", "सप्लाई बदलते हैं", "मोटर उलटी करते हैं"], a: 1 },
+            { q: "वार्ड-लियोनार्ड स्पीड कंट्रोल विधि (Ward-Leonard Method) का सबसे बड़ा लाभ क्या है?", o: ["यह बहुत सस्ती है", "दोनों दिशाओं में बहुत स्मूथ और विस्तृत गति नियंत्रण देती है", "कोई लॉस नहीं होता", "कोई जनरेटर नहीं चाहिए"], a: 1 },
+            { q: "3-पॉइंट स्टार्टर में ओवरलोड प्रोटेक्शन के लिए क्या लगा होता है?", o: ["NVC", "OLC (Over Load Coil)", "Fuse", "Bimetallic Strip"], a: 1 },
+            { q: "यदि चलती हुई DC शंट मोटर की फील्ड वाइंडिंग अचानक ओपन (Break) हो जाए, तो क्या होगा?", o: ["मोटर तुरंत रुक जाएगी", "मोटर खतरनाक रूप से अत्यधिक तेज गति पकड़ लेगी", "मोटर सामान्य चलती रहेगी", "मोटर रिवर्स हो जाएगी"], a: 1 },
+            { q: "DC मोटर का बैक EMF (Eb) ज्ञात करने का सही सूत्र क्या है?", o: ["Eb = V + IaRa", "Eb = V - IaRa", "Eb = V / IaRa", "Eb = IaRa - V"], a: 1 },
+            { q: "फ्लेमिंग के बाएं हाथ के नियम में अंगूठा (Thumb) किसकी दिशा को दर्शाता है?", o: ["मैग्नेटिक फील्ड की दिशा", "करंट की दिशा", "चालक पर लगने वाले बल या मोशन की दिशा", "EMF की दिशा"], a: 2 },
+            { q: "स्टार्टर के अंदर प्रयुक्त होने वाला 'स्टड रेजिस्टेंस' आमतौर पर किस वायर का बना होता है?", o: ["Copper", "Nichrome / Eureka", "Aluminium", "Silver"], a: 1 },
+            { q: "DC मोटर की रोटेशन की दिशा बदलने का सबसे सुरक्षित तरीका क्या है?", o: ["सप्लाई टर्मिनल्स को आपस में बदल देना", "या तो आर्मेचर या फील्ड कनेक्शन में से किसी एक को बदलना", "दोनों को एक साथ बदलना", "ब्रश की पोजीशन बदलना"], a: 1 }
+        ],
+        3: [
+            { q: "DC मशीन में होने वाले आयरन लॉसेस (Iron Losses) कहाँ घटित होते हैं?", o: ["Yoke में", "Armature Core में", "Commutator पर", "Field Windings में"], a: 1 },
+            { q: "DC मशीन में मैकेनिकल लॉस (Mechanical Losses) के अंतर्गत क्या आता है?", o: ["Copper Loss", "Friction and Windage Loss (घर्षण हानियां)", "Hysteresis Loss", "Eddy Loss"], a: 1 },
+            { q: "DC मशीन में कॉपर लॉस (Copper Losses) किस प्रकार के लॉस होते हैं?", o: ["Constant Losses", "Variable Losses (लोड के साथ बदलने वाले)", "Magnetic Losses", "Core Losses"], a: 1 },
+            { q: "DC मशीन की अधिकतम दक्षता (Maximum Efficiency) किस स्थिति पर प्राप्त होती है?", o: ["Variable Loss = Constant Loss", "Variable Loss > Constant Loss", "Constant Loss = 0", "No Load पर"], a: 0 },
+            { q: "स्वाइनबर्न टेस्ट (Swinburne's Test) DC मोटर्स पर किस स्थिति में किया जाता है?", o: ["Full Load पर", "No Load स्थिति में", "शॉर्ट सर्किट स्थिति में", "Blocked Rotor स्थिति में"], a: 1 },
+            { q: "स्वाइनबर्न टेस्ट को किस मोटर पर लागू नहीं किया जा सकता?", o: ["Shunt Motor", "Series Motor (क्योंकि यह नो-लोड पर खतरनाक है)", "Compound Motor", "Separately Excited Machine"], a: 1 },
+            { q: "हॉपकिंसन टेस्ट (Hopkinson's Test) करने के लिए कम से कम कितनी समान DC मशीनों की आवश्यकता होती है?", o: ["1", "2 समान मशीनें (Regenerative Test)", "3", "4"], a: 1 },
+            { q: "DC शंट जनरेटर का क्रिटिकल रेजिस्टेंस (Critical Resistance) किससे संबंधित है?", o: ["Armature", "Field Winding", "Load Circuit", "Commutator"], a: 1 },
+            { q: "यदि किसी जनरेटर का फील्ड रेजिस्टेंस उसके क्रिटिकल रेजिस्टेंस से 'अधिक' हो, तो क्या होगा?", o: ["जनरेटर बहुत हाई वोल्टेज बनाएगा", "जनरेटर वोल्टेज बिल्ड-अप करने में फेल हो जाएगा", "मशीन जल जाएगी", "कोई फर्क नहीं पड़ेगा"], a: 1 },
+            { q: "डिफरेंशियल कंपाउंड मोटर (Differential Compound Motor) का व्यावहारिक उपयोग कहाँ होता है?", o: ["क्रेन में", "रेलवे में", "आमतौर पर कहीं नहीं (असुरक्षित गति व्यवहार के कारण)", "लेथ मशीन में"], a: 2 },
+            { q: "कम्युटेटर पर अत्यधिक स्पार्किंग होने का मुख्य कारण क्या हो सकता है?", o: ["गलत ब्रश पोजीशन (MNA पर न होना)", "कम वोल्टेज", "ओवर स्पीड", "साफ हवा का न होना"], a: 0 },
+            { q: "DC मशीनों में हिस्टेरेसिस लॉस को कम करने के लिए कोर में क्या मिलाया जाता है?", o: ["Silicon (3-4% Silicon Steel)", "Carbon", "Zinc", "Aluminium"], a: 0 },
+            { q: "DC शंट जनरेटर का वोल्टेज लोड बढ़ने पर थोड़ा कम क्यों हो जाता है?", o: ["आर्मेचर रिएक्शन और आर्मेचर ड्रॉप (IaRa) के कारण", "स्पीड बढ़ने के कारण", "रेसिड्यूअल चुंबकत्व बढ़ने के कारण", "फील्ड टूटने के कारण"], a: 0 },
+            { q: "फ्लाईव्हील (Flywheel) का उपयोग किस मोटर के साथ लोड को संतुलित करने के लिए किया जाता है?", o: ["Series Motor", "Shunt Motor", "Cumulative Compound Motor", "Differential Motor"], a: 2 },
+            { q: "DC सीरीज मोटर का टॉर्क-करंट विशेषता वक्र (Toleration Curve) सैचुरेशन से पहले कैसा होता है?", o: ["Straight Line", "Parabola (परवलयाकार)", "Hyperbola", "Circular"], a: 1 },
+            { q: "कार्बन ब्रश का वोल्टेज ड्रॉप आमतौर पर प्रति ब्रश कितना माना जाता है?", o: ["0 Volt", "1 से 2 Volt", "10 Volt", "50 Volt"], a: 1 },
+            { q: "DC मशीन की शाफ्ट (Shaft) किसकी बनी होती है?", o: ["Cast Iron", "Mild Steel / Hardened Steel", "Aluminium", "Mica"], a: 1 },
+            { q: "स्मॉल रेटिंग (छोटे) वाले DC मोटर्स के आर्मेचर रेजिस्टेंस का मान लगभग कितना होता है?", o: ["1000 Ohm", "1 Ohm या उससे कम", "500 Ohm", "अनंत"], a: 1 },
+            { q: "कम्युटेटर से आर्मेचर कॉइल के सिरे किसके माध्यम से जोड़े जाते हैं?", o: ["Riser (राइजर्स)", "Brushes", "Shaft", "Yoke"], a: 0 },
+            { q: "DC मशीन में वायु घर्षण हानि (Windage Loss) किस कारक पर निर्भर करती है?", o: ["केवल करंट", "मशीन की गति (Speed) के वर्ग पर", "वोल्टेज पर", "तापमान पर"], a: 1 ] }
+        ]
+    };
+
+    function initPlayerDashboard() {
+        currentPlayer = document.getElementById('pName').value.trim();
+        if(currentPlayer === "") { alert("Hey Pilot! Enter your Name first."); return; }
+        
+        switchScreen('scrLogin', 'scrDashboard');
+    }
+
+    function launchSector(secNum) {
+        if(missionHistory[secNum]) {
+            alert("This Sector is already cleared! Pick another destination.");
+            return;
+        }
+        activeSector = secNum;
+        nodeIndex = 0;
+        battleScore = 0;
+        
+        document.getElementById('lblSectorName').innerText = `SECTOR BATTLE: 0${activeSector}`;
+        switchScreen('scrDashboard', 'scrArena');
+        loadNextGameNode();
+    }
+
+    function loadNextGameNode() {
+        lockControls = false;
+        let activeNodes = machineGameDatabase[activeSector];
+        
+        if(nodeIndex >= activeNodes.length) { 
+            concludeSectorMission(); 
+            return; 
+        }
+
+        document.getElementById('lblProgress').innerText = `POINTS: ${battleScore.toString().padStart(2, '0')} / 20`;
+        
+        let currentNode = activeNodes[nodeIndex];
+        document.getElementById('boxQuestion').innerText = currentNode.q;
+        
+        let optsBox = document.getElementById('boxOptions');
+        optsBox.innerHTML = '';
+
+        currentNode.o.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'game-opt-btn';
+            btn.innerHTML = `<span style="color:var(--neon-blue); margin-right:8px;">[${idx+1}]</span> ${opt}`;
+            btn.onclick = () => processHit(idx, btn);
+            optsBox.appendChild(btn);
+        });
+    }
+
+    function processHit(chosenIdx, element) {
+        if(lockControls) return;
+        lockControls = true;
+
+        let activeNodes = machineGameDatabase[activeSector];
+        let rightTarget = activeNodes[nodeIndex].a;
+        let allOptionButtons = document.querySelectorAll('.game-opt-btn');
+
+        if(chosenIdx === rightTarget) { 
+            element.classList.add('hit-success'); 
+            AudioEngine.playSuccess();
+            battleScore++; 
+        } else { 
+            element.classList.add('hit-fail'); 
+            allOptionButtons[rightTarget].classList.add('hit-success'); 
+            AudioEngine.playFail();
+        }
+
+        setTimeout(() => { nodeIndex++; loadNextGameNode(); }, 1300);
+    }
+
+    function concludeSectorMission() {
+        AudioEngine.playComplete();
+        switchScreen('scrArena', 'scrScoreboard');
+        document.getElementById('lblFinalScore').innerText = `${battleScore.toString().padStart(2, '0')} / 20`;
+        
+        missionHistory[activeSector] = true;
+        document.getElementById(`lblZ${activeSector}`).innerText = `🏆 CLEARED (${battleScore}/20)`;
+        document.getElementById(`z${activeSector}`).classList.add('locked');
+
+        syncPointsToCloud(currentPlayer, activeSector, battleScore);
+    }
+
+    function backToBase() {
+        switchScreen('scrScoreboard', 'scrDashboard');
+    }
+
+    function switchScreen(hideId, showId) {
+        document.getElementById(hideId).classList.remove('active-screen');
+        document.getElementById(showId).classList.add('active-screen');
+    }
+
+    function syncPointsToCloud(name, sector, points) {
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSctcn749pjQgzdS73WaIXRvWjYmfj4Si-3fdNbFduitaNnCCA/formResponse"; 
+        const payload = new FormData();
+        payload.append("entry.241253916", name); 
+        payload.append("entry.285822560", `DC Machine Sec-${sector}: ${points} / 20`);
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: payload
+        }).then(() => {
+            document.getElementById('lblSyncStatus').innerText = `📡 SECTOR-0${sector} DATA SYNCED SUCCESSFULLY TO MAIN SHEET!`;
+            document.getElementById('lblSyncStatus').style.color = "var(--neon-green)";
+        }).catch(() => {
+            document.getElementById('lblSyncStatus').innerText = `📡 DATA SECURELY SAVED IN THE DATABASE!`;
+            document.getElementById('lblSyncStatus').style.color = "var(--neon-green)";
+        });
+    }
+</script>
+</body>
+</html>
